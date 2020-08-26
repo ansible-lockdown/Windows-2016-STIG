@@ -2439,7 +2439,7 @@
 - name: "MEDIUM | WN16-PK-000030 | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
   block:
       - name: "MEDIUM | WN16-PK-000030 | AUDIT | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
-        win_shell: Get-ChildItem -Path Cert:Localmachine\disallowed | Where Issuer -Like "*CCEB Interoperability*" | FL Subject, Issuer, Thumbprint, NotAfter
+        win_command: Get-ChildItem -Path Cert:Localmachine\disallowed | Where Issuer -Like "*CCEB Interoperability*" | FL Subject, Issuer, Thumbprint, NotAfter
         register: wn16_pk_000030_audit
         check_mode: no
         changed_when: no
