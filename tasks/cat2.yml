@@ -2443,6 +2443,7 @@
         register: wn16_pk_000030_audit
         check_mode: no
         changed_when: no
+        failed_when: no
 
 
       - name: "MEDIUM | WN16-PK-000030 | PATCH | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
