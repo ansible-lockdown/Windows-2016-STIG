@@ -418,6 +418,7 @@
         changed_when: no
   when:
       - wn16_00_000270
+      - not winstig_skip_for_test
   tags:
       - WN16-00-000270
       - SV-87923r2
@@ -2443,6 +2444,7 @@
         register: wn16_pk_000030_audit
         check_mode: no
         changed_when: no
+        failed_when: no
 
 
       - name: "MEDIUM | WN16-PK-000030 | PATCH | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
@@ -2508,6 +2510,7 @@
       value: "{{ wn16_so_000030_newadministratorname }}"
   when:
       - wn16_so_000030
+      - not winstig_skip_for_test
   tags:
       - WN16-SO-000030
       - SV-88287r2

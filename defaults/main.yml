@@ -24,7 +24,10 @@ win2016stig_disruption_high: no
 # setting to make them stand out.
 win2016stig_audit_disruptive: yes
 
-win2016stig_skip_for_travis: false
+winstig_skip_for_travis: false
+
+# Some tasks need to be skipped for CI/CD testing to work correctly
+win2016stig_skip_for_test: false
 
 win2016stig_workaround_for_disa_benchmark: true
 win2016stig_workaround_for_ssg_benchmark: true
