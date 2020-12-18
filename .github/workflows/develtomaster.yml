@@ -31,7 +31,7 @@ jobs:
           # Project ID
           project_id: 5f47f0c4a13c7b18373e5556
           # Job ID
-          job_id: 5fdd15849b7a34765da4c2ef
+          job_id: 5fdd1d9683f833b179c51275
           # Variables
           variables: '{ "gitrepo": "https://github.com/ansible-lockdown/Windows-2016-STIG.git", "image": "ami-02be4a5e4a6c698da" }'
           # Refactr API base URL
