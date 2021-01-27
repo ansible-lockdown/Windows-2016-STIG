@@ -58,6 +58,7 @@
             - wn16_00_000050_audit is not skipped
             - wn16_00_000050_audit.stdout != ""
         changed_when: yes
+
   when:
       - wn16_00_000050
       - not ansible_windows_domain_role == "Primary domain controller"
@@ -78,6 +79,7 @@
       - name: "MEDIUM | WN16-00-000060 | PATCH | Manually managed application account passwords must be at least 15 characters in length."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_00_000060
   tags:
@@ -98,6 +100,7 @@
       - name: "MEDIUM | WN16-00-000070 | PATCH | Manually managed application account passwords must be changed at least annually or when a system administrator with knowledge of the password leaves the organization."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_00_000070
   tags:
@@ -120,6 +123,7 @@
       - name: "MEDIUM | WN16-00-000080 | PATCH | Shared user accounts must not be permitted on the system."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_00_000080
   tags:
@@ -140,6 +144,7 @@
       - name: "MEDIUM | WN16-00-000090 | PATCH | Windows Server 2016 must employ a deny-all, permit-by-exception policy to allow the execution of authorized software programs."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_00_000090
   tags:
@@ -206,6 +211,7 @@
       - name: "MEDIUM | WN16-00-000160 | PATCH | Permissions for the system drive root directory usually C:\ must conform to minimum requirements."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_00_000160
   tags:
@@ -222,7 +228,6 @@
         register: wn16_00_000170_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-00-000170 | PATCH | Permissions for program file directories must conform to minimum requirements."
         win_shell: echo true
         changed_when: no
@@ -242,7 +247,6 @@
         register: wn16_00_000180_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-00-000180 | PATCH | Permissions for the Windows installation directory must conform to minimum requirements."
         win_shell: echo true
         changed_when: no
@@ -261,7 +265,6 @@
         register: wn16_00_000190_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-00-000190 | PATCH | Default permissions for the HKEY_LOCAL_MACHINE registry hive must be maintained."
         win_shell: echo true
         changed_when: no
@@ -281,7 +284,6 @@
         register: wn16_00_000210_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-00-000210 | PATCH | Outdated or unused accounts must be removed from the system or disabled."
         win_shell: echo true
         changed_when: no
@@ -301,7 +303,6 @@
         check_mode: no
         changed_when: wn16_00_000220_audit_dc.stdout != ""
         when: ansible_windows_domain_role == "Primary domain controller"
-
       - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 accounts must require passwords."
         debug:
             msg:
@@ -318,7 +319,6 @@
         check_mode: no
         changed_when: wn16_00_000220_audit_dm_sa.stdout != ""
         when: not ansible_windows_domain_role == "Primary domain controller"
-
       - name: "MEDIUM | WN16-00-000220 | AUDIT -DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 accounts must require passwords."
         debug:
             msg:
@@ -341,7 +341,6 @@
         register: wn16_00_000230_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-00-000230 | PATCH | Passwords must be configured to expire."
         win_shell: echo true
         changed_when: no
@@ -360,7 +359,6 @@
         register: wn16_00_000240_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-00-000240 | PATCH | System files must be monitored for unauthorized changes."
         win_shell: echo true
         changed_when: no
@@ -384,10 +382,12 @@
         check_mode: no
         changed_when: no
 
-      - name: "MEDIUM | WN16-00-000250 | AUDIT | Non-system-created file shares on a system must limit access to groups that require it."
-        debug:
+      - debug:
             msg: "{{ wn16_00_000250_audit.stdout_lines }}"
         when: wn16_00_000250_audit is failed
+      - name: "MEDIUM | WN16-00-000250 | PATCH | Non-system-created file shares on a system must limit access to groups that require it."
+        win_shell: echo true
+        changed_when: no
   when:
       - wn16_00_000250
   tags:
@@ -395,6 +395,7 @@
       - SV-87919r1
       - notimplemented
       - notest
+
 
 # https://stackoverflow.com/questions/31049454/how-to-retrieve-recursively-any-files-with-a-specific-extensions-in-powershell/31049571
 - name: "MEDIUM | WN16-00-000270 | Software certificate installation files must be removed from Windows Server 2016."
@@ -410,11 +411,11 @@
         check_mode: no
         changed_when: no
         # do we need async; its very long running to search filesystems
-
-      - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
-        debug:
-            msg: "{{ wn16_00_000270_audit.stdout_lines }}"
-        when: wn16_00_000270_audit.stdout != ""
+      - debug:
+            var: wn16_00_000270_audit
+      - name: "MEDIUM | WN16-00-000270 | PATCH | Software certificate installation files must be removed from Windows Server 2016."
+        win_shell: echo true
+        changed_when: no
   when:
       - wn16_00_000270
       - not winstig_skip_for_test
@@ -434,9 +435,12 @@
         check_mode: no
         changed_when: no
 
+
       - name: "MEDIUM | WN16-00-000280 | PATCH | Systems requiring data at rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest."
         win_shell: echo true
         changed_when: no
+
+
   when:
       - wn16_00_000280
   tags:
@@ -452,7 +456,6 @@
         register: wn16_00_000290_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-00-000290 | PATCH | Protection methods such as TLS, encrypted VPNs, or IPsec must be implemented if the data owner has a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process."
         win_shell: echo true
         changed_when: no
@@ -471,7 +474,6 @@
         register: wn16_00_000310_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-00-000310 | PATCH | A host-based firewall must be installed and enabled on the system."
         win_shell: echo true
         changed_when: no
@@ -491,6 +493,7 @@
         check_mode: no
         changed_when: no
 
+
       - name: "MEDIUM | WN16-00-000320 | PATCH | Windows Server 2016 must employ automated mechanisms to determine the state of system components with regard to flaw remediation using the following frequency: continuously, where Host Based Security System (HBSS) is used; 30 days, for any additional internal network scans not covered by HBSS; and annually, for external scans by Computer Network Defense Service Provider (CNDSP)."
         win_shell: echo true
         changed_when: no
@@ -509,6 +512,7 @@
         register: wn16_00_000330_audit
         check_mode: no
         changed_when: no
+
 
       - name: "MEDIUM | WN16-00-000330 | PATCH | Windows Server 2016 must automatically remove or disable temporary user accounts after 72 hours."
         win_shell: echo true
@@ -616,8 +620,6 @@
   win_feature:
       name: FS-SMB1
       state: absent
-  when:
-      - wn16_00_000410
   tags:
       - WN16-00-000410
       - xccdf_mil.disa.stig_rule_SV-87951r2_rule
@@ -695,7 +697,6 @@
             that: wn16_ac_000030_resetlockoutcount | int is version('15', '>=')
             fail_msg: "Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater and variable wn16_ac_000030_resetlockoutcount is set to {{ wn16_ac_000030_resetlockoutcount }}"
         ignore_errors: yes
-
       - name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
         win_security_policy:
             section: System Access
@@ -715,7 +716,6 @@
             that: wn16_ac_000010_lockoutduration | int is version('15', '<=')
             fail_msg: "Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater and variable wn16_ac_000010_lockoutduration is set to {{ wn16_ac_000010_lockoutduration }}"
         ignore_errors: yes
-
       - name: "MEDIUM | WN16-AC-000010 | PATCH | Windows 2016 account lockout duration must be configured to 15 minutes or greater."
         win_security_policy:
             section: System Access
@@ -734,7 +734,6 @@
             that: wn16_ac_000040_passwordhistorysize | int is version('24', '>=')
             fail_msg: "Windows Server 2016 password history must be configured to 24 passwords remembered and variable wn16_ac_000040_passwordhistorysize is set to {{ wn16_ac_000040_passwordhistorysize }}"
         ignore_errors: yes
-
       - name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered."
         win_security_policy:
             section: System Access
@@ -753,7 +752,6 @@
             that: wn16_ac_000050_maximumpasswordage | int is version('60', '<=')
             fail_msg: "Windows Server 2016 maximum password age must be configured to 60 days or less and variable wn16_ac_000050_maximumpasswordage is set to {{ wn16_ac_000050_maximumpasswordage }}"
         ignore_errors: yes
-
       - name: "MEDIUM | WN16-AC-000050 |  PATCH | Windows Server 2016 maximum password age must be configured to 60 days or less."
         win_security_policy:
             section: System Access
@@ -772,7 +770,6 @@
             that: wn16_ac_000060_minimumpasswordage is version('1', '>=')
             fail_msg: "Windows Server 2016 minimum password age must be configured to at least one day and variable wn16_ac_000060_minimumpasswordage is set to {{ wn16_ac_000060_minimumpasswordage }}"
         ignore_errors: yes
-
       - name: "MEDIUM | WN16-AC-000060 | PATCH | Windows Server 2016 minimum password age must be configured to at least one day."
         win_security_policy:
             section: System Access
@@ -791,7 +788,6 @@
             that: wn16_ac_000070_minimumpasswordlength is version('14', '>=')
             fail_msg: "Windows Server 2016 minimum password length must be configured to 14 characters and variable wn16_ac_000070_minimumpasswordlength is set to {{ wn16_ac_000070_minimumpasswordlength }} characters"
         ignore_errors: yes
-
       - name: "MEDIUM | WN16-AC-000070 | PATCH | Windows Server 2016 minimum password length must be configured to 14 characters."
         win_security_policy:
             section: System Access
@@ -814,285 +810,285 @@
       - WN16-AC-000080
       - SV-87975r2
 
-# # - name: "MEDIUM | WN16-DC-000020 | Kerberos user logon restrictions must be enforced."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000020 | AUDIT | Kerberos user logon restrictions must be enforced."
-# #         win_shell: echo true
-# #         register: wn16_dc_000020_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000020 | PATCH | Kerberos user logon restrictions must be enforced."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000020
-# #   tags:
-# #       - WN16-DC-000020
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000020 | Kerberos user logon restrictions must be enforced."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000020 | AUDIT | Kerberos user logon restrictions must be enforced."
+#         win_shell: echo true
+#         register: wn16_dc_000020_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000020 | PATCH | Kerberos user logon restrictions must be enforced."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000020
+#   tags:
+#       - WN16-DC-000020
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000030 | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000030 | AUDIT | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
-# #         win_shell: echo true
-# #         register: wn16_dc_000030_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000030 | PATCH | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000030
-# #   tags:
-# #       - WN16-DC-000030
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000030 | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000030 | AUDIT | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
+#         win_shell: echo true
+#         register: wn16_dc_000030_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000030 | PATCH | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000030
+#   tags:
+#       - WN16-DC-000030
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000040 | The Kerberos user ticket lifetime must be limited to 10 hours or less."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000040 | AUDIT | The Kerberos user ticket lifetime must be limited to 10 hours or less."
-# #         win_shell: echo true
-# #         register: wn16_dc_000040_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000040 | PATCH | The Kerberos user ticket lifetime must be limited to 10 hours or less."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000040
-# #   tags:
-# #       - WN16-DC-000040
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000040 | The Kerberos user ticket lifetime must be limited to 10 hours or less."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000040 | AUDIT | The Kerberos user ticket lifetime must be limited to 10 hours or less."
+#         win_shell: echo true
+#         register: wn16_dc_000040_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000040 | PATCH | The Kerberos user ticket lifetime must be limited to 10 hours or less."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000040
+#   tags:
+#       - WN16-DC-000040
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000050 | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000050 | AUDIT | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
-# #         win_shell: echo true
-# #         register: wn16_dc_000050_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000050 | PATCH | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000050
-# #   tags:
-# #       - WN16-DC-000050
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000050 | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000050 | AUDIT | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
+#         win_shell: echo true
+#         register: wn16_dc_000050_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000050 | PATCH | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000050
+#   tags:
+#       - WN16-DC-000050
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000060 | The computer clock synchronization tolerance must be limited to 5 minutes or less."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000060 | AUDIT | The computer clock synchronization tolerance must be limited to 5 minutes or less."
-# #         win_shell: echo true
-# #         register: wn16_dc_000060_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000060 | PATCH | The computer clock synchronization tolerance must be limited to 5 minutes or less."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000060
-# #   tags:
-# #       - WN16-DC-000060
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000060 | The computer clock synchronization tolerance must be limited to 5 minutes or less."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000060 | AUDIT | The computer clock synchronization tolerance must be limited to 5 minutes or less."
+#         win_shell: echo true
+#         register: wn16_dc_000060_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000060 | PATCH | The computer clock synchronization tolerance must be limited to 5 minutes or less."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000060
+#   tags:
+#       - WN16-DC-000060
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000120 | Data files owned by users must be on a different logical partition from the directory server data files."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000120 | AUDIT | Data files owned by users must be on a different logical partition from the directory server data files."
-# #         win_shell: echo true
-# #         register: wn16_dc_000120_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000120 | PATCH | Data files owned by users must be on a different logical partition from the directory server data files."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000120
-# #   tags:
-# #       - WN16-DC-000120
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000120 | Data files owned by users must be on a different logical partition from the directory server data files."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000120 | AUDIT | Data files owned by users must be on a different logical partition from the directory server data files."
+#         win_shell: echo true
+#         register: wn16_dc_000120_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000120 | PATCH | Data files owned by users must be on a different logical partition from the directory server data files."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000120
+#   tags:
+#       - WN16-DC-000120
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000130 | Domain controllers must run on a machine dedicated to that function."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000130 | AUDIT | Domain controllers must run on a machine dedicated to that function."
-# #         win_shell: echo true
-# #         register: wn16_dc_000130_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000130 | PATCH | Domain controllers must run on a machine dedicated to that function."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000130
-# #   tags:
-# #       - WN16-DC-000130
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000130 | Domain controllers must run on a machine dedicated to that function."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000130 | AUDIT | Domain controllers must run on a machine dedicated to that function."
+#         win_shell: echo true
+#         register: wn16_dc_000130_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000130 | PATCH | Domain controllers must run on a machine dedicated to that function."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000130
+#   tags:
+#       - WN16-DC-000130
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000140 | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000140 | AUDIT | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
-# #         win_shell: echo true
-# #         register: wn16_dc_000140_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000140 | PATCH | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000140
-# #   tags:
-# #       - WN16-DC-000140
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000140 | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000140 | AUDIT | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
+#         win_shell: echo true
+#         register: wn16_dc_000140_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000140 | PATCH | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000140
+#   tags:
+#       - WN16-DC-000140
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000170 | Active Directory Group Policy objects must be configured with proper audit settings."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         register: wn16_dc_000170_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000170 | PATCH | Active Directory Group Policy objects must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000170
-# #   tags:
-# #       - WN16-DC-000170
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000170 | Active Directory Group Policy objects must be configured with proper audit settings."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings."
+#         win_shell: echo true
+#         register: wn16_dc_000170_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000170 | PATCH | Active Directory Group Policy objects must be configured with proper audit settings."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000170
+#   tags:
+#       - WN16-DC-000170
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000180 | The Active Directory Domain object must be configured with proper audit settings."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000180 | AUDIT | The Active Directory Domain object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         register: wn16_dc_000180_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000180 | PATCH | The Active Directory Domain object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000180
-# #   tags:
-# #       - WN16-DC-000180
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000180 | The Active Directory Domain object must be configured with proper audit settings."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000180 | AUDIT | The Active Directory Domain object must be configured with proper audit settings."
+#         win_shell: echo true
+#         register: wn16_dc_000180_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000180 | PATCH | The Active Directory Domain object must be configured with proper audit settings."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000180
+#   tags:
+#       - WN16-DC-000180
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000190 | The Active Directory Infrastructure object must be configured with proper audit settings."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000190 | AUDIT | The Active Directory Infrastructure object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         register: wn16_dc_000190_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000190 | PATCH | The Active Directory Infrastructure object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000190
-# #   tags:
-# #       - WN16-DC-000190
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000190 | The Active Directory Infrastructure object must be configured with proper audit settings."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000190 | AUDIT | The Active Directory Infrastructure object must be configured with proper audit settings."
+#         win_shell: echo true
+#         register: wn16_dc_000190_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000190 | PATCH | The Active Directory Infrastructure object must be configured with proper audit settings."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000190
+#   tags:
+#       - WN16-DC-000190
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000200 | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000200 | AUDIT | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         register: wn16_dc_000200_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000200 | PATCH | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000200
-# #   tags:
-# #       - WN16-DC-000200
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000200 | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000200 | AUDIT | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
+#         win_shell: echo true
+#         register: wn16_dc_000200_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000200 | PATCH | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000200
+#   tags:
+#       - WN16-DC-000200
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000210 | The Active Directory AdminSDHolder object must be configured with proper audit settings."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000210 | AUDIT | The Active Directory AdminSDHolder object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         register: wn16_dc_000210_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000210 | PATCH | The Active Directory AdminSDHolder object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000210
-# #   tags:
-# #       - WN16-DC-000210
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000210 | The Active Directory AdminSDHolder object must be configured with proper audit settings."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000210 | AUDIT | The Active Directory AdminSDHolder object must be configured with proper audit settings."
+#         win_shell: echo true
+#         register: wn16_dc_000210_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000210 | PATCH | The Active Directory AdminSDHolder object must be configured with proper audit settings."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000210
+#   tags:
+#       - WN16-DC-000210
+#       - notimplemented
 
-# # - name: "MEDIUM | WN16-DC-000220 | The Active Directory RID Manager$ object must be configured with proper audit settings."
-# #   block:
-# #       - name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         register: wn16_dc_000220_audit
-# #         check_mode: no
-# #         changed_when: no
-# #
-# #
-# #       - name: "MEDIUM | WN16-DC-000220 | PATCH | The Active Directory RID Manager$ object must be configured with proper audit settings."
-# #         win_shell: echo true
-# #         changed_when: no
-# #
-# #
-# #   when:
-# #       - wn16_dc_000220
-# #   tags:
-# #       - WN16-DC-000220
-# #       - notimplemented
+# - name: "MEDIUM | WN16-DC-000220 | The Active Directory RID Manager$ object must be configured with proper audit settings."
+#   block:
+#       - name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings."
+#         win_shell: echo true
+#         register: wn16_dc_000220_audit
+#         check_mode: no
+#         changed_when: no
+#
+#
+#       - name: "MEDIUM | WN16-DC-000220 | PATCH | The Active Directory RID Manager$ object must be configured with proper audit settings."
+#         win_shell: echo true
+#         changed_when: no
+#
+#
+#   when:
+#       - wn16_dc_000220
+#   tags:
+#       - WN16-DC-000220
+#       - notimplemented
 
 - name: "MEDIUM | WN16-AU-000010 | Audit records must be backed up to a different system or media than the system being audited."
   block:
@@ -1101,7 +1097,6 @@
         register: wn16_au_000010_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-AU-000010 | PATCH | Audit records must be backed up to a different system or media than the system being audited."
         win_shell: echo true
         changed_when: no
@@ -1120,7 +1115,6 @@
         register: wn16_au_000020_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-AU-000020 | PATCH | Windows Server 2016 must, at a minimum, off-load audit records of interconnected systems in real time and off-load standalone systems weekly."
         win_shell: echo true
         changed_when: no
@@ -1140,7 +1134,6 @@
         register: wn16_au_000030_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-AU-000030 | PATCH | Permissions for the Application event log must prevent access by non-privileged accounts."
         win_shell: echo true
         changed_when: no
@@ -1159,7 +1152,6 @@
         register: wn16_au_000040_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-AU-000040 | PATCH | Permissions for the Security event log must prevent access by non-privileged accounts."
         win_shell: echo true
         changed_when: no
@@ -1177,7 +1169,6 @@
         register: wn16_au_000050_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-AU-000050 | PATCH | Permissions for the System event log must prevent access by non-privileged accounts."
         win_shell: echo true
         changed_when: no
@@ -1195,7 +1186,6 @@
         register: wn16_au_000060_audit
         check_mode: no
         changed_when: no
-
       - name: "MEDIUM | WN16-AU-000060 | PATCH | Event Viewer must be protected from unauthorized modification and deletion."
         win_shell: echo true
         changed_when: no
@@ -1212,7 +1202,6 @@
         win_shell: AuditPol /get /subcategory:"Credential Validation" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
         register: wn16_au_000070_audit
         check_mode: no
-
         changed_when: "'Success' not in wn16_au_000070_audit.stdout"
       - name: "MEDIUM | WN16-AU-000070 | PATCH | Windows Server 2016 must be configured to audit Account Logon - Credential Validation successes."
         win_shell: AuditPol /set /subcategory:"Credential Validation" /success:enable
@@ -1229,7 +1218,6 @@
         win_shell: AuditPol /get /subcategory:"Credential Validation" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
         register: wn16_au_000080_audit
         check_mode: no
-
         changed_when: "'Failure' not in wn16_au_000080_audit.stdout"
       - name: "MEDIUM | WN16-AU-000080 | PATCH | Windows Server 2016 must be configured to audit Account Logon - Credential Validation failures."
         win_shell: AuditPol /set /subcategory:"Credential Validation" /failure:enable
@@ -1240,22 +1228,22 @@
       - WN16-AU-000080
       - SV-88067r1
 
-# - name: "MEDIUM | WN16-DC-000230 | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000230 | AUDIT | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes."
-#         win_shell: AuditPol /get /subcategory:"Computer Account Management" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
-#         register: wn16_dc_000230_audit
-#         check_mode: no
-#         changed_when: "'Success' not in wn16_dc_000230_audit.stdout"
-#       - name: "MEDIUM | WN16-DC-000230 | PATCH | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes."
-#         win_shell: AuditPol /set /subcategory:"Computer Account Management" /success:enable
-#         when: "'Success' not in wn16_dc_000230_audit.stdout"
-#   when:
-#       - wn16_dc_000230
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000230
-#       - SV-88069r1
+- name: "MEDIUM | WN16-DC-000230 | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes."
+  block:
+      - name: "MEDIUM | WN16-DC-000230 | AUDIT | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes."
+        win_shell: AuditPol /get /subcategory:"Computer Account Management" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
+        register: wn16_dc_000230_audit
+        check_mode: no
+        changed_when: "'Success' not in wn16_dc_000230_audit.stdout"
+      - name: "MEDIUM | WN16-DC-000230 | PATCH | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes."
+        win_shell: AuditPol /set /subcategory:"Computer Account Management" /success:enable
+        when: "'Success' not in wn16_dc_000230_audit.stdout"
+  when:
+      - wn16_dc_000230
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000230
+      - SV-88069r1
 
 - name: "MEDIUM | WN16-AU-000100 | Windows Server 2016 must be configured to audit Account Management - Other Account Management Events successes."
   block:
@@ -1264,7 +1252,6 @@
         register: wn16_au_000100_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000100_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000100 | PATCH | Windows Server 2016 must be configured to audit Account Management - Other Account Management Events successes."
         win_shell: AuditPol /set /subcategory:"Other Account Management Events" /success:enable
         when: "'Success' not in wn16_au_000100_audit.stdout"
@@ -1281,7 +1268,6 @@
         register: wn16_au_000120_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000120_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000120 | PATCH | Windows Server 2016 must be configured to audit Account Management - Security Group Management successes."
         win_shell: AuditPol /set /subcategory:"Security Group Management" /success:enable
         when: "'Success' not in wn16_au_000120_audit.stdout"
@@ -1298,7 +1284,6 @@
         register: wn16_au_000140_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000140_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000140 | PATCH | Windows Server 2016 must be configured to audit Account Management - User Account Management successes."
         win_shell: AuditPol /set /subcategory:"User Account Management" /success:enable
         when: "'Success' not in wn16_au_000140_audit.stdout"
@@ -1315,7 +1300,6 @@
         register: wn16_au_000150_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000150_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000150 | PATCH | Windows Server 2016 must be configured to audit Account Management - User Account Management failures."
         win_shell: AuditPol /set /subcategory:"User Account Management" /failure:enable
         when: "'Failure' not in wn16_au_000150_audit.stdout"
@@ -1332,7 +1316,6 @@
         register: wn16_au_000160_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000160_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000160 | PATCH | Windows Server 2016 must be configured to audit Detailed Tracking - Plug and Play Events successes."
         win_shell: AuditPol /set /subcategory:"Plug and Play Events" /success:enable
         when: "'Success' not in wn16_au_000160_audit.stdout"
@@ -1349,7 +1332,6 @@
         register: wn16_au_000170_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000170_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000170 | PATCH | Windows Server 2016 must be configured to audit Detailed Tracking - Process Creation successes."
         win_shell: AuditPol /set /subcategory:"Process Creation" /success:enable
         when: "'Success' not in wn16_au_000170_audit.stdout"
@@ -1359,73 +1341,73 @@
       - WN16-AU-000170
       - SV-88085r1
 
-# - name: "MEDIUM | WN16-DC-000240 | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000240 | AUDIT | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes."
-#         win_shell: AuditPol /get /subcategory:"Directory Service Access" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
-#         register: wn16_dc_000240_audit
-#         check_mode: no
-#         changed_when: "'Success' not in wn16_dc_000240_audit.stdout"
-#       - name: "MEDIUM | WN16-DC-000240 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes."
-#         win_shell: AuditPol /set /subcategory:"Directory Service Access" /success:enable
-#         when: "'Success' not in wn16_dc_000240_audit.stdout"
-#   when:
-#       - wn16_dc_000240
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000240
-#       - SV-88087r1
+- name: "MEDIUM | WN16-DC-000240 | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes."
+  block:
+      - name: "MEDIUM | WN16-DC-000240 | AUDIT | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes."
+        win_shell: AuditPol /get /subcategory:"Directory Service Access" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
+        register: wn16_dc_000240_audit
+        check_mode: no
+        changed_when: "'Success' not in wn16_dc_000240_audit.stdout"
+      - name: "MEDIUM | WN16-DC-000240 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes."
+        win_shell: AuditPol /set /subcategory:"Directory Service Access" /success:enable
+        when: "'Success' not in wn16_dc_000240_audit.stdout"
+  when:
+      - wn16_dc_000240
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000240
+      - SV-88087r1
 
-# - name: "MEDIUM | WN16-DC-000250 | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000250 | AUDIT | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures."
-#         win_shell: AuditPol /get /subcategory:"Directory Service Access" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
-#         register: wn16_dc_000250_audit
-#         check_mode: no
-#         changed_when: "'Failure' not in wn16_dc_000250_audit.stdout"
-#       - name: "MEDIUM | WN16-DC-000250 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures."
-#         win_shell: AuditPol /set /subcategory:"Directory Service Access" /failure:enable
-#         when: "'Failure' not in wn16_dc_000250_audit.stdout"
-#   when:
-#       - wn16_dc_000250
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000250
-#       - SV-88089r1
+- name: "MEDIUM | WN16-DC-000250 | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures."
+  block:
+      - name: "MEDIUM | WN16-DC-000250 | AUDIT | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures."
+        win_shell: AuditPol /get /subcategory:"Directory Service Access" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
+        register: wn16_dc_000250_audit
+        check_mode: no
+        changed_when: "'Failure' not in wn16_dc_000250_audit.stdout"
+      - name: "MEDIUM | WN16-DC-000250 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures."
+        win_shell: AuditPol /set /subcategory:"Directory Service Access" /failure:enable
+        when: "'Failure' not in wn16_dc_000250_audit.stdout"
+  when:
+      - wn16_dc_000250
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000250
+      - SV-88089r1
 
-# - name: "MEDIUM | WN16-DC-000260 | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000260 | AUDIT | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes."
-#         win_shell: AuditPol /get /subcategory:"Directory Service Changes" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
-#         register: wn16_dc_000260_audit
-#         check_mode: no
-#         changed_when: "'Success' not in wn16_dc_000260_audit.stdout"
-#       - name: "MEDIUM | WN16-DC-000260 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes."
-#         win_shell: AuditPol /set /subcategory:"Directory Service Changes" /success:enable
-#         when: "'Success' not in wn16_dc_000260_audit.stdout"
-#   when:
-#       - wn16_dc_000260
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000260
-#       - SV-88091r1
+- name: "MEDIUM | WN16-DC-000260 | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes."
+  block:
+      - name: "MEDIUM | WN16-DC-000260 | AUDIT | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes."
+        win_shell: AuditPol /get /subcategory:"Directory Service Changes" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
+        register: wn16_dc_000260_audit
+        check_mode: no
+        changed_when: "'Success' not in wn16_dc_000260_audit.stdout"
+      - name: "MEDIUM | WN16-DC-000260 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes."
+        win_shell: AuditPol /set /subcategory:"Directory Service Changes" /success:enable
+        when: "'Success' not in wn16_dc_000260_audit.stdout"
+  when:
+      - wn16_dc_000260
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000260
+      - SV-88091r1
 
-# - name: "MEDIUM | WN16-DC-000270 | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes failures."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000270 | AUDIT | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes failures."
-#         win_shell: AuditPol /get /subcategory:"Directory Service Changes" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
-#         register: wn16_dc_000270_audit
-#         check_mode: no
-#         changed_when: "'Failure' not in wn16_dc_000270_audit.stdout"
-#       - name: "MEDIUM | WN16-DC-000270 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes failures."
-#         win_shell: AuditPol /set /subcategory:"Directory Service Changes" /failure:enable
-#         when: "'Failure' not in wn16_dc_000270_audit.stdout"
-#   when:
-#       - wn16_dc_000270
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000270
-#       - SV-88093r1
+- name: "MEDIUM | WN16-DC-000270 | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes failures."
+  block:
+      - name: "MEDIUM | WN16-DC-000270 | AUDIT | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes failures."
+        win_shell: AuditPol /get /subcategory:"Directory Service Changes" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
+        register: wn16_dc_000270_audit
+        check_mode: no
+        changed_when: "'Failure' not in wn16_dc_000270_audit.stdout"
+      - name: "MEDIUM | WN16-DC-000270 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes failures."
+        win_shell: AuditPol /set /subcategory:"Directory Service Changes" /failure:enable
+        when: "'Failure' not in wn16_dc_000270_audit.stdout"
+  when:
+      - wn16_dc_000270
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000270
+      - SV-88093r1
 
 - name: "MEDIUM | WN16-AU-000220 | Windows Server 2016 must be configured to audit Logon/Logoff - Account Lockout successes."
   block:
@@ -1434,7 +1416,6 @@
         register: wn16_au_000220_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000220_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000220 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Account Lockout successes."
         win_shell: AuditPol /set /subcategory:"Account Lockout" /success:enable
         when: "'Success' not in wn16_au_000220_audit.stdout"
@@ -1451,7 +1432,6 @@
         register: wn16_au_000230_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000230_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000230 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Account Lockout failures."
         win_shell: AuditPol /set /subcategory:"Account Lockout" /failure:enable
         changed_when: "'Failure' not in wn16_au_000230_audit.stdout"
@@ -1468,7 +1448,6 @@
         register: wn16_au_000240_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000240_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000240 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Group Membership successes."
         win_shell: AuditPol /set /subcategory:"Group Membership" /success:enable
         changed_when: "'Success' not in wn16_au_000240_audit.stdout"
@@ -1485,7 +1464,6 @@
         register: wn16_au_000250_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000250_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000250 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logoff successes."
         win_shell: AuditPol /set /subcategory:"Logoff" /success:enable
         changed_when: "'Success' not in wn16_au_000250_audit.stdout"
@@ -1502,7 +1480,6 @@
         register: wn16_au_000260_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000260_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000260 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logon successes."
         win_shell: AuditPol /set /subcategory:"Logon" /success:enable
         changed_when: "'Success' not in wn16_au_000260_audit.stdout"
@@ -1519,7 +1496,6 @@
         register: wn16_au_000270_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000270_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000270 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logon failures."
         win_shell: AuditPol /set /subcategory:"Logon" /failure:enable
         when: "'Failure' not in wn16_au_000270_audit.stdout"
@@ -1536,7 +1512,6 @@
         register: wn16_au_000280_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000280_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000280 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Special Logon successes."
         win_shell: AuditPol /set /subcategory:"Special Logon" /success:enable
         when: "'Success' not in wn16_au_000280_audit.stdout"
@@ -1553,7 +1528,6 @@
         register: wn16_au_000290_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000290_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000290 | PATCH | Windows Server 2016 must be configured to audit Object Access - Removable Storage successes."
         win_shell: AuditPol /set /subcategory:"Removable Storage" /success:enable
         when: "'Success' not in wn16_au_000290_audit.stdout"
@@ -1570,7 +1544,6 @@
         register: wn16_au_000300_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000300_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000300 | PATCH | Windows Server 2016 must be configured to audit Object Access - Removable Storage failures."
         win_shell: AuditPol /set /subcategory:"Removable Storage" /failure:enable
         when: "'Failure' not in wn16_au_000300_audit.stdout"
@@ -1587,7 +1560,6 @@
         register: wn16_au_000310_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000310_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000310 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Audit Policy Change successes."
         win_shell: AuditPol /set /subcategory:"Audit Policy Change" /success:enable
         when: "'Success' not in wn16_au_000310_audit.stdout"
@@ -1604,7 +1576,6 @@
         register: wn16_au_000320_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000320_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000320 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Audit Policy Change failures."
         win_shell: AuditPol /set /subcategory:"Audit Policy Change" /failure:enable
         when: "'Failure' not in wn16_au_000320_audit.stdout"
@@ -1621,7 +1592,6 @@
         register: wn16_au_000330_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000330_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000330 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Authentication Policy Change successes."
         win_shell: AuditPol /set /subcategory:"Authentication Policy Change" /success:enable
         when: "'Success' not in wn16_au_000330_audit.stdout"
@@ -1638,7 +1608,6 @@
         register: wn16_au_000340_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000340_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000340 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Authorization Policy Change successes."
         win_shell: AuditPol /set /subcategory:"Authorization Policy Change" /success:enable
         when: "'Success' not in wn16_au_000340_audit.stdout"
@@ -1655,7 +1624,6 @@
         register: wn16_au_000350_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000350_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000350 | PATCH | Windows Server 2016 must be configured to audit Privilege Use - Sensitive Privilege Use successes."
         win_shell: AuditPol /set /subcategory:"Sensitive Privilege Use" /success:enable
         when: "'Success' not in wn16_au_000350_audit.stdout"
@@ -1672,7 +1640,6 @@
         register: wn16_au_000360_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000360_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000360 | PATCH | Windows Server 2016 must be configured to audit Privilege Use - Sensitive Privilege Use failures."
         win_shell: AuditPol /set /subcategory:"Sensitive Privilege Use" /failure:enable
         when: "'Failure' not in wn16_au_000360_audit.stdout"
@@ -1689,7 +1656,6 @@
         register: wn16_au_000370_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000370_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000370 | PATCH | Windows Server 2016 must be configured to audit System - IPsec Driver successes."
         win_shell: AuditPol /set /subcategory:"IPsec Driver" /success:enable
         when: "'Success' not in wn16_au_000370_audit.stdout"
@@ -1709,7 +1675,6 @@
         changed_when: "'Failure' not in wn16_au_000380_audit.stdout"
       - debug:
             var: wn16_au_000380_audit
-
       - name: "MEDIUM | WN16-AU-000380 | PATCH | Windows Server 2016 must be configured to audit System - IPsec Driver failures."
         win_shell: AuditPol /set /subcategory:"IPsec Driver" /failure:enable
         when: "'Failure' not in wn16_au_000380_audit.stdout"
@@ -1727,7 +1692,6 @@
         register: wn16_au_000390_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000390_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000390 | PATCH | Windows Server 2016 must be configured to audit System - Other System Events successes."
         win_shell: AuditPol /set /subcategory:"Other System Events" /success:enable
         when: "'Success' not in wn16_au_000390_audit.stdout"
@@ -1745,7 +1709,6 @@
         register: wn16_au_000400_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000400_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000400 | PATCH | Windows Server 2016 must be configured to audit System - Other System Events failures."
         win_shell: AuditPol /set /subcategory:"Other System Events" /failure:enable
         check_mode: no
@@ -1764,7 +1727,6 @@
         register: wn16_au_000410_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000410_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000410 | PATCH | Windows Server 2016 must be configured to audit System - Security State Change successes."
         win_shell: AuditPol /set /subcategory:"Security State Change" /success:enable
         check_mode: no
@@ -1783,7 +1745,6 @@
         register: wn16_au_000420_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000420_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000420 | PATCH | Windows Server 2016 must be configured to audit System - Security System Extension successes."
         win_shell: AuditPol /set /subcategory:"Security System Extension" /success:enable
         check_mode: no
@@ -1816,7 +1777,6 @@
         register: wn16_au_000440_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000440_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000440 | PATCH | Windows Server 2016 must be configured to audit System - System Integrity successes."
         win_shell: AuditPol /set /subcategory:"System Integrity" /success:enable
         check_mode: no
@@ -1835,7 +1795,6 @@
         register: wn16_au_000450_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000450_audit.stdout"
-
       - name: "MEDIUM | WN16-AU-000450 | PATCH | Windows Server 2016 must be configured to audit System - System Integrity failures."
         win_shell: AuditPol /set /subcategory:"System Integrity" /failure:enable
         check_mode: no
@@ -1862,19 +1821,19 @@
       - xccdf_mil.disa.stig_rule_SV-88145r1_rule
       - tested
 
-# - name: "MEDIUM | WN16-MS-000020 | Local administrator accounts must have their privileged token filtered to prevent elevated privileges from being used over the network on domain systems."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: LocalAccountTokenFilterPolicy
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_ms_000020
-#       - ansible_windows_domain_role == "Member server"
-#   tags:
-#       - WN16-MS-000020
-#       - xccdf_mil.disa.stig_rule_SV-88147r1_rule
+- name: "MEDIUM | WN16-MS-000020 | Local administrator accounts must have their privileged token filtered to prevent elevated privileges from being used over the network on domain systems."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: LocalAccountTokenFilterPolicy
+      data: 0
+      datatype: dword
+  when:
+      - wn16_ms_000020
+      - ansible_windows_domain_role == "Member server"
+  tags:
+      - WN16-MS-000020
+      - xccdf_mil.disa.stig_rule_SV-88147r1_rule
 
 - name: "MEDIUM | WN16-CC-000030 | WDigest Authentication must be disabled on Windows Server 2016."
   win_regedit:
@@ -1944,6 +1903,7 @@
         register: wn16_cc_000110_audit
         check_mode: no
         changed_when: no
+
 
       - name: "MEDIUM | WN16-CC-000110 | PATCH | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection."
         win_shell: echo true
@@ -2027,20 +1987,20 @@
       - xccdf_mil.disa.stig_rule_SV-88185r1_rule
       - tested
 
-# - name: "MEDIUM | WN16-MS-000030 | Local users on domain-joined computers must not be enumerated."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
-#       state: present
-#       value: EnumerateLocalUsers
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_ms_000030
-#       - ansible_windows_domain_role == "Member server"
-#   tags:
-#       - WN16-MS-000030
-#       - xccdf_mil.disa.stig_rule_SV-88187r1_rule
-#       - tested
+- name: "MEDIUM | WN16-MS-000030 | Local users on domain-joined computers must not be enumerated."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+      state: present
+      value: EnumerateLocalUsers
+      data: 0
+      datatype: dword
+  when:
+      - wn16_ms_000030
+      - ansible_windows_domain_role == "Member server"
+  tags:
+      - WN16-MS-000030
+      - xccdf_mil.disa.stig_rule_SV-88187r1_rule
+      - tested
 
 - name: "MEDIUM | WN16-CC-000210 | Users must be prompted to authenticate when the system wakes from sleep (on battery)."
   win_regedit:
@@ -2070,19 +2030,19 @@
       - xccdf_mil.disa.stig_rule_SV-88201r1_rule
       - tested
 
-# - name: "MEDIUM | WN16-MS-000040 | Unauthenticated Remote Procedure Call (RPC) clients must be restricted from connecting to the RPC server."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Rpc
-#       state: present
-#       value: RestrictRemoteClients
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_ms_000040
-#   tags:
-#       - WN16-MS-000040
-#       - xccdf_mil.disa.stig_rule_SV-88203r1_rule
-#       - tested
+- name: "MEDIUM | WN16-MS-000040 | Unauthenticated Remote Procedure Call (RPC) clients must be restricted from connecting to the RPC server."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Rpc
+      state: present
+      value: RestrictRemoteClients
+      data: 1
+      datatype: dword
+  when:
+      - wn16_ms_000040
+  tags:
+      - WN16-MS-000040
+      - xccdf_mil.disa.stig_rule_SV-88203r1_rule
+      - tested
 
 - name: "MEDIUM | WN16-CC-000290 | Windows Telemetry must be configured to Security or Basic."
   win_regedit:
@@ -2098,1462 +2058,1462 @@
       - xccdf_mil.disa.stig_rule_SV-88215r1_rule
       - tested
 
-# - name: "MEDIUM | WN16-CC-000300 | The Application event log size must be configured to 32768 KB or greater."
-#   block:
-#       - name: "MEDIUM | WN16-CC-000300 | AUDIT | The Application event log size must be configured to 32768 KB or greater."
-#         win_reg_stat:
-#             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application
-#             name: MaxSize
-#         register: wn16_cc_000300_audit
-#         changed_when: no
-#       - name: "MEDIUM | WN16-CC-000300 | PATCH | The Application event log size must be configured to 32768 KB or greater."
-#         win_regedit:
-#             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application
-#             state: present
-#             value: MaxSize
-#             data: "{{ wn16_cc_000300_app_maxsize }}"
-#             datatype: dword
-#         when: not wn16_cc_000300_audit.exists or wn16_cc_000300_audit.value < 32768
-#   when:
-#       - wn16_cc_000300
-#   tags:
-#       - WN16-CC-000300
-#       - xccdf_mil.disa.stig_rule_SV-88217r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000310 | The Security event log size must be configured to 196608 KB or greater."
-#   block:
-#       - name: "MEDIUM | WN16-CC-000310 | AUDIT | The Security event log size must be configured to 196608 KB or greater."
-#         win_reg_stat:
-#             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security
-#             name: MaxSize
-#         register: wn16_cc_000310_audit
-#         changed_when: no
-#       - name: "MEDIUM | WN16-CC-000310 | PATCH | The Security event log size must be configured to 196608 KB or greater."
-#         win_regedit:
-#             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security
-#             state: present
-#             value: MaxSize
-#             data: "{{ wn16_cc_000310_sec_maxsize }}"
-#             datatype: dword
-#         when: not wn16_cc_000310_audit.exists or wn16_cc_000310_audit.value < 196608
-#   when:
-#       - wn16_cc_000310
-#   tags:
-#       - WN16-CC-000310
-#       - xccdf_mil.disa.stig_rule_SV-88219r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000320 | The System event log size must be configured to 32768 KB or greater."
-#   block:
-#       - name: "MEDIUM | WN16-CC-000320 | AUDIT | The System event log size must be configured to 32768 KB or greater."
-#         win_reg_stat:
-#             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\System
-#             name: MaxSize
-#         register: wn16_cc_000320_audit
-#         changed_when: no
-#       - name: "MEDIUM | WN16-CC-000320 | PATCH | The System event log size must be configured to 32768 KB or greater."
-#         win_regedit:
-#             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\System
-#             state: present
-#             value: MaxSize
-#             data: "{{ wn16_cc_000320_sys_maxsize }}"
-#             datatype: dword
-#         when: not wn16_cc_000320_audit.exists or wn16_cc_000320_audit.value < 32768
-#   when:
-#       - wn16_cc_000320
-#   tags:
-#       - WN16-CC-000320
-#       - xccdf_mil.disa.stig_rule_SV-88221r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000330 | Windows Server 2016 Windows SmartScreen must be enabled."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
-#       state: present
-#       value: EnableSmartScreen
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000330
-#   tags:
-#       - WN16-CC-000330
-#       - xccdf_mil.disa.stig_rule_SV-88223r2_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000340 | Explorer Data Execution Prevention must be enabled."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer
-#       state: present
-#       value: NoDataExecutionPrevention
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000340
-#   tags:
-#       - WN16-CC-000340
-#       - xccdf_mil.disa.stig_rule_SV-88225r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000360 | File Explorer shell protocol must run in protected mode."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
-#       state: present
-#       value: PreXPSP2ShellProtocolBehavior
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000360
-#   tags:
-#       - WN16-CC-000360
-#       - xccdf_mil.disa.stig_rule_SV-88229r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000370 | Passwords must not be saved in the Remote Desktop Client."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-#       state: present
-#       value: DisablePasswordSaving
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000370
-#   tags:
-#       - WN16-CC-000370
-#       - xccdf_mil.disa.stig_rule_SV-88231r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000380 | Local drives must be prevented from sharing with Remote Desktop Session Hosts."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-#       state: present
-#       value: fDisableCdm
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000380
-#   tags:
-#       - WN16-CC-000380
-#       - xccdf_mil.disa.stig_rule_SV-88233r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000390 | Remote Desktop Services must always prompt a client for passwords upon connection."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-#       state: present
-#       value: fPromptForPassword
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000390
-#   tags:
-#       - WN16-CC-000390
-#       - xccdf_mil.disa.stig_rule_SV-88235r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000400 | The Remote Desktop Session Host must require secure Remote Procedure Call (RPC) communications."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-#       state: present
-#       value: fEncryptRPCTraffic
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000400
-#   tags:
-#       - WN16-CC-000400
-#       - xccdf_mil.disa.stig_rule_SV-88237r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000410 | Remote Desktop Services must be configured with the client connection encryption set to High Level."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-#       state: present
-#       value: MinEncryptionLevel
-#       data: 3
-#       datatype: dword
-#   when:
-#       - wn16_cc_000410
-#   tags:
-#       - WN16-CC-000410
-#       - xccdf_mil.disa.stig_rule_SV-88239r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000420 | Attachments must be prevented from being downloaded from RSS feeds."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Feeds
-#       state: present
-#       value: DisableEnclosureDownload
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000420
-#   tags:
-#       - WN16-CC-000420
-#       - xccdf_mil.disa.stig_rule_SV-88241r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000430 | Basic authentication for RSS feeds over HTTP must not be used."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Feeds
-#       state: present
-#       value: AllowBasicAuthInClear
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000430
-#   tags:
-#       - WN16-CC-000430
-#       - xccdf_mil.disa.stig_rule_SV-88243r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000440 | Indexing of encrypted files must be turned off."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search
-#       state: present
-#       value: AllowIndexingEncryptedStoresOrItems
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000440
-#   tags:
-#       - WN16-CC-000440
-#       - xccdf_mil.disa.stig_rule_SV-88245r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000450 | Users must be prevented from changing installation options."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer
-#       state: present
-#       value: EnableUserControl
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000450
-#   tags:
-#       - WN16-CC-000450
-#       - xccdf_mil.disa.stig_rule_SV-88247r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000470 | Users must be notified if a web-based program attempts to install software."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer
-#       state: present
-#       value: SafeForScripting
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000470
-#   tags:
-#       - WN16-CC-000470
-#       - xccdf_mil.disa.stig_rule_SV-88251r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000480 | Automatically signing in the last interactive user after a system-initiated restart must be disabled."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: DisableAutomaticRestartSignOn
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000480
-#   tags:
-#       - WN16-CC-000480
-#       - xccdf_mil.disa.stig_rule_SV-88253r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000490 | PowerShell script block logging must be enabled."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
-#       state: present
-#       value: EnableScriptBlockLogging
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000490
-#   tags:
-#       - WN16-CC-000490
-#       - xccdf_mil.disa.stig_rule_SV-88255r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000510 | The Windows Remote Management (WinRM) client must not allow unencrypted traffic."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client
-#       state: present
-#       value: AllowUnencryptedTraffic
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000510
-#   tags:
-#       - WN16-CC-000510
-#       - xccdf_mil.disa.stig_rule_SV-88259r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000520 | The Windows Remote Management (WinRM) client must not use Digest authentication."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client
-#       state: present
-#       value: AllowDigest
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000520
-#   tags:
-#       - WN16-CC-000520
-#       - xccdf_mil.disa.stig_rule_SV-88261r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000540 | The Windows Remote Management (WinRM) service must not allow unencrypted traffic."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service
-#       state: present
-#       value: AllowUnencryptedTraffic
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_cc_000540
-#   tags:
-#       - WN16-CC-000540
-#       - xccdf_mil.disa.stig_rule_SV-88265r1_rule
-#       - tested
-
-# - name: "MEDIUM | WN16-CC-000550 | The Windows Remote Management (WinRM) service must not store RunAs credentials."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service
-#       state: present
-#       value: DisableRunAs
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_cc_000550
-#   tags:
-#       - WN16-CC-000550
-#       - xccdf_mil.disa.stig_rule_SV-88267r1_rule
-#       - tested
-
-# # https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-6_dod.zip ?
-# - name: "MEDIUM | WN16-PK-000010 | The DoD Root CA certificates must be installed in the Trusted Root Store."
-#   block:
-#       - name: "MEDIUM | WN16-PK-000010 | AUDIT | The DoD Root CA certificates must be installed in the Trusted Root Store."
-#         win_shell: echo true
-#         register: wn16_pk_000010_audit
-#         check_mode: no
-#         changed_when: no
-
-
-#       - name: "MEDIUM | WN16-PK-000010 | PATCH | The DoD Root CA certificates must be installed in the Trusted Root Store."
-#         win_shell: echo true
-#         changed_when: no
-
-
-#   when:
-#       - wn16_pk_000010
-#   tags:
-#       - WN16-PK-000010
-#       - xccdf_mil.disa.stig_rule_SV-88269r3_rule
-#       - notimplemented
-#       - notest
-
-# - name: "MEDIUM | WN16-PK-000020 | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
-#   block:
-#       - name: "MEDIUM | WN16-PK-000020 | AUDIT | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
-#         win_shell: echo true
-#         register: wn16_pk_000020_audit
-#         check_mode: no
-#         changed_when: no
-
-
-#       - name: "MEDIUM | WN16-PK-000020 | PATCH | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
-#         win_shell: echo true
-#         changed_when: no
-
-
-#   when:
-#       - wn16_pk_000020
-#   tags:
-#       - WN16-PK-000020
-#       - notimplemented
-#       - notest
-
-# - name: "MEDIUM | WN16-PK-000030 | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
-#   block:
-#       - name: "MEDIUM | WN16-PK-000030 | AUDIT | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
-#         win_shell: Get-ChildItem -Path Cert:Localmachine\disallowed | Where Issuer -Like "*CCEB Interoperability*" | FL Subject, Issuer, Thumbprint, NotAfter
-#         register: wn16_pk_000030_audit
-#         check_mode: no
-#         changed_when: no
-#         failed_when: no
-
-
-#       - name: "MEDIUM | WN16-PK-000030 | PATCH | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
-#         win_shell: echo true
-#         changed_when: no
-
-
-#   when:
-#       - wn16_pk_000030
-#   tags:
-#       - WN16-PK-000030
-#       - SV-88273r3
-#       - notimplemented
-#       - notest
-
-# - name: "MEDIUM | WN16-DC-000280 | Domain controllers must have a PKI server certificate."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000280 | AUDIT | Domain controllers must have a PKI server certificate."
-#         win_shell: echo true
-#         register: wn16_dc_000280_audit
-#         check_mode: no
-#         changed_when: no
-
-
-#       - name: "MEDIUM | WN16-DC-000280 | PATCH | Domain controllers must have a PKI server certificate."
-#         win_shell: echo true
-#         changed_when: no
-
-
-#   when:
-#       - wn16_dc_000280
-#   tags:
-#       - WN16-DC-000280
-#       - notimplemented
-#       - notest
-
-# - name: "MEDIUM | WN16-DC-000310 | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000310 | AUDIT | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
-#         win_shell: echo true
-#         register: wn16_dc_000310_audit
-#         check_mode: no
-#         changed_when: no
-
-
-#       - name: "MEDIUM | WN16-DC-000310 | PATCH | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
-#         win_shell: echo true
-#         changed_when: no
-
-
-#   when:
-#       - wn16_dc_000310
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000310
-#       - notimplemented
-#       - notest
-
-# - name: "MEDIUM | WN16-SO-000030 | Windows Server 2016 built-in administrator account must be renamed."
-#   win_security_policy:
-#       section: System Access
-#       key: NewAdministratorName
-#       value: "{{ wn16_so_000030_newadministratorname }}"
-#   when:
-#       - wn16_so_000030
-#       - not winstig_skip_for_test
-#   tags:
-#       - WN16-SO-000030
-#       - SV-88287r2
-
-# - name: "MEDIUM | WN16-SO-000040 | Windows Server 2016 built-in guest account must be renamed."
-#   win_security_policy:
-#       section: System Access
-#       key: NewGuestName
-#       value: "{{ wn16_so_000040_newguestname }}"
-#   when:
-#       - wn16_so_000040
-#   tags:
-#       - WN16-SO-000040
-#       - SV-88289r2
-
-# - name: "MEDIUM | WN16-SO-000050 | Audit policy using subcategories must be enabled."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\
-#       state: present
-#       value: SCENoApplyLegacyAuditPolicy
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000050
-#   tags:
-#       - WN16-SO-000050
-#       - xccdf_mil.disa.stig_rule_SV-88291r1_rule
-
-# - name: "MEDIUM | WN16-DC-000320 | Domain controllers must require LDAP access signing."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
-#       state: present
-#       value: LDAPServerIntegrity
-#       data: 2
-#       datatype: dword
-#   when:
-#       - wn16_dc_000320
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000320
-#       - SV-88293r1_rule
-
-# - name: "MEDIUM | WN16-DC-000330 | Domain controllers must be configured to allow reset of machine account passwords."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-#       state: present
-#       value: RefusePasswordChange
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_dc_000330
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000330
-#       - SV-88295r1_rule
-
-# - name: "MEDIUM | WN16-SO-000080 | The setting Domain member: Digitally encrypt or sign secure channel data (always) must be configured to Enabled."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-#       state: present
-#       value: RequireSignOrSeal
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000080
-#       - ansible_windows_domain_role == "Member server"
-#   tags:
-#       - WN16-SO-000080
-#       - SV-88297r1
-
-# - name: "MEDIUM | WN16-SO-000090 | The setting Domain member: Digitally encrypt secure channel data (when possible) must be configured to enabled."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-#       state: present
-#       value: SealSecureChannel
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000090
-#       - ansible_windows_domain_role == "Member server"
-#   tags:
-#       - WN16-SO-000090
-#       - SV-88299r1
-
-# - name: "MEDIUM | WN16-SO-000100 | The setting Domain member: Digitally sign secure channel data (when possible) must be configured to Enabled."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-#       state: present
-#       value: SignSecureChannel
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000100
-#       - ansible_windows_domain_role == "Member server"
-#   tags:
-#       - WN16-SO-000100
-#       - SV-88301r1
-
-# - name: "MEDIUM | WN16-SO-000110 | The computer account password must not be prevented from being reset."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-#       state: present
-#       value: DisablePasswordChange
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_so_000110
-#   tags:
-#       - WN16-SO-000110
-#       - SV-88303r1
-
-# - name: "MEDIUM | WN16-SO-000120 | The maximum age for machine account passwords must be configured to 30 days or less."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-#       state: present
-#       value: MaximumPasswordAge
-#       data: 30
-#       datatype: dword
-#   when:
-#       - wn16_so_000120
-#   tags:
-#       - WN16-SO-000120
-#       - SV-88305r1
-
-# - name: "MEDIUM | WN16-SO-000130 | Windows Server 2016 must be configured to require a strong session key."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-#       state: present
-#       value: RequireStrongKey
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000130
-#   tags:
-#       - WN16-SO-000130
-#       - SV-88307r1
-
-# - name: "MEDIUM | WN16-SO-000140 | The machine inactivity limit must be set to 15 minutes, locking the system with the screen saver."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: InactivityTimeoutSecs
-#       data: 900
-#       datatype: dword
-#   when:
-#       - wn16_so_000140
-#   tags:
-#       - WN16-SO-000140
-#       - xccdf_mil.disa.stig_rule_SV-88309r2_rule
-
-# - name: "MEDIUM | WN16-SO-000150 | The required legal notice must be configured to display before console logon."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: LegalNoticeText
-#       data: "{{ wn16_so_000150_legalnoticetext }}"
-#       datatype: string
-#   when:
-#       - wn16_so_000150
-#   tags:
-#       - WN16-SO-000150
-#       - xccdf_mil.disa.stig_rule_SV-88311r2_rule
-#       - borked_regkey_casesensitive
-
-# - name: "MEDIUM | WN16-MS-000050 | Caching of logon credentials must be limited."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
-#       state: present
-#       value: CachedLogonsCount
-#       data: 4
-#       datatype: dword
-#   when:
-#       - wn16_ms_000050
-#       - ansible_windows_domain_role == "Member server"
-#   tags:
-#       - WN16-MS-000050
-#       - xccdf_mil.disa.stig_rule_SV-88315r1_rule
-
-# - name: "MEDIUM | WN16-SO-000190 | The setting Microsoft network client: Digitally sign communications (always) must be configured to Enabled."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
-#       state: present
-#       value: RequireSecuritySignature
-#       data: 1
-#       datatype: dword
-#   tags:
-#       - WN16-SO-000190
-#       - xccdf_mil.disa.stig_rule_SV-88317r1_rule
-
-# - name: "MEDIUM | WN16-SO-000200 | The setting Microsoft network client: Digitally sign communications (if server agrees) must be configured to Enabled."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
-#       state: present
-#       value: EnableSecuritySignature
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000200
-#   tags:
-#       - WN16-SO-000200
-#       - xccdf_mil.disa.stig_rule_SV-88319r1_rule
-
-# - name: "MEDIUM | WN16-SO-000210 | Unencrypted passwords must not be sent to third-party Server Message Block (SMB) servers."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
-#       state: present
-#       value: EnablePlainTextPassword
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_so_000210
-#   tags:
-#       - WN16-SO-000210
-#       - xccdf_mil.disa.stig_rule_SV-88321r1_rule
-
-# - name: "MEDIUM | WN16-SO-000230 | The setting Microsoft network server: Digitally sign communications (always) must be configured to Enabled."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters
-#       state: present
-#       value: RequireSecuritySignature
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000230
-#   tags:
-#       - WN16-SO-000230
-#       - xccdf_mil.disa.stig_rule_SV-88325r1_rule
-#       - borked_regkey_casesensitive
-
-# - name: "MEDIUM | WN16-SO-000240 | The setting Microsoft network server: Digitally sign communications (if client agrees) must be configured to Enabled."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters
-#       state: present
-#       value: EnableSecuritySignature
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000240
-#   tags:
-#       - WN16-SO-000240
-#       - xccdf_mil.disa.stig_rule_SV-88327r1_rule
-#       - borked_regkey_casesensitive
-
-# - name: "MEDIUM | WN16-SO-000290 | Windows Server 2016 must be configured to prevent anonymous users from having the same permissions as the Everyone group."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-#       state: present
-#       value: EveryoneIncludesAnonymous
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_so_000290
-#   tags:
-#       - WN16-SO-000290
-#       - xccdf_mil.disa.stig_rule_SV-88337r1_rule
-#       - borked_regkey_casesensitive
-
-# - name: "MEDIUM | WN16-MS-000310 | Remote calls to the Security Account Manager (SAM) must be restricted to Administrators."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-#       state: present
-#       value: RestrictRemoteSAM
-#       data: O:BAG:BAD:(A;;RC;;;BA)
-#       datatype: string
-#   when:
-#       - wn16_ms_000310
-#   tags:
-#       - WN16-MS-000310
-#       - xccdf_mil.disa.stig_rule_SV-88341r2_rule
-
-# - name: "MEDIUM | WN16-SO-000320 | Services using Local System that use Negotiate when reverting to NTLM authentication must use the computer identity instead of authenticating anonymously."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-#       state: present
-#       value: UseMachineId
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000320
-#   tags:
-#       - WN16-SO-000320
-#       - xccdf_mil.disa.stig_rule_SV-88343r1_rule
-
-# - name: "MEDIUM | WN16-SO-000330 | NTLM must be prevented from falling back to a Null session."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
-#       state: present
-#       value: allownullsessionfallback
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_so_000330
-#   tags:
-#       - WN16-SO-000330
-#       - xccdf_mil.disa.stig_rule_SV-88345r1_rule
-
-# - name: "MEDIUM | WN16-SO-000340 | PKU2U authentication using online identities must be prevented."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\pku2u
-#       state: present
-#       value: AllowOnlineID
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_so_000340
-#   tags:
-#       - WN16-SO-000340
-#       - xccdf_mil.disa.stig_rule_SV-88347r1_rule
-
-# - name: "MEDIUM | WN16-SO-000350 | Kerberos encryption types must be configured to prevent the use of DES and RC4 encryption suites."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters
-#       state: present
-#       value: SupportedEncryptionTypes
-#       data: 2147483640
-#       datatype: dword
-#   when:
-#       - wn16_so_000350
-#   tags:
-#       - WN16-SO-000350
-#       - xccdf_mil.disa.stig_rule_SV-88349r2_rule
-
-# - name: "MEDIUM | WN16-SO-000390 | Windows Server 2016 must be configured to at least negotiate signing for LDAP client signing."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Services\LDAP
-#       state: present
-#       value: LDAPClientIntegrity
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000390
-#   tags:
-#       - WN16-SO-000390
-#       - xccdf_mil.disa.stig_rule_SV-88357r1_rule
-#       - borked_regkey_casesensitive
-
-# - name: "MEDIUM | WN16-SO-000400 | Session security for NTLM SSP-based clients must be configured to require NTLMv2 session security and 128-bit encryption."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
-#       state: present
-#       value: NTLMMinClientSec
-#       data: 537395200
-#       datatype: dword
-#   when:
-#       - wn16_so_000400
-#   tags:
-#       - WN16-SO-000400
-#       - xccdf_mil.disa.stig_rule_SV-88359r1_rule
-#       - borked_regkey_casesensitive
-
-# - name: "MEDIUM | WN16-SO-000410 | Session security for NTLM SSP-based servers must be configured to require NTLMv2 session security and 128-bit encryption."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
-#       state: present
-#       value: NTLMMinServerSec
-#       data: 537395200
-#       datatype: dword
-#   when:
-#       - wn16_so_000410
-#   tags:
-#       - WN16-SO-000410
-#       - xccdf_mil.disa.stig_rule_SV-88361r1_rule
-#       - borked_regkey_casesensitive
-
-# - name: "MEDIUM | WN16-SO-000420 | Users must be required to enter a password to access private keys stored on the computer."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Policies\Microsoft\Cryptography
-#       state: present
-#       value: ForceKeyProtection
-#       data: 2
-#       datatype: dword
-#   when:
-#       - wn16_so_000420
-#   tags:
-#       - WN16-SO-000420
-#       - xccdf_mil.disa.stig_rule_SV-88363r1_rule
-
-# - name: "MEDIUM | WN16-SO-000430 | Windows Server 2016 must be configured to use FIPS-compliant algorithms for encryption, hashing, and signing."
-#   win_regedit:
-#       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\FIPSAlgorithmPolicy
-#       state: present
-#       value: Enabled
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000430
-#   tags:
-#       - WN16-SO-000430
-#       - xccdf_mil.disa.stig_rule_SV-88365r1_rule
-
-# - name: "MEDIUM | WN16-SO-000460 | User Account Control approval mode for the built-in Administrator must be enabled."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: FilterAdministratorToken
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000460
-#   tags:
-#       - WN16-SO-000460
-#       - xccdf_mil.disa.stig_rule_SV-88371r1_rule
-#       # - exclusions for server core? think its NA there
-
-# - name: "MEDIUM | WN16-SO-000470 | UIAccess applications must not be allowed to prompt for elevation without using the secure desktop."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: EnableUIADesktopToggle
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_so_000470
-#   tags:
-#       - WN16-SO-000470
-#       - xccdf_mil.disa.stig_rule_SV-88373r1_rule
-
-# - name: "MEDIUM | WN16-SO-000480 | User Account Control must, at a minimum, prompt administrators for consent on the secure desktop."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: ConsentPromptBehaviorAdmin
-#       data: 2
-#       datatype: dword
-#   when:
-#       - wn16_so_000480
-#   tags:
-#       - WN16-SO-000480
-#       - xccdf_mil.disa.stig_rule_SV-88375r1_rule
-
-# - name: "MEDIUM | WN16-SO-000490 | User Account Control must automatically deny standard user requests for elevation."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: ConsentPromptBehaviorUser
-#       data: 0
-#       datatype: dword
-#   when:
-#       - wn16_so_000490
-#   tags:
-#       - WN16-SO-000490
-#       - xccdf_mil.disa.stig_rule_SV-88377r1_rule
-
-# - name: "MEDIUM | WN16-SO-000500 | User Account Control must be configured to detect application installations and prompt for elevation."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: EnableInstallerDetection
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000500
-#   tags:
-#       - WN16-SO-000500
-#       - SV-88379r1
-
-# - name: "MEDIUM | WN16-SO-000510 | User Account Control must only elevate UIAccess applications that are installed in secure locations."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: EnableSecureUIAPaths
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000510
-#   tags:
-#       - WN16-SO-000510
-#       - SV-88381r1
-
-# - name: "MEDIUM | WN16-SO-000520 | User Account Control must run all administrators in Admin Approval Mode, enabling UAC."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: EnableLUA
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000520
-#   tags:
-#       - WN16-SO-000520
-#       - SV-88383r1
-
-# - name: "MEDIUM | WN16-SO-000530 | User Account Control must virtualize file and registry write failures to per-user locations."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-#       state: present
-#       value: EnableVirtualization
-#       data: 1
-#       datatype: dword
-#   when:
-#       - wn16_so_000530
-#   tags:
-#       - WN16-SO-000530
-#       - SV-88385r1
-
-# - name: "MEDIUM | WN16-UC-000030 | Zone information must be preserved when saving attachments."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments
-#       state: present
-#       value: SaveZoneInformation
-#       data: 2
-#       datatype: dword
-#   when:
-#       - wn16_uc_000030
-#   tags:
-#       - WN16-UC-000030
-#       - SV-88391r1_rule
-
-# - name: "MEDIUM | WN16-UR-000010 | The Access Credential Manager as a trusted caller user right must not be assigned to any groups or accounts."
-#   win_security_policy:
-#       section: Privilege Rights
-#       key: SeTrustedCredManAccessPrivilege
-#       value: ""
-#   when:
-#       - wn16_ur_000010
-#   tags:
-#       - WN16-UR-000010
-#       - SV-88393r2
-
-# - name: "MEDIUM | WN16-DC-000340 | The Access this computer from the network user right must only be assigned to the Administrators, Authenticated Users, and Enterprise Domain Controllers groups on domain controllers."
-#   win_user_right:
-#       name: SeNetworkLogonRight
-#       users:
-#           - Administrators
-#           - Authenticated Users
-#           - Enterprise Domain Controllers
-#       action: set
-#   when:
-#       - wn16_dc_000340
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000340
-#       - SV-88395r3_rule
-
-# - name: "MEDIUM | WN16-MS-000340 | The Access this computer from the network user right must only be assigned to the Administrators and Authenticated Users groups on member servers."
-#   win_user_right:
-#       name: SeNetworkLogonRight
-#       users:
-#           - Administrators
-#           - Authenticated Users
-#       action: set
-#   when:
-#       - wn16_ms_000340
-#   tags:
-#       - WN16-MS-000340
-#       - SV-88397r3
-
-# - name: "MEDIUM | WN16-DC-000350 | The Add workstations to domain user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeMachineAccountPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_dc_000350
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000350
-#       - SV-88401r2_rule
-
-# - name: "MEDIUM | WN16-UR-000050 | The Allow log on locally user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeInteractiveLogonRight
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000050
-#   tags:
-#       - WN16-UR-000050
-#       - SV-88403r2
-
-# - name: "MEDIUM | WN16-DC-000360 | The Allow log on through Remote Desktop Services user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeRemoteInteractiveLogonRight
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_dc_000360
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000360
-#       - SV-88405r2
-
-# - name: "MEDIUM | WN16-UR-000070 | The Back up files and directories user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeBackupPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000070
-#   tags:
-#       - WN16-UR-000070
-#       - SV-88407r2
-#       - borked_passes_when_empty
-
-# - name: "MEDIUM | WN16-UR-000080 | The Create a pagefile user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeCreatePagefilePrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000080
-#   tags:
-#       - WN16-UR-000080
-#       - SV-88409r2
-#       - borked_passes_when_empty
-
-# - name: "MEDIUM | WN16-UR-000100 | The Create global objects user right must only be assigned to Administrators, Service, Local Service, and Network Service."
-#   win_user_right:
-#       name: SeCreateGlobalPrivilege
-#       users:
-#           - Administrators
-#           - Service
-#           - "Local Service"
-#           - Network Service
-#       action: set
-#   when:
-#       - wn16_ur_000100
-#   tags:
-#       - WN16-UR-000100
-#       - SV-88413r2
-
-# - name: "MEDIUM | WN16-UR-000110 | The Create permanent shared objects user right must not be assigned to any groups or accounts."
-#   win_security_policy:
-#       section: Privilege Rights
-#       key: SeCreatePermanentPrivilege
-#       value: ""
-#   when:
-#       - wn16_ur_000110
-#   tags:
-#       - WN16-UR-000110
-#       - SV-88415r2
-
-# - name: "MEDIUM | WN16-UR-000120 | The Create symbolic links user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeCreateSymbolicLinkPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000120
-#   tags:
-#       - WN16-UR-000120
-#       - SV-88417r2
-
-# - name: "MEDIUM | WN16-DC-000370 | The Deny access to this computer from the network user right on domain controllers must be configured to prevent unauthenticated access."
-#   win_user_right:
-#       name: SeDenyNetworkLogonRight
-#       users: Guests
-#       action: set
-#   when:
-#       - wn16_dc_000370
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000370
-#       - SV-88421r2
-
-# - name: "MEDIUM | WN16-MS-000370 | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems."
-#   block:
-#       - name: "MEDIUM | WN16-MS-000370 | AUDIT | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems."
-#         win_user_right:
-#             name: SeDenyNetworkLogonRight
-#             users:
-#                 - Guests
-#                 - Enterprise Admins
-#                 - Domain Admins
-#                 - Local account
-#                 - Local account and member of Administrators group
-#             action: set
-#         when: ansible_windows_domain_role == "Member server"
-#       - name: "MEDIUM | WN16-MS-000370 | PATCH | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems."
-#         win_user_right:
-#             name: SeDenyNetworkLogonRight
-#             users: Guests
-#             action: set
-#         when: not ansible_windows_domain_member
-#   when:
-#       - wn16_ms_000370
-#   tags:
-#       - WN16-MS-000370
-#       - SV-88423r3
-#       - borked_if_ansible_svc_is_admin_domain_member_fails_after
-
-# - name: "MEDIUM | WN16-DC-000380 | The Deny log on as a batch job user right on domain controllers must be configured to prevent unauthenticated access."
-#   win_user_right:
-#       name: SeDenyBatchLogonRight
-#       users: Guests
-#       action: set
-#   when:
-#       - wn16_dc_000380
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000380
-#       - SV-88425r2
-
-# - name: "MEDIUM | WN16-MS-000380 | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
-#   block:
-#       - name: "MEDIUM | WN16-MS-000380 | DOMAIN MEMBER | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
-#         win_user_right:
-#             name: SeDenyBatchLogonRight
-#             users:
-#                 - Enterprise Admins
-#                 - Domain Admins
-#                 - Guests
-#             action: set
-#         when: ansible_windows_domain_role == "Member server"
-#       - name: "MEDIUM | WN16-MS-000380 | STAND-ALONE | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
-#         win_user_right:
-#             name: SeDenyBatchLogonRight
-#             users:
-#                 - Guests
-#             action: set
-#         when: not ansible_windows_domain_member
-#   when:
-#       - wn16_ms_000380
-#   tags:
-#       - WN16-MS-000380
-#       - SV-88427r2
-
-# - name: "MEDIUM | WN16-DC-000390 | The Deny log on as a service user right must be configured to include no accounts or groups (blank) on domain controllers."
-#   win_security_policy:
-#       section: Privilege Rights
-#       key: SeDenyServiceLogonRight
-#       value: ""
-#   when:
-#       - wn16_dc_000390
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000390
-#       - SV-88429r2
-
-# - name: "MEDIUM | WN16-MS-000390 | The Deny log on as a service user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems. No other groups or accounts must be assigned this right."
-#   win_user_right:
-#       name: SeDenyServiceLogonRight
-#       users:
-#           - Enterprise Admins
-#           - Domain Admins
-#       action: set
-#   when:
-#       - wn16_ms_000390
-#       - ansible_windows_domain_role == "Member server"
-#   tags:
-#       - WN16-MS-000390
-#       - SV-88431r2
-
-# - name: "MEDIUM | WN16-DC-000400 | The Deny log on locally user right on domain controllers must be configured to prevent unauthenticated access."
-#   win_user_right:
-#       name: SeDenyInteractiveLogonRight
-#       users: Guests
-#       action: set
-#   when:
-#       - wn16_dc_000400
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000400
-#       - SV-88433r2
-
-# - name: "MEDIUM | WN16-MS-000400 | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
-#   block:
-#       - name: "MEDIUM | WN16-MS-000400 | DOMAIN MEMBER | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
-#         win_user_right:
-#             name: SeDenyInteractiveLogonRight
-#             users:
-#                 - Guests
-#                 - Enterprise Admins
-#                 - Domain Admins
-#             action: set
-#         when: ansible_windows_domain_role == "Member server"
-#       - name: "MEDIUM | WN16-MS-000400 | STAND-ALONE | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
-#         win_user_right:
-#             name: SeDenyInteractiveLogonRight
-#             users:
-#                 - Guests
-#             action: set
-#         when: not ansible_windows_domain_member
-#   when:
-#       - wn16_ms_000400
-#   tags:
-#       - WN16-MS-000400
-#       - SV-88435r3
-
-# - name: "MEDIUM | WN16-DC-000410 | The Deny log on through Remote Desktop Services user right on domain controllers must be configured to prevent unauthenticated access."
-#   win_user_right:
-#       name: SeDenyRemoteInteractiveLogonRight
-#       users: Guests
-#       action: set
-#   when:
-#       - wn16_dc_000410
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000410
-#       - SV-88437r2
-
-# - name: "MEDIUM | WN16-MS-000410 | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
-#   block:
-#       - name: "MEDIUM | WN16-MS-000410 | DOMAIN MEMBER | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
-#         win_user_right:
-#             name: SeDenyRemoteInteractiveLogonRight
-#             users:
-#                 - Guests
-#                 - Local account
-#                 - Enterprise Admins
-#                 - Domain Admins
-#             action: set
-#         when: ansible_windows_domain_role == "Member server"
-#       - name: "MEDIUM | WN16-MS-000410 | STAND-ALONE | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
-#         win_user_right:
-#             name: SeDenyRemoteInteractiveLogonRight
-#             users:
-#                 - Guests
-#             action: set
-#         when: not ansible_windows_domain_member
-#   when:
-#       - wn16_ms_000410
-#   tags:
-#       - WN16-MS-000410
-#       - SV-88439r3
-
-# - name: "MEDIUM | WN16-DC-000420 | The Enable computer and user accounts to be trusted for delegation user right must only be assigned to the Administrators group on domain controllers."
-#   win_user_right:
-#       name: SeEnableDelegationPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_dc_000420
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000420
-#       - SV-88441r2
-
-# - name: "MEDIUM | WN16-MS-000420 | The Enable computer and user accounts to be trusted for delegation user right must not be assigned to any groups or accounts on member servers."
-#   win_security_policy:
-#       section: Privilege Rights
-#       key: SeEnableDelegationPrivilege
-#       value: ""
-#   when:
-#       - wn16_ms_000420
-#   tags:
-#       - WN16-MS-000420
-#       - SV-88443r2
-
-# - name: "MEDIUM | WN16-UR-000200 | The Force shutdown from a remote system user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeRemoteShutdownPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000200
-#   tags:
-#       - WN16-UR-000200
-#       - SV-88445r2
-#       - borked_passes_when_empty
-
-# - name: "MEDIUM | WN16-UR-000210 | The Generate security audits user right must only be assigned to Local Service and Network Service."
-#   win_user_right:
-#       name: SeAuditPrivilege
-#       users:
-#           - Local Service
-#           - Network Service
-#       action: set
-#   when:
-#       - wn16_ur_000210
-#   tags:
-#       - WN16-UR-000210
-#       - SV-88447r2
-
-# - name: "MEDIUM | WN16-UR-000220 | The Impersonate a client after authentication user right must only be assigned to Administrators, Service, Local Service, and Network Service."
-#   win_user_right:
-#       name: SeImpersonatePrivilege
-#       users:
-#           - Administrators
-#           - Service
-#           - Local Service
-#           - Network Service
-#       action: set
-#   when:
-#       - wn16_ur_000220
-#   tags:
-#       - WN16-UR-000220
-#       - xccdf_mil.disa.stig_rule_SV-88449r2_rule
-
-# - name: "MEDIUM | WN16-UR-000230 | The Increase scheduling priority user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeIncreaseBasePriorityPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000230
-#   tags:
-#       - WN16-UR-000230
-#       - xccdf_mil.disa.stig_rule_SV-88451r2_rule
-#       - borked_passes_when_empty
-
-# - name: "MEDIUM | WN16-UR-000240 | The Load and unload device drivers user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeLoadDriverPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000240
-#   tags:
-#       - WN16-UR-000240
-#       - xccdf_mil.disa.stig_rule_SV-88453r2_rule
-#       - borked_passes_when_empty
-
-# - name: "MEDIUM | WN16-UR-000250 | The Lock pages in memory user right must not be assigned to any groups or accounts."
-#   win_security_policy:
-#       section: Privilege Rights
-#       key: SeLockMemoryPrivilege
-#       value: ""
-#   when:
-#       - wn16_ur_000250
-#   tags:
-#       - WN16-UR-000250
-#       - SV-88455r2_rule
-
-# - name: "MEDIUM | WN16-UR-000260 | The Manage auditing and security log user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeSecurityPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000260
-#   tags:
-#       - WN16-UR-000260
-#       - SV-88457r2_rule
-
-# - name: "MEDIUM | WN16-UR-000270 | The Modify firmware environment values user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeSystemEnvironmentPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000270
-#   tags:
-#       - WN16-UR-000270
-#       - SV-88459r2_rule
-
-# - name: "MEDIUM | WN16-UR-000280 | The Perform volume maintenance tasks user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeManageVolumePrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000280
-#   tags:
-#       - WN16-UR-000280
-#       - SV-88461r2_rule
-
-# - name: "MEDIUM | WN16-UR-000290 | The Profile single process user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeProfileSingleProcessPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000290
-#   tags:
-#       - WN16-UR-000290
-#       - SV-88463r2
-
-# - name: "MEDIUM | WN16-UR-000300 | The Restore files and directories user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeRestorePrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000300
-#   tags:
-#       - WN16-UR-000300
-#       - SV-88465r2_rule
-
-# - name: "MEDIUM | WN16-UR-000310 | The Take ownership of files or other objects user right must only be assigned to the Administrators group."
-#   win_user_right:
-#       name: SeTakeOwnershipPrivilege
-#       users: Administrators
-#       action: set
-#   when:
-#       - wn16_ur_000310
-#   tags:
-#       - WN16-UR-000310
-#       - SV-88467r2_rule
-
-# - name: "MEDIUM | WN16-SO-000180 | The Smart Card removal option must be configured to Force Logoff or Lock Workstation."
-#   win_regedit:
-#       path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
-#       state: present
-#       value: scremoveoption
-#       data: 1
-#       datatype: string
-#   when:
-#       - wn16_so_000180
-#   tags:
-#       - WN16-SO-000180
-#       - xccdf_mil.disa.stig_rule_SV-88473r1_rule
-
-# - name: "MEDIUM | WN16-SO-000010 | Windows Server 2016 built-in guest account must be disabled."
-#   win_security_policy:
-#       section: System Access
-#       key: EnableGuestAccount
-#       value: 0
-#   when:
-#       - wn16_so_000010
-#   tags:
-#       - WN16-SO-000010
-#       - SV-88475r2
+- name: "MEDIUM | WN16-CC-000300 | The Application event log size must be configured to 32768 KB or greater."
+  block:
+      - name: "MEDIUM | WN16-CC-000300 | AUDIT | The Application event log size must be configured to 32768 KB or greater."
+        win_reg_stat:
+            path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application
+            name: MaxSize
+        register: wn16_cc_000300_audit
+        changed_when: no
+      - name: "MEDIUM | WN16-CC-000300 | PATCH | The Application event log size must be configured to 32768 KB or greater."
+        win_regedit:
+            path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application
+            state: present
+            value: MaxSize
+            data: "{{ wn16_cc_000300_app_maxsize }}"
+            datatype: dword
+        when: not wn16_cc_000300_audit.exists or wn16_cc_000300_audit.value < 32768
+  when:
+      - wn16_cc_000300
+  tags:
+      - WN16-CC-000300
+      - xccdf_mil.disa.stig_rule_SV-88217r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000310 | The Security event log size must be configured to 196608 KB or greater."
+  block:
+      - name: "MEDIUM | WN16-CC-000310 | AUDIT | The Security event log size must be configured to 196608 KB or greater."
+        win_reg_stat:
+            path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security
+            name: MaxSize
+        register: wn16_cc_000310_audit
+        changed_when: no
+      - name: "MEDIUM | WN16-CC-000310 | PATCH | The Security event log size must be configured to 196608 KB or greater."
+        win_regedit:
+            path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security
+            state: present
+            value: MaxSize
+            data: "{{ wn16_cc_000310_sec_maxsize }}"
+            datatype: dword
+        when: not wn16_cc_000310_audit.exists or wn16_cc_000310_audit.value < 196608
+  when:
+      - wn16_cc_000310
+  tags:
+      - WN16-CC-000310
+      - xccdf_mil.disa.stig_rule_SV-88219r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000320 | The System event log size must be configured to 32768 KB or greater."
+  block:
+      - name: "MEDIUM | WN16-CC-000320 | AUDIT | The System event log size must be configured to 32768 KB or greater."
+        win_reg_stat:
+            path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\System
+            name: MaxSize
+        register: wn16_cc_000320_audit
+        changed_when: no
+      - name: "MEDIUM | WN16-CC-000320 | PATCH | The System event log size must be configured to 32768 KB or greater."
+        win_regedit:
+            path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\System
+            state: present
+            value: MaxSize
+            data: "{{ wn16_cc_000320_sys_maxsize }}"
+            datatype: dword
+        when: not wn16_cc_000320_audit.exists or wn16_cc_000320_audit.value < 32768
+  when:
+      - wn16_cc_000320
+  tags:
+      - WN16-CC-000320
+      - xccdf_mil.disa.stig_rule_SV-88221r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000330 | Windows Server 2016 Windows SmartScreen must be enabled."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
+      state: present
+      value: EnableSmartScreen
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000330
+  tags:
+      - WN16-CC-000330
+      - xccdf_mil.disa.stig_rule_SV-88223r2_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000340 | Explorer Data Execution Prevention must be enabled."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer
+      state: present
+      value: NoDataExecutionPrevention
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000340
+  tags:
+      - WN16-CC-000340
+      - xccdf_mil.disa.stig_rule_SV-88225r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000360 | File Explorer shell protocol must run in protected mode."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
+      state: present
+      value: PreXPSP2ShellProtocolBehavior
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000360
+  tags:
+      - WN16-CC-000360
+      - xccdf_mil.disa.stig_rule_SV-88229r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000370 | Passwords must not be saved in the Remote Desktop Client."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+      state: present
+      value: DisablePasswordSaving
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000370
+  tags:
+      - WN16-CC-000370
+      - xccdf_mil.disa.stig_rule_SV-88231r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000380 | Local drives must be prevented from sharing with Remote Desktop Session Hosts."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+      state: present
+      value: fDisableCdm
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000380
+  tags:
+      - WN16-CC-000380
+      - xccdf_mil.disa.stig_rule_SV-88233r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000390 | Remote Desktop Services must always prompt a client for passwords upon connection."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+      state: present
+      value: fPromptForPassword
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000390
+  tags:
+      - WN16-CC-000390
+      - xccdf_mil.disa.stig_rule_SV-88235r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000400 | The Remote Desktop Session Host must require secure Remote Procedure Call (RPC) communications."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+      state: present
+      value: fEncryptRPCTraffic
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000400
+  tags:
+      - WN16-CC-000400
+      - xccdf_mil.disa.stig_rule_SV-88237r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000410 | Remote Desktop Services must be configured with the client connection encryption set to High Level."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
+      state: present
+      value: MinEncryptionLevel
+      data: 3
+      datatype: dword
+  when:
+      - wn16_cc_000410
+  tags:
+      - WN16-CC-000410
+      - xccdf_mil.disa.stig_rule_SV-88239r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000420 | Attachments must be prevented from being downloaded from RSS feeds."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Feeds
+      state: present
+      value: DisableEnclosureDownload
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000420
+  tags:
+      - WN16-CC-000420
+      - xccdf_mil.disa.stig_rule_SV-88241r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000430 | Basic authentication for RSS feeds over HTTP must not be used."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Feeds
+      state: present
+      value: AllowBasicAuthInClear
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000430
+  tags:
+      - WN16-CC-000430
+      - xccdf_mil.disa.stig_rule_SV-88243r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000440 | Indexing of encrypted files must be turned off."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search
+      state: present
+      value: AllowIndexingEncryptedStoresOrItems
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000440
+  tags:
+      - WN16-CC-000440
+      - xccdf_mil.disa.stig_rule_SV-88245r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000450 | Users must be prevented from changing installation options."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer
+      state: present
+      value: EnableUserControl
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000450
+  tags:
+      - WN16-CC-000450
+      - xccdf_mil.disa.stig_rule_SV-88247r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000470 | Users must be notified if a web-based program attempts to install software."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer
+      state: present
+      value: SafeForScripting
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000470
+  tags:
+      - WN16-CC-000470
+      - xccdf_mil.disa.stig_rule_SV-88251r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000480 | Automatically signing in the last interactive user after a system-initiated restart must be disabled."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: DisableAutomaticRestartSignOn
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000480
+  tags:
+      - WN16-CC-000480
+      - xccdf_mil.disa.stig_rule_SV-88253r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000490 | PowerShell script block logging must be enabled."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
+      state: present
+      value: EnableScriptBlockLogging
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000490
+  tags:
+      - WN16-CC-000490
+      - xccdf_mil.disa.stig_rule_SV-88255r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000510 | The Windows Remote Management (WinRM) client must not allow unencrypted traffic."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client
+      state: present
+      value: AllowUnencryptedTraffic
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000510
+  tags:
+      - WN16-CC-000510
+      - xccdf_mil.disa.stig_rule_SV-88259r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000520 | The Windows Remote Management (WinRM) client must not use Digest authentication."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client
+      state: present
+      value: AllowDigest
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000520
+  tags:
+      - WN16-CC-000520
+      - xccdf_mil.disa.stig_rule_SV-88261r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000540 | The Windows Remote Management (WinRM) service must not allow unencrypted traffic."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service
+      state: present
+      value: AllowUnencryptedTraffic
+      data: 0
+      datatype: dword
+  when:
+      - wn16_cc_000540
+  tags:
+      - WN16-CC-000540
+      - xccdf_mil.disa.stig_rule_SV-88265r1_rule
+      - tested
+
+- name: "MEDIUM | WN16-CC-000550 | The Windows Remote Management (WinRM) service must not store RunAs credentials."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service
+      state: present
+      value: DisableRunAs
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000550
+  tags:
+      - WN16-CC-000550
+      - xccdf_mil.disa.stig_rule_SV-88267r1_rule
+      - tested
+
+# https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-6_dod.zip ?
+- name: "MEDIUM | WN16-PK-000010 | The DoD Root CA certificates must be installed in the Trusted Root Store."
+  block:
+      - name: "MEDIUM | WN16-PK-000010 | AUDIT | The DoD Root CA certificates must be installed in the Trusted Root Store."
+        win_shell: echo true
+        register: wn16_pk_000010_audit
+        check_mode: no
+        changed_when: no
+
+
+      - name: "MEDIUM | WN16-PK-000010 | PATCH | The DoD Root CA certificates must be installed in the Trusted Root Store."
+        win_shell: echo true
+        changed_when: no
+
+
+  when:
+      - wn16_pk_000010
+  tags:
+      - WN16-PK-000010
+      - xccdf_mil.disa.stig_rule_SV-88269r3_rule
+      - notimplemented
+      - notest
+
+- name: "MEDIUM | WN16-PK-000020 | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
+  block:
+      - name: "MEDIUM | WN16-PK-000020 | AUDIT | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
+        win_shell: echo true
+        register: wn16_pk_000020_audit
+        check_mode: no
+        changed_when: no
+
+
+      - name: "MEDIUM | WN16-PK-000020 | PATCH | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
+        win_shell: echo true
+        changed_when: no
+
+
+  when:
+      - wn16_pk_000020
+  tags:
+      - WN16-PK-000020
+      - notimplemented
+      - notest
+
+- name: "MEDIUM | WN16-PK-000030 | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
+  block:
+      - name: "MEDIUM | WN16-PK-000030 | AUDIT | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
+        win_shell: Get-ChildItem -Path Cert:Localmachine\disallowed | Where Issuer -Like "*CCEB Interoperability*" | FL Subject, Issuer, Thumbprint, NotAfter
+        register: wn16_pk_000030_audit
+        check_mode: no
+        changed_when: no
+        failed_when: no
+
+
+      - name: "MEDIUM | WN16-PK-000030 | PATCH | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
+        win_shell: echo true
+        changed_when: no
+
+
+  when:
+      - wn16_pk_000030
+  tags:
+      - WN16-PK-000030
+      - SV-88273r3
+      - notimplemented
+      - notest
+
+- name: "MEDIUM | WN16-DC-000280 | Domain controllers must have a PKI server certificate."
+  block:
+      - name: "MEDIUM | WN16-DC-000280 | AUDIT | Domain controllers must have a PKI server certificate."
+        win_shell: echo true
+        register: wn16_dc_000280_audit
+        check_mode: no
+        changed_when: no
+
+
+      - name: "MEDIUM | WN16-DC-000280 | PATCH | Domain controllers must have a PKI server certificate."
+        win_shell: echo true
+        changed_when: no
+
+
+  when:
+      - wn16_dc_000280
+  tags:
+      - WN16-DC-000280
+      - notimplemented
+      - notest
+
+- name: "MEDIUM | WN16-DC-000310 | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
+  block:
+      - name: "MEDIUM | WN16-DC-000310 | AUDIT | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
+        win_shell: echo true
+        register: wn16_dc_000310_audit
+        check_mode: no
+        changed_when: no
+
+
+      - name: "MEDIUM | WN16-DC-000310 | PATCH | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
+        win_shell: echo true
+        changed_when: no
+
+
+  when:
+      - wn16_dc_000310
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000310
+      - notimplemented
+      - notest
+
+- name: "MEDIUM | WN16-SO-000030 | Windows Server 2016 built-in administrator account must be renamed."
+  win_security_policy:
+      section: System Access
+      key: NewAdministratorName
+      value: "{{ wn16_so_000030_newadministratorname }}"
+  when:
+      - wn16_so_000030
+      - not winstig_skip_for_test
+  tags:
+      - WN16-SO-000030
+      - SV-88287r2
+
+- name: "MEDIUM | WN16-SO-000040 | Windows Server 2016 built-in guest account must be renamed."
+  win_security_policy:
+      section: System Access
+      key: NewGuestName
+      value: "{{ wn16_so_000040_newguestname }}"
+  when:
+      - wn16_so_000040
+  tags:
+      - WN16-SO-000040
+      - SV-88289r2
+
+- name: "MEDIUM | WN16-SO-000050 | Audit policy using subcategories must be enabled."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\
+      state: present
+      value: SCENoApplyLegacyAuditPolicy
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000050
+  tags:
+      - WN16-SO-000050
+      - xccdf_mil.disa.stig_rule_SV-88291r1_rule
+
+- name: "MEDIUM | WN16-DC-000320 | Domain controllers must require LDAP access signing."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
+      state: present
+      value: LDAPServerIntegrity
+      data: 2
+      datatype: dword
+  when:
+      - wn16_dc_000320
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000320
+      - SV-88293r1_rule
+
+- name: "MEDIUM | WN16-DC-000330 | Domain controllers must be configured to allow reset of machine account passwords."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+      state: present
+      value: RefusePasswordChange
+      data: 0
+      datatype: dword
+  when:
+      - wn16_dc_000330
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000330
+      - SV-88295r1_rule
+
+- name: "MEDIUM | WN16-SO-000080 | The setting Domain member: Digitally encrypt or sign secure channel data (always) must be configured to Enabled."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+      state: present
+      value: RequireSignOrSeal
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000080
+      - ansible_windows_domain_role == "Member server"
+  tags:
+      - WN16-SO-000080
+      - SV-88297r1
+
+- name: "MEDIUM | WN16-SO-000090 | The setting Domain member: Digitally encrypt secure channel data (when possible) must be configured to enabled."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+      state: present
+      value: SealSecureChannel
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000090
+      - ansible_windows_domain_role == "Member server"
+  tags:
+      - WN16-SO-000090
+      - SV-88299r1
+
+- name: "MEDIUM | WN16-SO-000100 | The setting Domain member: Digitally sign secure channel data (when possible) must be configured to Enabled."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+      state: present
+      value: SignSecureChannel
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000100
+      - ansible_windows_domain_role == "Member server"
+  tags:
+      - WN16-SO-000100
+      - SV-88301r1
+
+- name: "MEDIUM | WN16-SO-000110 | The computer account password must not be prevented from being reset."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+      state: present
+      value: DisablePasswordChange
+      data: 0
+      datatype: dword
+  when:
+      - wn16_so_000110
+  tags:
+      - WN16-SO-000110
+      - SV-88303r1
+
+- name: "MEDIUM | WN16-SO-000120 | The maximum age for machine account passwords must be configured to 30 days or less."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+      state: present
+      value: MaximumPasswordAge
+      data: 30
+      datatype: dword
+  when:
+      - wn16_so_000120
+  tags:
+      - WN16-SO-000120
+      - SV-88305r1
+
+- name: "MEDIUM | WN16-SO-000130 | Windows Server 2016 must be configured to require a strong session key."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+      state: present
+      value: RequireStrongKey
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000130
+  tags:
+      - WN16-SO-000130
+      - SV-88307r1
+
+- name: "MEDIUM | WN16-SO-000140 | The machine inactivity limit must be set to 15 minutes, locking the system with the screen saver."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: InactivityTimeoutSecs
+      data: 900
+      datatype: dword
+  when:
+      - wn16_so_000140
+  tags:
+      - WN16-SO-000140
+      - xccdf_mil.disa.stig_rule_SV-88309r2_rule
+
+- name: "MEDIUM | WN16-SO-000150 | The required legal notice must be configured to display before console logon."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: LegalNoticeText
+      data: "{{ wn16_so_000150_legalnoticetext }}"
+      datatype: string
+  when:
+      - wn16_so_000150
+  tags:
+      - WN16-SO-000150
+      - xccdf_mil.disa.stig_rule_SV-88311r2_rule
+      - borked_regkey_casesensitive
+
+- name: "MEDIUM | WN16-MS-000050 | Caching of logon credentials must be limited."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+      state: present
+      value: CachedLogonsCount
+      data: 4
+      datatype: dword
+  when:
+      - wn16_ms_000050
+      - ansible_windows_domain_role == "Member server"
+  tags:
+      - WN16-MS-000050
+      - xccdf_mil.disa.stig_rule_SV-88315r1_rule
+
+- name: "MEDIUM | WN16-SO-000190 | The setting Microsoft network client: Digitally sign communications (always) must be configured to Enabled."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
+      state: present
+      value: RequireSecuritySignature
+      data: 1
+      datatype: dword
+  tags:
+      - WN16-SO-000190
+      - xccdf_mil.disa.stig_rule_SV-88317r1_rule
+
+- name: "MEDIUM | WN16-SO-000200 | The setting Microsoft network client: Digitally sign communications (if server agrees) must be configured to Enabled."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
+      state: present
+      value: EnableSecuritySignature
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000200
+  tags:
+      - WN16-SO-000200
+      - xccdf_mil.disa.stig_rule_SV-88319r1_rule
+
+- name: "MEDIUM | WN16-SO-000210 | Unencrypted passwords must not be sent to third-party Server Message Block (SMB) servers."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
+      state: present
+      value: EnablePlainTextPassword
+      data: 0
+      datatype: dword
+  when:
+      - wn16_so_000210
+  tags:
+      - WN16-SO-000210
+      - xccdf_mil.disa.stig_rule_SV-88321r1_rule
+
+- name: "MEDIUM | WN16-SO-000230 | The setting Microsoft network server: Digitally sign communications (always) must be configured to Enabled."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters
+      state: present
+      value: RequireSecuritySignature
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000230
+  tags:
+      - WN16-SO-000230
+      - xccdf_mil.disa.stig_rule_SV-88325r1_rule
+      - borked_regkey_casesensitive
+
+- name: "MEDIUM | WN16-SO-000240 | The setting Microsoft network server: Digitally sign communications (if client agrees) must be configured to Enabled."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters
+      state: present
+      value: EnableSecuritySignature
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000240
+  tags:
+      - WN16-SO-000240
+      - xccdf_mil.disa.stig_rule_SV-88327r1_rule
+      - borked_regkey_casesensitive
+
+- name: "MEDIUM | WN16-SO-000290 | Windows Server 2016 must be configured to prevent anonymous users from having the same permissions as the Everyone group."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
+      state: present
+      value: EveryoneIncludesAnonymous
+      data: 0
+      datatype: dword
+  when:
+      - wn16_so_000290
+  tags:
+      - WN16-SO-000290
+      - xccdf_mil.disa.stig_rule_SV-88337r1_rule
+      - borked_regkey_casesensitive
+
+- name: "MEDIUM | WN16-MS-000310 | Remote calls to the Security Account Manager (SAM) must be restricted to Administrators."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
+      state: present
+      value: RestrictRemoteSAM
+      data: O:BAG:BAD:(A;;RC;;;BA)
+      datatype: string
+  when:
+      - wn16_ms_000310
+  tags:
+      - WN16-MS-000310
+      - xccdf_mil.disa.stig_rule_SV-88341r2_rule
+
+- name: "MEDIUM | WN16-SO-000320 | Services using Local System that use Negotiate when reverting to NTLM authentication must use the computer identity instead of authenticating anonymously."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
+      state: present
+      value: UseMachineId
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000320
+  tags:
+      - WN16-SO-000320
+      - xccdf_mil.disa.stig_rule_SV-88343r1_rule
+
+- name: "MEDIUM | WN16-SO-000330 | NTLM must be prevented from falling back to a Null session."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
+      state: present
+      value: allownullsessionfallback
+      data: 0
+      datatype: dword
+  when:
+      - wn16_so_000330
+  tags:
+      - WN16-SO-000330
+      - xccdf_mil.disa.stig_rule_SV-88345r1_rule
+
+- name: "MEDIUM | WN16-SO-000340 | PKU2U authentication using online identities must be prevented."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\pku2u
+      state: present
+      value: AllowOnlineID
+      data: 0
+      datatype: dword
+  when:
+      - wn16_so_000340
+  tags:
+      - WN16-SO-000340
+      - xccdf_mil.disa.stig_rule_SV-88347r1_rule
+
+- name: "MEDIUM | WN16-SO-000350 | Kerberos encryption types must be configured to prevent the use of DES and RC4 encryption suites."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters
+      state: present
+      value: SupportedEncryptionTypes
+      data: 2147483640
+      datatype: dword
+  when:
+      - wn16_so_000350
+  tags:
+      - WN16-SO-000350
+      - xccdf_mil.disa.stig_rule_SV-88349r2_rule
+
+- name: "MEDIUM | WN16-SO-000390 | Windows Server 2016 must be configured to at least negotiate signing for LDAP client signing."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Services\LDAP
+      state: present
+      value: LDAPClientIntegrity
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000390
+  tags:
+      - WN16-SO-000390
+      - xccdf_mil.disa.stig_rule_SV-88357r1_rule
+      - borked_regkey_casesensitive
+
+- name: "MEDIUM | WN16-SO-000400 | Session security for NTLM SSP-based clients must be configured to require NTLMv2 session security and 128-bit encryption."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
+      state: present
+      value: NTLMMinClientSec
+      data: 537395200
+      datatype: dword
+  when:
+      - wn16_so_000400
+  tags:
+      - WN16-SO-000400
+      - xccdf_mil.disa.stig_rule_SV-88359r1_rule
+      - borked_regkey_casesensitive
+
+- name: "MEDIUM | WN16-SO-000410 | Session security for NTLM SSP-based servers must be configured to require NTLMv2 session security and 128-bit encryption."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
+      state: present
+      value: NTLMMinServerSec
+      data: 537395200
+      datatype: dword
+  when:
+      - wn16_so_000410
+  tags:
+      - WN16-SO-000410
+      - xccdf_mil.disa.stig_rule_SV-88361r1_rule
+      - borked_regkey_casesensitive
+
+- name: "MEDIUM | WN16-SO-000420 | Users must be required to enter a password to access private keys stored on the computer."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Policies\Microsoft\Cryptography
+      state: present
+      value: ForceKeyProtection
+      data: 2
+      datatype: dword
+  when:
+      - wn16_so_000420
+  tags:
+      - WN16-SO-000420
+      - xccdf_mil.disa.stig_rule_SV-88363r1_rule
+
+- name: "MEDIUM | WN16-SO-000430 | Windows Server 2016 must be configured to use FIPS-compliant algorithms for encryption, hashing, and signing."
+  win_regedit:
+      path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\FIPSAlgorithmPolicy
+      state: present
+      value: Enabled
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000430
+  tags:
+      - WN16-SO-000430
+      - xccdf_mil.disa.stig_rule_SV-88365r1_rule
+
+- name: "MEDIUM | WN16-SO-000460 | User Account Control approval mode for the built-in Administrator must be enabled."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: FilterAdministratorToken
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000460
+  tags:
+      - WN16-SO-000460
+      - xccdf_mil.disa.stig_rule_SV-88371r1_rule
+      # - exclusions for server core? think its NA there
+
+- name: "MEDIUM | WN16-SO-000470 | UIAccess applications must not be allowed to prompt for elevation without using the secure desktop."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: EnableUIADesktopToggle
+      data: 0
+      datatype: dword
+  when:
+      - wn16_so_000470
+  tags:
+      - WN16-SO-000470
+      - xccdf_mil.disa.stig_rule_SV-88373r1_rule
+
+- name: "MEDIUM | WN16-SO-000480 | User Account Control must, at a minimum, prompt administrators for consent on the secure desktop."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: ConsentPromptBehaviorAdmin
+      data: 2
+      datatype: dword
+  when:
+      - wn16_so_000480
+  tags:
+      - WN16-SO-000480
+      - xccdf_mil.disa.stig_rule_SV-88375r1_rule
+
+- name: "MEDIUM | WN16-SO-000490 | User Account Control must automatically deny standard user requests for elevation."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: ConsentPromptBehaviorUser
+      data: 0
+      datatype: dword
+  when:
+      - wn16_so_000490
+  tags:
+      - WN16-SO-000490
+      - xccdf_mil.disa.stig_rule_SV-88377r1_rule
+
+- name: "MEDIUM | WN16-SO-000500 | User Account Control must be configured to detect application installations and prompt for elevation."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: EnableInstallerDetection
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000500
+  tags:
+      - WN16-SO-000500
+      - SV-88379r1
+
+- name: "MEDIUM | WN16-SO-000510 | User Account Control must only elevate UIAccess applications that are installed in secure locations."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: EnableSecureUIAPaths
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000510
+  tags:
+      - WN16-SO-000510
+      - SV-88381r1
+
+- name: "MEDIUM | WN16-SO-000520 | User Account Control must run all administrators in Admin Approval Mode, enabling UAC."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: EnableLUA
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000520
+  tags:
+      - WN16-SO-000520
+      - SV-88383r1
+
+- name: "MEDIUM | WN16-SO-000530 | User Account Control must virtualize file and registry write failures to per-user locations."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+      state: present
+      value: EnableVirtualization
+      data: 1
+      datatype: dword
+  when:
+      - wn16_so_000530
+  tags:
+      - WN16-SO-000530
+      - SV-88385r1
+
+- name: "MEDIUM | WN16-UC-000030 | Zone information must be preserved when saving attachments."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments
+      state: present
+      value: SaveZoneInformation
+      data: 2
+      datatype: dword
+  when:
+      - wn16_uc_000030
+  tags:
+      - WN16-UC-000030
+      - SV-88391r1_rule
+
+- name: "MEDIUM | WN16-UR-000010 | The Access Credential Manager as a trusted caller user right must not be assigned to any groups or accounts."
+  win_security_policy:
+      section: Privilege Rights
+      key: SeTrustedCredManAccessPrivilege
+      value: ""
+  when:
+      - wn16_ur_000010
+  tags:
+      - WN16-UR-000010
+      - SV-88393r2
+
+- name: "MEDIUM | WN16-DC-000340 | The Access this computer from the network user right must only be assigned to the Administrators, Authenticated Users, and Enterprise Domain Controllers groups on domain controllers."
+  win_user_right:
+      name: SeNetworkLogonRight
+      users:
+          - Administrators
+          - Authenticated Users
+          - Enterprise Domain Controllers
+      action: set
+  when:
+      - wn16_dc_000340
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000340
+      - SV-88395r3_rule
+
+- name: "MEDIUM | WN16-MS-000340 | The Access this computer from the network user right must only be assigned to the Administrators and Authenticated Users groups on member servers."
+  win_user_right:
+      name: SeNetworkLogonRight
+      users:
+          - Administrators
+          - Authenticated Users
+      action: set
+  when:
+      - wn16_ms_000340
+  tags:
+      - WN16-MS-000340
+      - SV-88397r3
+
+- name: "MEDIUM | WN16-DC-000350 | The Add workstations to domain user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeMachineAccountPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_dc_000350
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000350
+      - SV-88401r2_rule
+
+- name: "MEDIUM | WN16-UR-000050 | The Allow log on locally user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeInteractiveLogonRight
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000050
+  tags:
+      - WN16-UR-000050
+      - SV-88403r2
+
+- name: "MEDIUM | WN16-DC-000360 | The Allow log on through Remote Desktop Services user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeRemoteInteractiveLogonRight
+      users: Administrators
+      action: set
+  when:
+      - wn16_dc_000360
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000360
+      - SV-88405r2
+
+- name: "MEDIUM | WN16-UR-000070 | The Back up files and directories user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeBackupPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000070
+  tags:
+      - WN16-UR-000070
+      - SV-88407r2
+      - borked_passes_when_empty
+
+- name: "MEDIUM | WN16-UR-000080 | The Create a pagefile user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeCreatePagefilePrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000080
+  tags:
+      - WN16-UR-000080
+      - SV-88409r2
+      - borked_passes_when_empty
+
+- name: "MEDIUM | WN16-UR-000100 | The Create global objects user right must only be assigned to Administrators, Service, Local Service, and Network Service."
+  win_user_right:
+      name: SeCreateGlobalPrivilege
+      users:
+          - Administrators
+          - Service
+          - "Local Service"
+          - Network Service
+      action: set
+  when:
+      - wn16_ur_000100
+  tags:
+      - WN16-UR-000100
+      - SV-88413r2
+
+- name: "MEDIUM | WN16-UR-000110 | The Create permanent shared objects user right must not be assigned to any groups or accounts."
+  win_security_policy:
+      section: Privilege Rights
+      key: SeCreatePermanentPrivilege
+      value: ""
+  when:
+      - wn16_ur_000110
+  tags:
+      - WN16-UR-000110
+      - SV-88415r2
+
+- name: "MEDIUM | WN16-UR-000120 | The Create symbolic links user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeCreateSymbolicLinkPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000120
+  tags:
+      - WN16-UR-000120
+      - SV-88417r2
+
+- name: "MEDIUM | WN16-DC-000370 | The Deny access to this computer from the network user right on domain controllers must be configured to prevent unauthenticated access."
+  win_user_right:
+      name: SeDenyNetworkLogonRight
+      users: Guests
+      action: set
+  when:
+      - wn16_dc_000370
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000370
+      - SV-88421r2
+
+- name: "MEDIUM | WN16-MS-000370 | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems."
+  block:
+      - name: "MEDIUM | WN16-MS-000370 | AUDIT | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems."
+        win_user_right:
+            name: SeDenyNetworkLogonRight
+            users:
+                - Guests
+                - Enterprise Admins
+                - Domain Admins
+                - Local account
+                - Local account and member of Administrators group
+            action: set
+        when: ansible_windows_domain_role == "Member server"
+      - name: "MEDIUM | WN16-MS-000370 | PATCH | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems."
+        win_user_right:
+            name: SeDenyNetworkLogonRight
+            users: Guests
+            action: set
+        when: not ansible_windows_domain_member
+  when:
+      - wn16_ms_000370
+  tags:
+      - WN16-MS-000370
+      - SV-88423r3
+      - borked_if_ansible_svc_is_admin_domain_member_fails_after
+
+- name: "MEDIUM | WN16-DC-000380 | The Deny log on as a batch job user right on domain controllers must be configured to prevent unauthenticated access."
+  win_user_right:
+      name: SeDenyBatchLogonRight
+      users: Guests
+      action: set
+  when:
+      - wn16_dc_000380
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000380
+      - SV-88425r2
+
+- name: "MEDIUM | WN16-MS-000380 | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
+  block:
+      - name: "MEDIUM | WN16-MS-000380 | DOMAIN MEMBER | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
+        win_user_right:
+            name: SeDenyBatchLogonRight
+            users:
+                - Enterprise Admins
+                - Domain Admins
+                - Guests
+            action: set
+        when: ansible_windows_domain_role == "Member server"
+      - name: "MEDIUM | WN16-MS-000380 | STAND-ALONE | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
+        win_user_right:
+            name: SeDenyBatchLogonRight
+            users:
+                - Guests
+            action: set
+        when: not ansible_windows_domain_member
+  when:
+      - wn16_ms_000380
+  tags:
+      - WN16-MS-000380
+      - SV-88427r2
+
+- name: "MEDIUM | WN16-DC-000390 | The Deny log on as a service user right must be configured to include no accounts or groups (blank) on domain controllers."
+  win_security_policy:
+      section: Privilege Rights
+      key: SeDenyServiceLogonRight
+      value: ""
+  when:
+      - wn16_dc_000390
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000390
+      - SV-88429r2
+
+- name: "MEDIUM | WN16-MS-000390 | The Deny log on as a service user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems. No other groups or accounts must be assigned this right."
+  win_user_right:
+      name: SeDenyServiceLogonRight
+      users:
+          - Enterprise Admins
+          - Domain Admins
+      action: set
+  when:
+      - wn16_ms_000390
+      - ansible_windows_domain_role == "Member server"
+  tags:
+      - WN16-MS-000390
+      - SV-88431r2
+
+- name: "MEDIUM | WN16-DC-000400 | The Deny log on locally user right on domain controllers must be configured to prevent unauthenticated access."
+  win_user_right:
+      name: SeDenyInteractiveLogonRight
+      users: Guests
+      action: set
+  when:
+      - wn16_dc_000400
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000400
+      - SV-88433r2
+
+- name: "MEDIUM | WN16-MS-000400 | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
+  block:
+      - name: "MEDIUM | WN16-MS-000400 | DOMAIN MEMBER | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
+        win_user_right:
+            name: SeDenyInteractiveLogonRight
+            users:
+                - Guests
+                - Enterprise Admins
+                - Domain Admins
+            action: set
+        when: ansible_windows_domain_role == "Member server"
+      - name: "MEDIUM | WN16-MS-000400 | STAND-ALONE | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
+        win_user_right:
+            name: SeDenyInteractiveLogonRight
+            users:
+                - Guests
+            action: set
+        when: not ansible_windows_domain_member
+  when:
+      - wn16_ms_000400
+  tags:
+      - WN16-MS-000400
+      - SV-88435r3
+
+- name: "MEDIUM | WN16-DC-000410 | The Deny log on through Remote Desktop Services user right on domain controllers must be configured to prevent unauthenticated access."
+  win_user_right:
+      name: SeDenyRemoteInteractiveLogonRight
+      users: Guests
+      action: set
+  when:
+      - wn16_dc_000410
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000410
+      - SV-88437r2
+
+- name: "MEDIUM | WN16-MS-000410 | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
+  block:
+      - name: "MEDIUM | WN16-MS-000410 | DOMAIN MEMBER | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
+        win_user_right:
+            name: SeDenyRemoteInteractiveLogonRight
+            users:
+                - Guests
+                - Local account
+                - Enterprise Admins
+                - Domain Admins
+            action: set
+        when: ansible_windows_domain_role == "Member server"
+      - name: "MEDIUM | WN16-MS-000410 | STAND-ALONE | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
+        win_user_right:
+            name: SeDenyRemoteInteractiveLogonRight
+            users:
+                - Guests
+            action: set
+        when: not ansible_windows_domain_member
+  when:
+      - wn16_ms_000410
+  tags:
+      - WN16-MS-000410
+      - SV-88439r3
+
+- name: "MEDIUM | WN16-DC-000420 | The Enable computer and user accounts to be trusted for delegation user right must only be assigned to the Administrators group on domain controllers."
+  win_user_right:
+      name: SeEnableDelegationPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_dc_000420
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000420
+      - SV-88441r2
+
+- name: "MEDIUM | WN16-MS-000420 | The Enable computer and user accounts to be trusted for delegation user right must not be assigned to any groups or accounts on member servers."
+  win_security_policy:
+      section: Privilege Rights
+      key: SeEnableDelegationPrivilege
+      value: ""
+  when:
+      - wn16_ms_000420
+  tags:
+      - WN16-MS-000420
+      - SV-88443r2
+
+- name: "MEDIUM | WN16-UR-000200 | The Force shutdown from a remote system user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeRemoteShutdownPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000200
+  tags:
+      - WN16-UR-000200
+      - SV-88445r2
+      - borked_passes_when_empty
+
+- name: "MEDIUM | WN16-UR-000210 | The Generate security audits user right must only be assigned to Local Service and Network Service."
+  win_user_right:
+      name: SeAuditPrivilege
+      users:
+          - Local Service
+          - Network Service
+      action: set
+  when:
+      - wn16_ur_000210
+  tags:
+      - WN16-UR-000210
+      - SV-88447r2
+
+- name: "MEDIUM | WN16-UR-000220 | The Impersonate a client after authentication user right must only be assigned to Administrators, Service, Local Service, and Network Service."
+  win_user_right:
+      name: SeImpersonatePrivilege
+      users:
+          - Administrators
+          - Service
+          - Local Service
+          - Network Service
+      action: set
+  when:
+      - wn16_ur_000220
+  tags:
+      - WN16-UR-000220
+      - xccdf_mil.disa.stig_rule_SV-88449r2_rule
+
+- name: "MEDIUM | WN16-UR-000230 | The Increase scheduling priority user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeIncreaseBasePriorityPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000230
+  tags:
+      - WN16-UR-000230
+      - xccdf_mil.disa.stig_rule_SV-88451r2_rule
+      - borked_passes_when_empty
+
+- name: "MEDIUM | WN16-UR-000240 | The Load and unload device drivers user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeLoadDriverPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000240
+  tags:
+      - WN16-UR-000240
+      - xccdf_mil.disa.stig_rule_SV-88453r2_rule
+      - borked_passes_when_empty
+
+- name: "MEDIUM | WN16-UR-000250 | The Lock pages in memory user right must not be assigned to any groups or accounts."
+  win_security_policy:
+      section: Privilege Rights
+      key: SeLockMemoryPrivilege
+      value: ""
+  when:
+      - wn16_ur_000250
+  tags:
+      - WN16-UR-000250
+      - SV-88455r2_rule
+
+- name: "MEDIUM | WN16-UR-000260 | The Manage auditing and security log user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeSecurityPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000260
+  tags:
+      - WN16-UR-000260
+      - SV-88457r2_rule
+
+- name: "MEDIUM | WN16-UR-000270 | The Modify firmware environment values user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeSystemEnvironmentPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000270
+  tags:
+      - WN16-UR-000270
+      - SV-88459r2_rule
+
+- name: "MEDIUM | WN16-UR-000280 | The Perform volume maintenance tasks user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeManageVolumePrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000280
+  tags:
+      - WN16-UR-000280
+      - SV-88461r2_rule
+
+- name: "MEDIUM | WN16-UR-000290 | The Profile single process user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeProfileSingleProcessPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000290
+  tags:
+      - WN16-UR-000290
+      - SV-88463r2
+
+- name: "MEDIUM | WN16-UR-000300 | The Restore files and directories user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeRestorePrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000300
+  tags:
+      - WN16-UR-000300
+      - SV-88465r2_rule
+
+- name: "MEDIUM | WN16-UR-000310 | The Take ownership of files or other objects user right must only be assigned to the Administrators group."
+  win_user_right:
+      name: SeTakeOwnershipPrivilege
+      users: Administrators
+      action: set
+  when:
+      - wn16_ur_000310
+  tags:
+      - WN16-UR-000310
+      - SV-88467r2_rule
+
+- name: "MEDIUM | WN16-SO-000180 | The Smart Card removal option must be configured to Force Logoff or Lock Workstation."
+  win_regedit:
+      path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+      state: present
+      value: scremoveoption
+      data: 1
+      datatype: string
+  when:
+      - wn16_so_000180
+  tags:
+      - WN16-SO-000180
+      - xccdf_mil.disa.stig_rule_SV-88473r1_rule
+
+- name: "MEDIUM | WN16-SO-000010 | Windows Server 2016 built-in guest account must be disabled."
+  win_security_policy:
+      section: System Access
+      key: EnableGuestAccount
+      value: 0
+  when:
+      - wn16_so_000010
+  tags:
+      - WN16-SO-000010
+      - SV-88475r2
 
 - name: "MEDIUM | WN16-00-000411 | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server."
   win_regedit:
@@ -3632,26 +3592,26 @@
       - WN16-AU-000286
       - xccdf_mil.disa.stig_rule_SV-101011r1_rule
 
-# - name: "MEDIUM | WN16-DC-000430 | The password for the krbtgt account on a domain must be reset at least every 180 days."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000430 | AUDIT | The password for the krbtgt account on a domain must be reset at least every 180 days."
-#         win_shell: "Get-ADUser krbtgt -Property PasswordLastSet | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16_dc_000430_pass_age }}))} | Select-Object -ExpandProperty PasswordLastSet"
-#         register: wn16_dc_000430_audit
-#         check_mode: no
-#         changed_when: wn16_dc_000430_audit.stdout != ""
+- name: "MEDIUM | WN16-DC-000430 | The password for the krbtgt account on a domain must be reset at least every 180 days."
+  block:
+      - name: "MEDIUM | WN16-DC-000430 | AUDIT | The password for the krbtgt account on a domain must be reset at least every 180 days."
+        win_shell: "Get-ADUser krbtgt -Property PasswordLastSet | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16_dc_000430_pass_age }}))} | Select-Object -ExpandProperty PasswordLastSet"
+        register: wn16_dc_000430_audit
+        check_mode: no
+        changed_when: wn16_dc_000430_audit.stdout != ""
 
-#       ## this seems highly prone to breakage? its a DC acct, has replicate. if you screw it up, it could stop kerberos tickets and break auth things
-#       ## https://www.kjctech.net/do-you-need-to-update-krbtgt-account-password/
-#       - name: "MEDIUM | WN16-DC-000430 | PATCH | The password for the krbtgt account on a domain must be reset at least every 180 days."
-#         win_shell: echo true
-#         changed_when: no
-#   when:
-#       - wn16_dc_000430
-#       - ansible_windows_domain_role == "Primary domain controller"
-#   tags:
-#       - WN16-DC-000430
-#       - win2k16_disruption_high
-#       - notimplemented
+      ## this seems highly prone to breakage? its a DC acct, has replicate. if you screw it up, it could stop kerberos tickets and break auth things
+      ## https://www.kjctech.net/do-you-need-to-update-krbtgt-account-password/
+      - name: "MEDIUM | WN16-DC-000430 | PATCH | The password for the krbtgt account on a domain must be reset at least every 180 days."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000430
+      - ansible_windows_domain_role == "Primary domain controller"
+  tags:
+      - WN16-DC-000430
+      - win2k16_disruption_high
+      - notimplemented
 
 - name: "MEDIUM | WN16-00-000300 | The roles and features required by the system must be documented."
   block:
