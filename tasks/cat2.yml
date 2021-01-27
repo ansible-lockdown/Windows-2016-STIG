@@ -401,7 +401,7 @@
   block:
       - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
         win_find:
-            paths: c:\
+            paths: C:\
             patterns: ['*.p12', '*.pfx']
             hidden: true
             recurse: true

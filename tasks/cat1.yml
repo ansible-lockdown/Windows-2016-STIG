@@ -644,9 +644,9 @@
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
 
-fails openscap - the v1r10 xml checks for "Administrators" string but secedit uses the SIDs thus
-"SeDebugPrivilege = *S-1-5-32-544"  is Administrators (openscap fails)
-emailed_disa.letterkenny.re.mbx.stig-customer-support-mailbox@mail.mil
+# fails openscap - the v1r10 xml checks for "Administrators" string but secedit uses the SIDs thus
+# "SeDebugPrivilege = *S-1-5-32-544"  is Administrators (openscap fails)
+# emailed_disa.letterkenny.re.mbx.stig-customer-support-mailbox@mail.mil
 # SCC tool works
 - name: "HIGH | WN16-UR-000130 | The Debug programs user right must only be assigned to the Administrators group."
   win_user_right:
