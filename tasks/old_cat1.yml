@@ -11,6 +11,7 @@
       - name: "HIGH | WN16-00-000010 | PATCH | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_00_000010
   tags:
@@ -32,6 +33,7 @@
       - name: "HIGH | WN16-DC-000010 | PATCH | Only administrators responsible for the domain controller must have Administrator rights on the system."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_dc_000010
       - ansible_windows_domain_role == "Primary domain controller"
@@ -77,6 +79,7 @@
       - name: "HIGH | WN16-00-000040 | PATCH | Administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_00_000040
   tags:
@@ -121,6 +124,7 @@
         register: wn16_00_000110_audit_currentbuild
         failed_when: wn16_00_000110_audit_currentbuildnumber.value is not version('14393', '>=')
         changed_when: no
+
   when:
       - wn16_00_000110
   tags:
@@ -144,6 +148,7 @@
       - name: "HIGH | WN16-00-000120 | PATCH | The Windows Server 2016 system must use an anti-virus program."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_00_000120
   tags:
@@ -171,6 +176,8 @@
         register: wn16_00_000150_audit
         check_mode: no
         changed_when: no
+
+
   when:
       - wn16_00_000150
   tags:
@@ -197,6 +204,7 @@
         # this would be on a DC however?
         # Get-ADUser -Filter * | Set-ADUser -AllowReversiblePasswordEncryption $false
         changed_when: no
+
   when:
       - wn16_ac_000090
   tags:
@@ -499,6 +507,7 @@
       - name: "HIGH | WN16-DC-000300 | PATCH | PKI certificates associated with user accounts must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
         win_shell: echo true
         changed_when: no
+
   when:
       - wn16_dc_000300
   tags:
@@ -530,8 +539,6 @@
       section: System Access
       key: LSAAnonymousNameLookup
       value: 0
-  when:
-      - wn16_so_000250
   tags:
       - WN16-SO-000250
       - xccdf_mil.disa.stig_rule_SV-88329r2_rule
@@ -644,9 +651,9 @@
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
 
-fails openscap - the v1r10 xml checks for "Administrators" string but secedit uses the SIDs thus
-"SeDebugPrivilege = *S-1-5-32-544"  is Administrators (openscap fails)
-emailed_disa.letterkenny.re.mbx.stig-customer-support-mailbox@mail.mil
+# fails openscap - the v1r10 xml checks for "Administrators" string but secedit uses the SIDs thus
+# "SeDebugPrivilege = *S-1-5-32-544"  is Administrators (openscap fails)
+# emailed_disa.letterkenny.re.mbx.stig-customer-support-mailbox@mail.mil
 # SCC tool works
 - name: "HIGH | WN16-UR-000130 | The Debug programs user right must only be assigned to the Administrators group."
   win_user_right:
