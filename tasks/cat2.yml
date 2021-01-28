@@ -2408,7 +2408,7 @@
       datatype: dword
   when:
       - wn16_cc_000550
-      - not
+      - not winstig_skip_for_test
   tags:
       - WN16-CC-000550
       - xccdf_mil.disa.stig_rule_SV-88267r1_rule
