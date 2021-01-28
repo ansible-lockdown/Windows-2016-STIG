@@ -2364,6 +2364,7 @@
       datatype: dword
   when:
       - wn16_cc_000510
+      - not wn16_cc_000510
   tags:
       - WN16-CC-000510
       - xccdf_mil.disa.stig_rule_SV-88259r1_rule
@@ -2392,6 +2393,7 @@
       datatype: dword
   when:
       - wn16_cc_000540
+      - not wn16_cc_000540
   tags:
       - WN16-CC-000540
       - xccdf_mil.disa.stig_rule_SV-88265r1_rule
@@ -2406,6 +2408,7 @@
       datatype: dword
   when:
       - wn16_cc_000550
+      - not
   tags:
       - WN16-CC-000550
       - xccdf_mil.disa.stig_rule_SV-88267r1_rule
@@ -2915,6 +2918,7 @@
       datatype: dword
   when:
       - wn16_so_000460
+      - not winstig_skip_for_test
   tags:
       - WN16-SO-000460
       - xccdf_mil.disa.stig_rule_SV-88371r1_rule
