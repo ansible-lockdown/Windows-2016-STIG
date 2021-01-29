@@ -27,7 +27,7 @@ win2016stig_audit_disruptive: yes
 winstig_skip_for_travis: false
 
 # Some tasks need to be skipped for CI/CD testing to work correctly
-win2016stig_skip_for_test: false
+winstig_skip_for_test: false
 
 win2016stig_workaround_for_disa_benchmark: true
 win2016stig_workaround_for_ssg_benchmark: true
@@ -106,6 +106,7 @@ wn16_00_000370: true
 wn16_00_000380: true
 wn16_00_000390: true
 wn16_00_000400: true
+wn16_00_000410: true
 wn16_00_000420: true
 wn16_00_000430: true
 wn16_00_000440: true
@@ -203,6 +204,7 @@ wn16_cc_000390: true
 wn16_cc_000400: true
 wn16_cc_000410: true
 wn16_cc_000420: true
+wn16_cc_000421: true
 wn16_cc_000430: true
 wn16_cc_000440: true
 wn16_cc_000450: true
