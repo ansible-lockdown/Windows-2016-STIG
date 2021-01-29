@@ -5,7 +5,7 @@ Windows Server 2016 DISA STIG
 
 Configure a Windows Server 2016 system to be DISA STIG compliant. All findings will be audited by default. Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default. ~Disruptive finding remediation can be enabled by setting `rhel7stig_disruption_high` to `yes`.~ _To be implemented_
 
-This role is based on Windows Server 2016 DISA STIG: [Version 1, Rel 9 released on July 26, 2019](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_MS_Windows_Server_2016_V1R9_STIG.zip).
+This role is based on Windows Server 2016 DISA STIG: [Version 2, Rel 1 released on November 13, 2020](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_MS_Windows_Server_2016_V2R1_STIG.zip).
 
 Requirements
 ------------

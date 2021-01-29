@@ -58,7 +58,6 @@
             - wn16_00_000050_audit is not skipped
             - wn16_00_000050_audit.stdout != ""
         changed_when: yes
-
   when:
       - wn16_00_000050
       - not ansible_windows_domain_role == "Primary domain controller"
@@ -79,7 +78,6 @@
       - name: "MEDIUM | WN16-00-000060 | PATCH | Manually managed application account passwords must be at least 15 characters in length."
         win_shell: echo true
         changed_when: no
-
   when:
       - wn16_00_000060
   tags:
@@ -100,7 +98,6 @@
       - name: "MEDIUM | WN16-00-000070 | PATCH | Manually managed application account passwords must be changed at least annually or when a system administrator with knowledge of the password leaves the organization."
         win_shell: echo true
         changed_when: no
-
   when:
       - wn16_00_000070
   tags:
@@ -123,7 +120,6 @@
       - name: "MEDIUM | WN16-00-000080 | PATCH | Shared user accounts must not be permitted on the system."
         win_shell: echo true
         changed_when: no
-
   when:
       - wn16_00_000080
   tags:
@@ -144,7 +140,6 @@
       - name: "MEDIUM | WN16-00-000090 | PATCH | Windows Server 2016 must employ a deny-all, permit-by-exception policy to allow the execution of authorized software programs."
         win_shell: echo true
         changed_when: no
-
   when:
       - wn16_00_000090
   tags:
@@ -211,7 +206,6 @@
       - name: "MEDIUM | WN16-00-000160 | PATCH | Permissions for the system drive root directory usually C:\ must conform to minimum requirements."
         win_shell: echo true
         changed_when: no
-
   when:
       - wn16_00_000160
   tags:
@@ -228,6 +222,7 @@
         register: wn16_00_000170_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-00-000170 | PATCH | Permissions for program file directories must conform to minimum requirements."
         win_shell: echo true
         changed_when: no
@@ -247,6 +242,7 @@
         register: wn16_00_000180_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-00-000180 | PATCH | Permissions for the Windows installation directory must conform to minimum requirements."
         win_shell: echo true
         changed_when: no
@@ -265,6 +261,7 @@
         register: wn16_00_000190_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-00-000190 | PATCH | Default permissions for the HKEY_LOCAL_MACHINE registry hive must be maintained."
         win_shell: echo true
         changed_when: no
@@ -284,6 +281,7 @@
         register: wn16_00_000210_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-00-000210 | PATCH | Outdated or unused accounts must be removed from the system or disabled."
         win_shell: echo true
         changed_when: no
@@ -303,6 +301,7 @@
         check_mode: no
         changed_when: wn16_00_000220_audit_dc.stdout != ""
         when: ansible_windows_domain_role == "Primary domain controller"
+
       - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 accounts must require passwords."
         debug:
             msg:
@@ -319,6 +318,7 @@
         check_mode: no
         changed_when: wn16_00_000220_audit_dm_sa.stdout != ""
         when: not ansible_windows_domain_role == "Primary domain controller"
+
       - name: "MEDIUM | WN16-00-000220 | AUDIT -DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 accounts must require passwords."
         debug:
             msg:
@@ -341,6 +341,7 @@
         register: wn16_00_000230_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-00-000230 | PATCH | Passwords must be configured to expire."
         win_shell: echo true
         changed_when: no
@@ -359,6 +360,7 @@
         register: wn16_00_000240_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-00-000240 | PATCH | System files must be monitored for unauthorized changes."
         win_shell: echo true
         changed_when: no
@@ -382,12 +384,10 @@
         check_mode: no
         changed_when: no
 
-      - debug:
+      - name: "MEDIUM | WN16-00-000250 | AUDIT | Non-system-created file shares on a system must limit access to groups that require it."
+        debug:
             msg: "{{ wn16_00_000250_audit.stdout_lines }}"
         when: wn16_00_000250_audit is failed
-      - name: "MEDIUM | WN16-00-000250 | PATCH | Non-system-created file shares on a system must limit access to groups that require it."
-        win_shell: echo true
-        changed_when: no
   when:
       - wn16_00_000250
   tags:
@@ -396,13 +396,12 @@
       - notimplemented
       - notest
 
-
 # https://stackoverflow.com/questions/31049454/how-to-retrieve-recursively-any-files-with-a-specific-extensions-in-powershell/31049571
 - name: "MEDIUM | WN16-00-000270 | Software certificate installation files must be removed from Windows Server 2016."
   block:
       - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
         win_find:
-            paths: c:\
+            paths: C:\
             patterns: ['*.p12', '*.pfx']
             hidden: true
             recurse: true
@@ -411,11 +410,11 @@
         check_mode: no
         changed_when: no
         # do we need async; its very long running to search filesystems
-      - debug:
-            var: wn16_00_000270_audit
-      - name: "MEDIUM | WN16-00-000270 | PATCH | Software certificate installation files must be removed from Windows Server 2016."
-        win_shell: echo true
-        changed_when: no
+
+      - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
+        debug:
+            msg: "{{ wn16_00_000270_audit.stdout_lines }}"
+        when: wn16_00_000270_audit.stdout != ""
   when:
       - wn16_00_000270
       - not winstig_skip_for_test
@@ -435,12 +434,9 @@
         check_mode: no
         changed_when: no
 
-
       - name: "MEDIUM | WN16-00-000280 | PATCH | Systems requiring data at rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest."
         win_shell: echo true
         changed_when: no
-
-
   when:
       - wn16_00_000280
   tags:
@@ -456,6 +452,7 @@
         register: wn16_00_000290_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-00-000290 | PATCH | Protection methods such as TLS, encrypted VPNs, or IPsec must be implemented if the data owner has a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process."
         win_shell: echo true
         changed_when: no
@@ -474,6 +471,7 @@
         register: wn16_00_000310_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-00-000310 | PATCH | A host-based firewall must be installed and enabled on the system."
         win_shell: echo true
         changed_when: no
@@ -493,7 +491,6 @@
         check_mode: no
         changed_when: no
 
-
       - name: "MEDIUM | WN16-00-000320 | PATCH | Windows Server 2016 must employ automated mechanisms to determine the state of system components with regard to flaw remediation using the following frequency: continuously, where Host Based Security System (HBSS) is used; 30 days, for any additional internal network scans not covered by HBSS; and annually, for external scans by Computer Network Defense Service Provider (CNDSP)."
         win_shell: echo true
         changed_when: no
@@ -512,7 +509,6 @@
         register: wn16_00_000330_audit
         check_mode: no
         changed_when: no
-
 
       - name: "MEDIUM | WN16-00-000330 | PATCH | Windows Server 2016 must automatically remove or disable temporary user accounts after 72 hours."
         win_shell: echo true
@@ -620,6 +616,8 @@
   win_feature:
       name: FS-SMB1
       state: absent
+  when:
+      - wn16_00_000410
   tags:
       - WN16-00-000410
       - xccdf_mil.disa.stig_rule_SV-87951r2_rule
@@ -697,6 +695,7 @@
             that: wn16_ac_000030_resetlockoutcount | int is version('15', '>=')
             fail_msg: "Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater and variable wn16_ac_000030_resetlockoutcount is set to {{ wn16_ac_000030_resetlockoutcount }}"
         ignore_errors: yes
+
       - name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
         win_security_policy:
             section: System Access
@@ -716,6 +715,7 @@
             that: wn16_ac_000010_lockoutduration | int is version('15', '<=')
             fail_msg: "Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater and variable wn16_ac_000010_lockoutduration is set to {{ wn16_ac_000010_lockoutduration }}"
         ignore_errors: yes
+
       - name: "MEDIUM | WN16-AC-000010 | PATCH | Windows 2016 account lockout duration must be configured to 15 minutes or greater."
         win_security_policy:
             section: System Access
@@ -734,6 +734,7 @@
             that: wn16_ac_000040_passwordhistorysize | int is version('24', '>=')
             fail_msg: "Windows Server 2016 password history must be configured to 24 passwords remembered and variable wn16_ac_000040_passwordhistorysize is set to {{ wn16_ac_000040_passwordhistorysize }}"
         ignore_errors: yes
+
       - name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered."
         win_security_policy:
             section: System Access
@@ -752,6 +753,7 @@
             that: wn16_ac_000050_maximumpasswordage | int is version('60', '<=')
             fail_msg: "Windows Server 2016 maximum password age must be configured to 60 days or less and variable wn16_ac_000050_maximumpasswordage is set to {{ wn16_ac_000050_maximumpasswordage }}"
         ignore_errors: yes
+
       - name: "MEDIUM | WN16-AC-000050 |  PATCH | Windows Server 2016 maximum password age must be configured to 60 days or less."
         win_security_policy:
             section: System Access
@@ -770,6 +772,7 @@
             that: wn16_ac_000060_minimumpasswordage is version('1', '>=')
             fail_msg: "Windows Server 2016 minimum password age must be configured to at least one day and variable wn16_ac_000060_minimumpasswordage is set to {{ wn16_ac_000060_minimumpasswordage }}"
         ignore_errors: yes
+
       - name: "MEDIUM | WN16-AC-000060 | PATCH | Windows Server 2016 minimum password age must be configured to at least one day."
         win_security_policy:
             section: System Access
@@ -788,6 +791,7 @@
             that: wn16_ac_000070_minimumpasswordlength is version('14', '>=')
             fail_msg: "Windows Server 2016 minimum password length must be configured to 14 characters and variable wn16_ac_000070_minimumpasswordlength is set to {{ wn16_ac_000070_minimumpasswordlength }} characters"
         ignore_errors: yes
+
       - name: "MEDIUM | WN16-AC-000070 | PATCH | Windows Server 2016 minimum password length must be configured to 14 characters."
         win_security_policy:
             section: System Access
@@ -810,285 +814,243 @@
       - WN16-AC-000080
       - SV-87975r2
 
-# - name: "MEDIUM | WN16-DC-000020 | Kerberos user logon restrictions must be enforced."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000020 | AUDIT | Kerberos user logon restrictions must be enforced."
-#         win_shell: echo true
-#         register: wn16_dc_000020_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000020 | PATCH | Kerberos user logon restrictions must be enforced."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000020
-#   tags:
-#       - WN16-DC-000020
-#       - notimplemented
+- name: "MEDIUM | WN16-DC-000020 | Kerberos user logon restrictions must be enforced."
+  block:
+      - name: "MEDIUM | WN16-DC-000020 | AUDIT | Kerberos user logon restrictions must be enforced."
+        win_shell: echo true
+        register: wn16_dc_000020_audit
+        check_mode: no
+        changed_when: no
 
-# - name: "MEDIUM | WN16-DC-000030 | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000030 | AUDIT | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
-#         win_shell: echo true
-#         register: wn16_dc_000030_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000030 | PATCH | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000030
-#   tags:
-#       - WN16-DC-000030
-#       - notimplemented
+      - name: "MEDIUM | WN16-DC-000020 | PATCH | Kerberos user logon restrictions must be enforced."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000020
+  tags:
+      - WN16-DC-000020
+      - notimplemented
 
-# - name: "MEDIUM | WN16-DC-000040 | The Kerberos user ticket lifetime must be limited to 10 hours or less."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000040 | AUDIT | The Kerberos user ticket lifetime must be limited to 10 hours or less."
-#         win_shell: echo true
-#         register: wn16_dc_000040_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000040 | PATCH | The Kerberos user ticket lifetime must be limited to 10 hours or less."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000040
-#   tags:
-#       - WN16-DC-000040
-#       - notimplemented
+- name: "MEDIUM | WN16-DC-000030 | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
+  block:
+      - name: "MEDIUM | WN16-DC-000030 | AUDIT | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
+        win_shell: echo true
+        register: wn16_dc_000030_audit
+        check_mode: no
+        changed_when: no
 
-# - name: "MEDIUM | WN16-DC-000050 | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000050 | AUDIT | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
-#         win_shell: echo true
-#         register: wn16_dc_000050_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000050 | PATCH | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000050
-#   tags:
-#       - WN16-DC-000050
-#       - notimplemented
+      - name: "MEDIUM | WN16-DC-000030 | PATCH | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000030
+  tags:
+      - WN16-DC-000030
+      - notimplemented
 
-# - name: "MEDIUM | WN16-DC-000060 | The computer clock synchronization tolerance must be limited to 5 minutes or less."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000060 | AUDIT | The computer clock synchronization tolerance must be limited to 5 minutes or less."
-#         win_shell: echo true
-#         register: wn16_dc_000060_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000060 | PATCH | The computer clock synchronization tolerance must be limited to 5 minutes or less."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000060
-#   tags:
-#       - WN16-DC-000060
-#       - notimplemented
+- name: "MEDIUM | WN16-DC-000040 | The Kerberos user ticket lifetime must be limited to 10 hours or less."
+  block:
+      - name: "MEDIUM | WN16-DC-000040 | AUDIT | The Kerberos user ticket lifetime must be limited to 10 hours or less."
+        win_shell: echo true
+        register: wn16_dc_000040_audit
+        check_mode: no
+        changed_when: no
 
-# - name: "MEDIUM | WN16-DC-000120 | Data files owned by users must be on a different logical partition from the directory server data files."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000120 | AUDIT | Data files owned by users must be on a different logical partition from the directory server data files."
-#         win_shell: echo true
-#         register: wn16_dc_000120_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000120 | PATCH | Data files owned by users must be on a different logical partition from the directory server data files."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000120
-#   tags:
-#       - WN16-DC-000120
-#       - notimplemented
+      - name: "MEDIUM | WN16-DC-000040 | PATCH | The Kerberos user ticket lifetime must be limited to 10 hours or less."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000040
+  tags:
+      - WN16-DC-000040
+      - notimplemented
 
-# - name: "MEDIUM | WN16-DC-000130 | Domain controllers must run on a machine dedicated to that function."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000130 | AUDIT | Domain controllers must run on a machine dedicated to that function."
-#         win_shell: echo true
-#         register: wn16_dc_000130_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000130 | PATCH | Domain controllers must run on a machine dedicated to that function."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000130
-#   tags:
-#       - WN16-DC-000130
-#       - notimplemented
+- name: "MEDIUM | WN16-DC-000050 | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
+  block:
+      - name: "MEDIUM | WN16-DC-000050 | AUDIT | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
+        win_shell: echo true
+        register: wn16_dc_000050_audit
+        check_mode: no
+        changed_when: no
 
-# - name: "MEDIUM | WN16-DC-000140 | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000140 | AUDIT | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
-#         win_shell: echo true
-#         register: wn16_dc_000140_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000140 | PATCH | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000140
-#   tags:
-#       - WN16-DC-000140
-#       - notimplemented
+      - name: "MEDIUM | WN16-DC-000050 | PATCH | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000050
+  tags:
+      - WN16-DC-000050
+      - notimplemented
 
-# - name: "MEDIUM | WN16-DC-000170 | Active Directory Group Policy objects must be configured with proper audit settings."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings."
-#         win_shell: echo true
-#         register: wn16_dc_000170_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000170 | PATCH | Active Directory Group Policy objects must be configured with proper audit settings."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000170
-#   tags:
-#       - WN16-DC-000170
-#       - notimplemented
+- name: "MEDIUM | WN16-DC-000060 | The computer clock synchronization tolerance must be limited to 5 minutes or less."
+  block:
+      - name: "MEDIUM | WN16-DC-000060 | AUDIT | The computer clock synchronization tolerance must be limited to 5 minutes or less."
+        win_shell: echo true
+        register: wn16_dc_000060_audit
+        check_mode: no
+        changed_when: no
 
-# - name: "MEDIUM | WN16-DC-000180 | The Active Directory Domain object must be configured with proper audit settings."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000180 | AUDIT | The Active Directory Domain object must be configured with proper audit settings."
-#         win_shell: echo true
-#         register: wn16_dc_000180_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000180 | PATCH | The Active Directory Domain object must be configured with proper audit settings."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000180
-#   tags:
-#       - WN16-DC-000180
-#       - notimplemented
+      - name: "MEDIUM | WN16-DC-000060 | PATCH | The computer clock synchronization tolerance must be limited to 5 minutes or less."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000060
+  tags:
+      - WN16-DC-000060
+      - notimplemented
 
-# - name: "MEDIUM | WN16-DC-000190 | The Active Directory Infrastructure object must be configured with proper audit settings."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000190 | AUDIT | The Active Directory Infrastructure object must be configured with proper audit settings."
-#         win_shell: echo true
-#         register: wn16_dc_000190_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000190 | PATCH | The Active Directory Infrastructure object must be configured with proper audit settings."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000190
-#   tags:
-#       - WN16-DC-000190
-#       - notimplemented
+- name: "MEDIUM | WN16-DC-000120 | Data files owned by users must be on a different logical partition from the directory server data files."
+  block:
+      - name: "MEDIUM | WN16-DC-000120 | AUDIT | Data files owned by users must be on a different logical partition from the directory server data files."
+        win_shell: echo true
+        register: wn16_dc_000120_audit
+        check_mode: no
+        changed_when: no
 
-# - name: "MEDIUM | WN16-DC-000200 | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000200 | AUDIT | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
-#         win_shell: echo true
-#         register: wn16_dc_000200_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000200 | PATCH | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000200
-#   tags:
-#       - WN16-DC-000200
-#       - notimplemented
+      - name: "MEDIUM | WN16-DC-000120 | PATCH | Data files owned by users must be on a different logical partition from the directory server data files."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000120
+  tags:
+      - WN16-DC-000120
+      - notimplemented
 
-# - name: "MEDIUM | WN16-DC-000210 | The Active Directory AdminSDHolder object must be configured with proper audit settings."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000210 | AUDIT | The Active Directory AdminSDHolder object must be configured with proper audit settings."
-#         win_shell: echo true
-#         register: wn16_dc_000210_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000210 | PATCH | The Active Directory AdminSDHolder object must be configured with proper audit settings."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000210
-#   tags:
-#       - WN16-DC-000210
-#       - notimplemented
+- name: "MEDIUM | WN16-DC-000130 | Domain controllers must run on a machine dedicated to that function."
+  block:
+      - name: "MEDIUM | WN16-DC-000130 | AUDIT | Domain controllers must run on a machine dedicated to that function."
+        win_shell: echo true
+        register: wn16_dc_000130_audit
+        check_mode: no
+        changed_when: no
 
-# - name: "MEDIUM | WN16-DC-000220 | The Active Directory RID Manager$ object must be configured with proper audit settings."
-#   block:
-#       - name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings."
-#         win_shell: echo true
-#         register: wn16_dc_000220_audit
-#         check_mode: no
-#         changed_when: no
-#
-#
-#       - name: "MEDIUM | WN16-DC-000220 | PATCH | The Active Directory RID Manager$ object must be configured with proper audit settings."
-#         win_shell: echo true
-#         changed_when: no
-#
-#
-#   when:
-#       - wn16_dc_000220
-#   tags:
-#       - WN16-DC-000220
-#       - notimplemented
+      - name: "MEDIUM | WN16-DC-000130 | PATCH | Domain controllers must run on a machine dedicated to that function."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000130
+  tags:
+      - WN16-DC-000130
+      - notimplemented
+
+- name: "MEDIUM | WN16-DC-000140 | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
+  block:
+      - name: "MEDIUM | WN16-DC-000140 | AUDIT | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
+        win_shell: echo true
+        register: wn16_dc_000140_audit
+        check_mode: no
+        changed_when: no
+
+      - name: "MEDIUM | WN16-DC-000140 | PATCH | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000140
+  tags:
+      - WN16-DC-000140
+      - notimplemented
+
+- name: "MEDIUM | WN16-DC-000170 | Active Directory Group Policy objects must be configured with proper audit settings."
+  block:
+      - name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings."
+        win_shell: echo true
+        register: wn16_dc_000170_audit
+        check_mode: no
+        changed_when: no
+
+      - name: "MEDIUM | WN16-DC-000170 | PATCH | Active Directory Group Policy objects must be configured with proper audit settings."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000170
+  tags:
+      - WN16-DC-000170
+      - notimplemented
+
+- name: "MEDIUM | WN16-DC-000180 | The Active Directory Domain object must be configured with proper audit settings."
+  block:
+      - name: "MEDIUM | WN16-DC-000180 | AUDIT | The Active Directory Domain object must be configured with proper audit settings."
+        win_shell: echo true
+        register: wn16_dc_000180_audit
+        check_mode: no
+        changed_when: no
+
+      - name: "MEDIUM | WN16-DC-000180 | PATCH | The Active Directory Domain object must be configured with proper audit settings."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000180
+  tags:
+      - WN16-DC-000180
+      - notimplemented
+
+- name: "MEDIUM | WN16-DC-000190 | The Active Directory Infrastructure object must be configured with proper audit settings."
+  block:
+      - name: "MEDIUM | WN16-DC-000190 | AUDIT | The Active Directory Infrastructure object must be configured with proper audit settings."
+        win_shell: echo true
+        register: wn16_dc_000190_audit
+        check_mode: no
+        changed_when: no
+
+      - name: "MEDIUM | WN16-DC-000190 | PATCH | The Active Directory Infrastructure object must be configured with proper audit settings."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000190
+  tags:
+      - WN16-DC-000190
+      - notimplemented
+
+- name: "MEDIUM | WN16-DC-000200 | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
+  block:
+      - name: "MEDIUM | WN16-DC-000200 | AUDIT | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
+        win_shell: echo true
+        register: wn16_dc_000200_audit
+        check_mode: no
+        changed_when: no
+
+      - name: "MEDIUM | WN16-DC-000200 | PATCH | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000200
+  tags:
+      - WN16-DC-000200
+      - notimplemented
+
+- name: "MEDIUM | WN16-DC-000210 | The Active Directory AdminSDHolder object must be configured with proper audit settings."
+  block:
+      - name: "MEDIUM | WN16-DC-000210 | AUDIT | The Active Directory AdminSDHolder object must be configured with proper audit settings."
+        win_shell: echo true
+        register: wn16_dc_000210_audit
+        check_mode: no
+        changed_when: no
+
+      - name: "MEDIUM | WN16-DC-000210 | PATCH | The Active Directory AdminSDHolder object must be configured with proper audit settings."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000210
+  tags:
+      - WN16-DC-000210
+      - notimplemented
+
+- name: "MEDIUM | WN16-DC-000220 | The Active Directory RID Manager$ object must be configured with proper audit settings."
+  block:
+      - name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings."
+        win_shell: echo true
+        register: wn16_dc_000220_audit
+        check_mode: no
+        changed_when: no
+
+      - name: "MEDIUM | WN16-DC-000220 | PATCH | The Active Directory RID Manager$ object must be configured with proper audit settings."
+        win_shell: echo true
+        changed_when: no
+  when:
+      - wn16_dc_000220
+  tags:
+      - WN16-DC-000220
+      - notimplemented
 
 - name: "MEDIUM | WN16-AU-000010 | Audit records must be backed up to a different system or media than the system being audited."
   block:
@@ -1097,6 +1059,7 @@
         register: wn16_au_000010_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-AU-000010 | PATCH | Audit records must be backed up to a different system or media than the system being audited."
         win_shell: echo true
         changed_when: no
@@ -1115,6 +1078,7 @@
         register: wn16_au_000020_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-AU-000020 | PATCH | Windows Server 2016 must, at a minimum, off-load audit records of interconnected systems in real time and off-load standalone systems weekly."
         win_shell: echo true
         changed_when: no
@@ -1134,6 +1098,7 @@
         register: wn16_au_000030_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-AU-000030 | PATCH | Permissions for the Application event log must prevent access by non-privileged accounts."
         win_shell: echo true
         changed_when: no
@@ -1152,6 +1117,7 @@
         register: wn16_au_000040_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-AU-000040 | PATCH | Permissions for the Security event log must prevent access by non-privileged accounts."
         win_shell: echo true
         changed_when: no
@@ -1169,6 +1135,7 @@
         register: wn16_au_000050_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-AU-000050 | PATCH | Permissions for the System event log must prevent access by non-privileged accounts."
         win_shell: echo true
         changed_when: no
@@ -1186,6 +1153,7 @@
         register: wn16_au_000060_audit
         check_mode: no
         changed_when: no
+
       - name: "MEDIUM | WN16-AU-000060 | PATCH | Event Viewer must be protected from unauthorized modification and deletion."
         win_shell: echo true
         changed_when: no
@@ -1202,6 +1170,7 @@
         win_shell: AuditPol /get /subcategory:"Credential Validation" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
         register: wn16_au_000070_audit
         check_mode: no
+
         changed_when: "'Success' not in wn16_au_000070_audit.stdout"
       - name: "MEDIUM | WN16-AU-000070 | PATCH | Windows Server 2016 must be configured to audit Account Logon - Credential Validation successes."
         win_shell: AuditPol /set /subcategory:"Credential Validation" /success:enable
@@ -1218,6 +1187,7 @@
         win_shell: AuditPol /get /subcategory:"Credential Validation" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
         register: wn16_au_000080_audit
         check_mode: no
+
         changed_when: "'Failure' not in wn16_au_000080_audit.stdout"
       - name: "MEDIUM | WN16-AU-000080 | PATCH | Windows Server 2016 must be configured to audit Account Logon - Credential Validation failures."
         win_shell: AuditPol /set /subcategory:"Credential Validation" /failure:enable
@@ -1235,6 +1205,7 @@
         register: wn16_dc_000230_audit
         check_mode: no
         changed_when: "'Success' not in wn16_dc_000230_audit.stdout"
+
       - name: "MEDIUM | WN16-DC-000230 | PATCH | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes."
         win_shell: AuditPol /set /subcategory:"Computer Account Management" /success:enable
         when: "'Success' not in wn16_dc_000230_audit.stdout"
@@ -1252,6 +1223,7 @@
         register: wn16_au_000100_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000100_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000100 | PATCH | Windows Server 2016 must be configured to audit Account Management - Other Account Management Events successes."
         win_shell: AuditPol /set /subcategory:"Other Account Management Events" /success:enable
         when: "'Success' not in wn16_au_000100_audit.stdout"
@@ -1268,6 +1240,7 @@
         register: wn16_au_000120_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000120_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000120 | PATCH | Windows Server 2016 must be configured to audit Account Management - Security Group Management successes."
         win_shell: AuditPol /set /subcategory:"Security Group Management" /success:enable
         when: "'Success' not in wn16_au_000120_audit.stdout"
@@ -1284,6 +1257,7 @@
         register: wn16_au_000140_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000140_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000140 | PATCH | Windows Server 2016 must be configured to audit Account Management - User Account Management successes."
         win_shell: AuditPol /set /subcategory:"User Account Management" /success:enable
         when: "'Success' not in wn16_au_000140_audit.stdout"
@@ -1300,6 +1274,7 @@
         register: wn16_au_000150_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000150_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000150 | PATCH | Windows Server 2016 must be configured to audit Account Management - User Account Management failures."
         win_shell: AuditPol /set /subcategory:"User Account Management" /failure:enable
         when: "'Failure' not in wn16_au_000150_audit.stdout"
@@ -1316,6 +1291,7 @@
         register: wn16_au_000160_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000160_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000160 | PATCH | Windows Server 2016 must be configured to audit Detailed Tracking - Plug and Play Events successes."
         win_shell: AuditPol /set /subcategory:"Plug and Play Events" /success:enable
         when: "'Success' not in wn16_au_000160_audit.stdout"
@@ -1332,6 +1308,7 @@
         register: wn16_au_000170_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000170_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000170 | PATCH | Windows Server 2016 must be configured to audit Detailed Tracking - Process Creation successes."
         win_shell: AuditPol /set /subcategory:"Process Creation" /success:enable
         when: "'Success' not in wn16_au_000170_audit.stdout"
@@ -1348,6 +1325,7 @@
         register: wn16_dc_000240_audit
         check_mode: no
         changed_when: "'Success' not in wn16_dc_000240_audit.stdout"
+
       - name: "MEDIUM | WN16-DC-000240 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes."
         win_shell: AuditPol /set /subcategory:"Directory Service Access" /success:enable
         when: "'Success' not in wn16_dc_000240_audit.stdout"
@@ -1365,6 +1343,7 @@
         register: wn16_dc_000250_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_dc_000250_audit.stdout"
+
       - name: "MEDIUM | WN16-DC-000250 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures."
         win_shell: AuditPol /set /subcategory:"Directory Service Access" /failure:enable
         when: "'Failure' not in wn16_dc_000250_audit.stdout"
@@ -1382,6 +1361,7 @@
         register: wn16_dc_000260_audit
         check_mode: no
         changed_when: "'Success' not in wn16_dc_000260_audit.stdout"
+
       - name: "MEDIUM | WN16-DC-000260 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes."
         win_shell: AuditPol /set /subcategory:"Directory Service Changes" /success:enable
         when: "'Success' not in wn16_dc_000260_audit.stdout"
@@ -1399,6 +1379,7 @@
         register: wn16_dc_000270_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_dc_000270_audit.stdout"
+
       - name: "MEDIUM | WN16-DC-000270 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes failures."
         win_shell: AuditPol /set /subcategory:"Directory Service Changes" /failure:enable
         when: "'Failure' not in wn16_dc_000270_audit.stdout"
@@ -1416,6 +1397,7 @@
         register: wn16_au_000220_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000220_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000220 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Account Lockout successes."
         win_shell: AuditPol /set /subcategory:"Account Lockout" /success:enable
         when: "'Success' not in wn16_au_000220_audit.stdout"
@@ -1432,6 +1414,7 @@
         register: wn16_au_000230_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000230_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000230 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Account Lockout failures."
         win_shell: AuditPol /set /subcategory:"Account Lockout" /failure:enable
         changed_when: "'Failure' not in wn16_au_000230_audit.stdout"
@@ -1448,6 +1431,7 @@
         register: wn16_au_000240_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000240_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000240 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Group Membership successes."
         win_shell: AuditPol /set /subcategory:"Group Membership" /success:enable
         changed_when: "'Success' not in wn16_au_000240_audit.stdout"
@@ -1464,6 +1448,7 @@
         register: wn16_au_000250_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000250_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000250 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logoff successes."
         win_shell: AuditPol /set /subcategory:"Logoff" /success:enable
         changed_when: "'Success' not in wn16_au_000250_audit.stdout"
@@ -1480,6 +1465,7 @@
         register: wn16_au_000260_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000260_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000260 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logon successes."
         win_shell: AuditPol /set /subcategory:"Logon" /success:enable
         changed_when: "'Success' not in wn16_au_000260_audit.stdout"
@@ -1496,6 +1482,7 @@
         register: wn16_au_000270_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000270_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000270 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logon failures."
         win_shell: AuditPol /set /subcategory:"Logon" /failure:enable
         when: "'Failure' not in wn16_au_000270_audit.stdout"
@@ -1512,6 +1499,7 @@
         register: wn16_au_000280_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000280_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000280 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Special Logon successes."
         win_shell: AuditPol /set /subcategory:"Special Logon" /success:enable
         when: "'Success' not in wn16_au_000280_audit.stdout"
@@ -1528,6 +1516,7 @@
         register: wn16_au_000290_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000290_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000290 | PATCH | Windows Server 2016 must be configured to audit Object Access - Removable Storage successes."
         win_shell: AuditPol /set /subcategory:"Removable Storage" /success:enable
         when: "'Success' not in wn16_au_000290_audit.stdout"
@@ -1544,6 +1533,7 @@
         register: wn16_au_000300_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000300_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000300 | PATCH | Windows Server 2016 must be configured to audit Object Access - Removable Storage failures."
         win_shell: AuditPol /set /subcategory:"Removable Storage" /failure:enable
         when: "'Failure' not in wn16_au_000300_audit.stdout"
@@ -1560,6 +1550,7 @@
         register: wn16_au_000310_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000310_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000310 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Audit Policy Change successes."
         win_shell: AuditPol /set /subcategory:"Audit Policy Change" /success:enable
         when: "'Success' not in wn16_au_000310_audit.stdout"
@@ -1576,6 +1567,7 @@
         register: wn16_au_000320_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000320_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000320 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Audit Policy Change failures."
         win_shell: AuditPol /set /subcategory:"Audit Policy Change" /failure:enable
         when: "'Failure' not in wn16_au_000320_audit.stdout"
@@ -1592,6 +1584,7 @@
         register: wn16_au_000330_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000330_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000330 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Authentication Policy Change successes."
         win_shell: AuditPol /set /subcategory:"Authentication Policy Change" /success:enable
         when: "'Success' not in wn16_au_000330_audit.stdout"
@@ -1608,6 +1601,7 @@
         register: wn16_au_000340_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000340_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000340 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Authorization Policy Change successes."
         win_shell: AuditPol /set /subcategory:"Authorization Policy Change" /success:enable
         when: "'Success' not in wn16_au_000340_audit.stdout"
@@ -1624,6 +1618,7 @@
         register: wn16_au_000350_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000350_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000350 | PATCH | Windows Server 2016 must be configured to audit Privilege Use - Sensitive Privilege Use successes."
         win_shell: AuditPol /set /subcategory:"Sensitive Privilege Use" /success:enable
         when: "'Success' not in wn16_au_000350_audit.stdout"
@@ -1640,6 +1635,7 @@
         register: wn16_au_000360_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000360_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000360 | PATCH | Windows Server 2016 must be configured to audit Privilege Use - Sensitive Privilege Use failures."
         win_shell: AuditPol /set /subcategory:"Sensitive Privilege Use" /failure:enable
         when: "'Failure' not in wn16_au_000360_audit.stdout"
@@ -1656,6 +1652,7 @@
         register: wn16_au_000370_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000370_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000370 | PATCH | Windows Server 2016 must be configured to audit System - IPsec Driver successes."
         win_shell: AuditPol /set /subcategory:"IPsec Driver" /success:enable
         when: "'Success' not in wn16_au_000370_audit.stdout"
@@ -1675,6 +1672,7 @@
         changed_when: "'Failure' not in wn16_au_000380_audit.stdout"
       - debug:
             var: wn16_au_000380_audit
+
       - name: "MEDIUM | WN16-AU-000380 | PATCH | Windows Server 2016 must be configured to audit System - IPsec Driver failures."
         win_shell: AuditPol /set /subcategory:"IPsec Driver" /failure:enable
         when: "'Failure' not in wn16_au_000380_audit.stdout"
@@ -1692,6 +1690,7 @@
         register: wn16_au_000390_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000390_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000390 | PATCH | Windows Server 2016 must be configured to audit System - Other System Events successes."
         win_shell: AuditPol /set /subcategory:"Other System Events" /success:enable
         when: "'Success' not in wn16_au_000390_audit.stdout"
@@ -1709,6 +1708,7 @@
         register: wn16_au_000400_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000400_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000400 | PATCH | Windows Server 2016 must be configured to audit System - Other System Events failures."
         win_shell: AuditPol /set /subcategory:"Other System Events" /failure:enable
         check_mode: no
@@ -1727,6 +1727,7 @@
         register: wn16_au_000410_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000410_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000410 | PATCH | Windows Server 2016 must be configured to audit System - Security State Change successes."
         win_shell: AuditPol /set /subcategory:"Security State Change" /success:enable
         check_mode: no
@@ -1745,6 +1746,7 @@
         register: wn16_au_000420_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000420_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000420 | PATCH | Windows Server 2016 must be configured to audit System - Security System Extension successes."
         win_shell: AuditPol /set /subcategory:"Security System Extension" /success:enable
         check_mode: no
@@ -1777,6 +1779,7 @@
         register: wn16_au_000440_audit
         check_mode: no
         changed_when: "'Success' not in wn16_au_000440_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000440 | PATCH | Windows Server 2016 must be configured to audit System - System Integrity successes."
         win_shell: AuditPol /set /subcategory:"System Integrity" /success:enable
         check_mode: no
@@ -1795,6 +1798,7 @@
         register: wn16_au_000450_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000450_audit.stdout"
+
       - name: "MEDIUM | WN16-AU-000450 | PATCH | Windows Server 2016 must be configured to audit System - System Integrity failures."
         win_shell: AuditPol /set /subcategory:"System Integrity" /failure:enable
         check_mode: no
@@ -1903,7 +1907,6 @@
         register: wn16_cc_000110_audit
         check_mode: no
         changed_when: no
-
 
       - name: "MEDIUM | WN16-CC-000110 | PATCH | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection."
         win_shell: echo true
@@ -2066,6 +2069,7 @@
             name: MaxSize
         register: wn16_cc_000300_audit
         changed_when: no
+
       - name: "MEDIUM | WN16-CC-000300 | PATCH | The Application event log size must be configured to 32768 KB or greater."
         win_regedit:
             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application
@@ -2112,6 +2116,7 @@
             name: MaxSize
         register: wn16_cc_000320_audit
         changed_when: no
+
       - name: "MEDIUM | WN16-CC-000320 | PATCH | The System event log size must be configured to 32768 KB or greater."
         win_regedit:
             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\System
@@ -2253,6 +2258,19 @@
       - xccdf_mil.disa.stig_rule_SV-88241r1_rule
       - tested
 
+- name: "MEDIUM | WN16-CC-000421 | The Windows Explorer Preview pane must be disabled for Windows Server 2016."
+  win_regedit:
+      path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
+      state: present
+      value: NoPreviewPane
+      data: 1
+      datatype: dword
+  when:
+      - wn16_cc_000421
+  tags:
+      - WN16-CC-000421
+      - xccdf_mil.disa.stig_rule_SV-224950r569186_rule
+
 - name: "MEDIUM | WN16-CC-000430 | Basic authentication for RSS feeds over HTTP must not be used."
   win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Feeds
@@ -2346,6 +2364,7 @@
       datatype: dword
   when:
       - wn16_cc_000510
+      - not winstig_skip_for_test
   tags:
       - WN16-CC-000510
       - xccdf_mil.disa.stig_rule_SV-88259r1_rule
@@ -2374,6 +2393,7 @@
       datatype: dword
   when:
       - wn16_cc_000540
+      - not winstig_skip_for_test
   tags:
       - WN16-CC-000540
       - xccdf_mil.disa.stig_rule_SV-88265r1_rule
@@ -2388,6 +2408,7 @@
       datatype: dword
   when:
       - wn16_cc_000550
+      - not winstig_skip_for_test
   tags:
       - WN16-CC-000550
       - xccdf_mil.disa.stig_rule_SV-88267r1_rule
@@ -2402,12 +2423,9 @@
         check_mode: no
         changed_when: no
 
-
       - name: "MEDIUM | WN16-PK-000010 | PATCH | The DoD Root CA certificates must be installed in the Trusted Root Store."
         win_shell: echo true
         changed_when: no
-
-
   when:
       - wn16_pk_000010
   tags:
@@ -2424,12 +2442,9 @@
         check_mode: no
         changed_when: no
 
-
       - name: "MEDIUM | WN16-PK-000020 | PATCH | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
         win_shell: echo true
         changed_when: no
-
-
   when:
       - wn16_pk_000020
   tags:
@@ -2446,12 +2461,9 @@
         changed_when: no
         failed_when: no
 
-
       - name: "MEDIUM | WN16-PK-000030 | PATCH | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
         win_shell: echo true
         changed_when: no
-
-
   when:
       - wn16_pk_000030
   tags:
@@ -2468,12 +2480,9 @@
         check_mode: no
         changed_when: no
 
-
       - name: "MEDIUM | WN16-DC-000280 | PATCH | Domain controllers must have a PKI server certificate."
         win_shell: echo true
         changed_when: no
-
-
   when:
       - wn16_dc_000280
   tags:
@@ -2489,12 +2498,9 @@
         check_mode: no
         changed_when: no
 
-
       - name: "MEDIUM | WN16-DC-000310 | PATCH | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
         win_shell: echo true
         changed_when: no
-
-
   when:
       - wn16_dc_000310
       - ansible_windows_domain_role == "Primary domain controller"
@@ -2696,6 +2702,8 @@
       value: RequireSecuritySignature
       data: 1
       datatype: dword
+  when:
+      - wn16_so_000190
   tags:
       - WN16-SO-000190
       - xccdf_mil.disa.stig_rule_SV-88317r1_rule
@@ -2910,6 +2918,7 @@
       datatype: dword
   when:
       - wn16_so_000460
+      - not winstig_skip_for_test
   tags:
       - WN16-SO-000460
       - xccdf_mil.disa.stig_rule_SV-88371r1_rule
@@ -3179,6 +3188,7 @@
                 - Local account and member of Administrators group
             action: set
         when: ansible_windows_domain_role == "Member server"
+
       - name: "MEDIUM | WN16-MS-000370 | PATCH | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems."
         win_user_right:
             name: SeDenyNetworkLogonRight
@@ -3215,6 +3225,7 @@
                 - Guests
             action: set
         when: ansible_windows_domain_role == "Member server"
+
       - name: "MEDIUM | WN16-MS-000380 | STAND-ALONE | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
         win_user_right:
             name: SeDenyBatchLogonRight
@@ -3277,6 +3288,7 @@
                 - Domain Admins
             action: set
         when: ansible_windows_domain_role == "Member server"
+
       - name: "MEDIUM | WN16-MS-000400 | STAND-ALONE | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
         win_user_right:
             name: SeDenyInteractiveLogonRight
@@ -3314,6 +3326,7 @@
                 - Domain Admins
             action: set
         when: ansible_windows_domain_role == "Member server"
+
       - name: "MEDIUM | WN16-MS-000410 | STAND-ALONE | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
         win_user_right:
             name: SeDenyRemoteInteractiveLogonRight
