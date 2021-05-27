@@ -189,8 +189,8 @@
         register: wn16_ac_000090_audit
         # failed_when: wn16_ac_000090_audit
         changed_when: no
-      - debug:
-            var: wn16_ac_000090_audit.stdout_lines
+      # - debug:
+      #      var: wn16_ac_000090_audit.stdout_lines
 
       - name: "HIGH | WN16-AC-000090 | PATCH | Windows Server 2016 reversible password encryption must be disabled."
         win_shell: echo true
