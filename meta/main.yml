@@ -3,11 +3,12 @@ galaxy_info:
     author: Trey Perrone, DFed
     description: Apply the DISA Windows Server 2016 STIG
     company: "MindPoint Group"
+    role_name: windows_2016_stig
     license: MIT
-    min_ansible_version: 2.6
+    min_ansible_version: 2.8
 
     platforms:
-        - name: Windows Server
+        - name: Windows
           versions:
               - 2016
 
