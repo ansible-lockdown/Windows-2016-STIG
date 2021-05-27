@@ -688,19 +688,11 @@
       - SV-87963r2
 
 # below task is dependent on WN16-AC-000020, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'ResetLockoutCount' in section 'System Access' is not a valid key, cannot set this value"
-- name: "MEDIUM | WN16-AC-000030 | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
-  block:
-      - name: "MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
-        assert:
-            that: wn16_ac_000030_resetlockoutcount | int is version('15', '>=')
-            fail_msg: "Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater and variable wn16_ac_000030_resetlockoutcount is set to {{ wn16_ac_000030_resetlockoutcount }}"
-        ignore_errors: yes
-
-      - name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
-        win_security_policy:
-            section: System Access
-            key: ResetLockoutCount
-            value: "{{ wn16_ac_000030_resetlockoutcount }}"
+- name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
+  win_security_policy:
+      section: System Access
+      key: ResetLockoutCount
+      value: "{{ wn16_ac_000030_resetlockoutcount }}"
   when:
       - wn16_ac_000030
   tags:
@@ -708,95 +700,56 @@
       - SV-87965r2
 
 # below task is dependent on WN16-AC-000020 and WN16-AC-000030, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'LockoutDuration' in section 'System Access' is not a valid key, cannot set this value"
-- name: "MEDIUM | WN16-AC-000010 | Windows 2016 account lockout duration must be configured to 15 minutes or greater."
-  block:
-      - name: "MEDIUM | WN16-AC-000010 | AUDIT | Windows 2016 account lockout duration must be configured to 15 minutes or greater."
-        assert:
-            that: wn16_ac_000010_lockoutduration | int is version('15', '<=')
-            fail_msg: "Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater and variable wn16_ac_000010_lockoutduration is set to {{ wn16_ac_000010_lockoutduration }}"
-        ignore_errors: yes
 
-      - name: "MEDIUM | WN16-AC-000010 | PATCH | Windows 2016 account lockout duration must be configured to 15 minutes or greater."
-        win_security_policy:
-            section: System Access
-            key: LockoutDuration
-            value: "{{ wn16_ac_000010_lockoutduration }}"
+- name: "MEDIUM | WN16-AC-000010 | PATCH | Windows 2016 account lockout duration must be configured to 15 minutes or greater."
+  win_security_policy:
+      section: System Access
+      key: LockoutDuration
+      value: "{{ wn16_ac_000010_lockoutduration }}"
   when:
       - wn16_ac_000010
   tags:
       - WN16-AC-000010
       - SV-87961r3
 
-- name: "MEDIUM | WN16-AC-000040 | Windows Server 2016 password history must be configured to 24 passwords remembered."
-  block:
-      - name: "MEDIUM | WN16-AC-000040 | AUDIT | Windows Server 2016 password history must be configured to 24 passwords remembered."
-        assert:
-            that: wn16_ac_000040_passwordhistorysize | int is version('24', '>=')
-            fail_msg: "Windows Server 2016 password history must be configured to 24 passwords remembered and variable wn16_ac_000040_passwordhistorysize is set to {{ wn16_ac_000040_passwordhistorysize }}"
-        ignore_errors: yes
-
-      - name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered."
-        win_security_policy:
-            section: System Access
-            key: PasswordHistorySize
-            value: "{{ wn16_ac_000040_passwordhistorysize }}"
+- name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered."
+  win_security_policy:
+      section: System Access
+      key: PasswordHistorySize
+      value: "{{ wn16_ac_000040_passwordhistorysize }}"
   when:
       - wn16_ac_000040
   tags:
       - WN16-AC-000040
       - SV-87967r2_rule
 
-- name: "MEDIUM | WN16-AC-000050 | Windows Server 2016 maximum password age must be configured to 60 days or less."
-  block:
-      - name: "MEDIUM | WN16-AC-000050 |  AUDIT | Windows Server 2016 maximum password age must be configured to 60 days or less."
-        assert:
-            that: wn16_ac_000050_maximumpasswordage | int is version('60', '<=')
-            fail_msg: "Windows Server 2016 maximum password age must be configured to 60 days or less and variable wn16_ac_000050_maximumpasswordage is set to {{ wn16_ac_000050_maximumpasswordage }}"
-        ignore_errors: yes
-
-      - name: "MEDIUM | WN16-AC-000050 |  PATCH | Windows Server 2016 maximum password age must be configured to 60 days or less."
-        win_security_policy:
-            section: System Access
-            key: MaximumPasswordAge
-            value: "{{ wn16_ac_000050_maximumpasswordage }}"
+- name: "MEDIUM | WN16-AC-000050 |  PATCH | Windows Server 2016 maximum password age must be configured to 60 days or less."
+  win_security_policy:
+      section: System Access
+      key: MaximumPasswordAge
+      value: "{{ wn16_ac_000050_maximumpasswordage }}"
   when:
       - wn16_ac_000050
   tags:
       - WN16-AC-000050
       - SV-87969r2
 
-- name: "MEDIUM | WN16-AC-000060 | Windows Server 2016 minimum password age must be configured to at least one day."
-  block:
-      - name: "MEDIUM | WN16-AC-000060 | AUDIT | Windows Server 2016 minimum password age must be configured to at least one day."
-        assert:
-            that: wn16_ac_000060_minimumpasswordage is version('1', '>=')
-            fail_msg: "Windows Server 2016 minimum password age must be configured to at least one day and variable wn16_ac_000060_minimumpasswordage is set to {{ wn16_ac_000060_minimumpasswordage }}"
-        ignore_errors: yes
-
-      - name: "MEDIUM | WN16-AC-000060 | PATCH | Windows Server 2016 minimum password age must be configured to at least one day."
-        win_security_policy:
-            section: System Access
-            key: MinimumPasswordAge
-            value: "{{ wn16_ac_000060_minimumpasswordage }}"
+- name: "MEDIUM | WN16-AC-000060 | PATCH | Windows Server 2016 minimum password age must be configured to at least one day."
+  win_security_policy:
+      section: System Access
+      key: MinimumPasswordAge
+      value: "{{ wn16_ac_000060_minimumpasswordage }}"
   when:
       - wn16_ac_000060
   tags:
       - WN16-AC-000060
       - SV-87971r2_rule
 
-- name: "MEDIUM | WN16-AC-000070 | Windows Server 2016 minimum password length must be configured to 14 characters."
-  block:
-      - name: "MEDIUM | WN16-AC-000070 | AUDIT | Windows Server 2016 minimum password length must be configured to 14 characters."
-        assert:
-            that: wn16_ac_000070_minimumpasswordlength is version('14', '>=')
-            fail_msg: "Windows Server 2016 minimum password length must be configured to 14 characters and variable wn16_ac_000070_minimumpasswordlength is set to {{ wn16_ac_000070_minimumpasswordlength }} characters"
-        ignore_errors: yes
-
-      - name: "MEDIUM | WN16-AC-000070 | PATCH | Windows Server 2016 minimum password length must be configured to 14 characters."
-        win_security_policy:
-            section: System Access
-            key: MinimumPasswordLength
-            value: "{{ wn16_ac_000070_minimumpasswordlength }}"
+- name: "MEDIUM | WN16-AC-000070 | PATCH | Windows Server 2016 minimum password length must be configured to 14 characters."
+  win_security_policy:
+      section: System Access
+      key: MinimumPasswordLength
+      value: "{{ wn16_ac_000070_minimumpasswordlength }}"
   when:
       - wn16_ac_000070
   tags:
@@ -1670,8 +1623,8 @@
         register: wn16_au_000380_audit
         check_mode: no
         changed_when: "'Failure' not in wn16_au_000380_audit.stdout"
-      - debug:
-            var: wn16_au_000380_audit
+      # - debug:
+      #      var: wn16_au_000380_audit
 
       - name: "MEDIUM | WN16-AU-000380 | PATCH | Windows Server 2016 must be configured to audit System - IPsec Driver failures."
         win_shell: AuditPol /set /subcategory:"IPsec Driver" /failure:enable
@@ -3633,8 +3586,8 @@
         register: wn16_00_000300_audit
         check_mode: no
         changed_when: no
-      - debug:
-            var: wn16_00_000300_audit.stdout_lines
+      #- debug:
+      #      var: wn16_00_000300_audit.stdout_lines
   when:
       - wn16_00_000300
   tags:

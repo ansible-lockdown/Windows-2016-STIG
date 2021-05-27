@@ -26,5 +26,67 @@
   tags:
       - always
 # remove this debug or set a verb level
-- debug:
+- name: ensure rdp is enabled
+  debug:
       var: win2016_rdp_enabled.value
+# Assert that default seetings have not be amened below STIF recommended values
+
+- name: "MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
+  assert:
+      that: wn16_ac_000030_resetlockoutcount | int is version('15', '>=')
+      fail_msg: "Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater and variable wn16_ac_000030_resetlockoutcount is set to {{ wn16_ac_000030_resetlockoutcount }}"
+  when:
+      - wn16_ac_000030
+  tags:
+      - WN16-AC-000030
+      - SV-87965r2
+
+- name: "MEDIUM | WN16-AC-000010 | AUDIT | Windows 2016 account lockout duration must be configured to 15 minutes or greater."
+  assert:
+      that: wn16_ac_000010_lockoutduration | int is version('15', '<=')
+      fail_msg: "Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater and variable wn16_ac_000010_lockoutduration is set to {{ wn16_ac_000010_lockoutduration }}"
+  when:
+      - wn16_ac_000010
+  tags:
+      - WN16-AC-000010
+      - SV-87961r3
+
+- name: "MEDIUM | WN16-AC-000040 | AUDIT | Windows Server 2016 password history must be configured to 24 passwords remembered."
+  assert:
+      that: wn16_ac_000040_passwordhistorysize | int is version('24', '>=')
+      fail_msg: "Windows Server 2016 password history must be configured to 24 passwords remembered and variable wn16_ac_000040_passwordhistorysize is set to {{ wn16_ac_000040_passwordhistorysize }}"
+  when:
+      - wn16_ac_000040
+  tags:
+      - WN16-AC-000040
+      - SV-87967r2_rule
+
+- name: "MEDIUM | WN16-AC-000050 |  AUDIT | Windows Server 2016 maximum password age must be configured to 60 days or less."
+  assert:
+      that: wn16_ac_000050_maximumpasswordage | int is version('60', '<=')
+      fail_msg: "Windows Server 2016 maximum password age must be configured to 60 days or less and variable wn16_ac_000050_maximumpasswordage is set to {{ wn16_ac_000050_maximumpasswordage }}"
+  when:
+      - wn16_ac_000050
+  tags:
+      - WN16-AC-000050
+      - SV-87969r2
+
+- name: "MEDIUM | WN16-AC-000060 | AUDIT | Windows Server 2016 minimum password age must be configured to at least one day."
+  assert:
+      that: wn16_ac_000060_minimumpasswordage is version('1', '>=')
+      fail_msg: "Windows Server 2016 minimum password age must be configured to at least one day and variable wn16_ac_000060_minimumpasswordage is set to {{ wn16_ac_000060_minimumpasswordage }}"
+  when:
+      - wn16_ac_000060
+  tags:
+      - WN16-AC-000060
+      - SV-87971r2_rule
+
+- name: "MEDIUM | WN16-AC-000070 | AUDIT | Windows Server 2016 minimum password length must be configured to 14 characters."
+  assert:
+      that: wn16_ac_000070_minimumpasswordlength is version('14', '>=')
+      fail_msg: "Windows Server 2016 minimum password length must be configured to 14 characters and variable wn16_ac_000070_minimumpasswordlength is set to {{ wn16_ac_000070_minimumpasswordlength }} characters"
+  when:
+      - wn16_ac_000070
+  tags:
+      - WN16-AC-000070
+      - SV-87973r2_rule
