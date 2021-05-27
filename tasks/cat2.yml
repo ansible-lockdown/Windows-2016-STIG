@@ -3586,8 +3586,8 @@
         register: wn16_00_000300_audit
         check_mode: no
         changed_when: no
-      #- debug:
-      #      var: wn16_00_000300_audit.stdout_lines
+  #   - debug:
+  #         var: wn16_00_000300_audit.stdout_lines
   when:
       - wn16_00_000300
   tags:
