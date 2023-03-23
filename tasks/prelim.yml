@@ -9,8 +9,8 @@
 - name: "PRELIM | Detect if Trusted Platform Module (TPM) is available"
   win_shell: (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
   register: win2016_tpm_enabled
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
   tags:
       - always
 
@@ -21,10 +21,11 @@
       path: HKLM:\System\CurrentControlSet\Control\Terminal Server
       name: fDenyTSConnections
   register: win2016_rdp_enabled
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
   tags:
       - always
 # remove this debug or set a verb level
-- debug:
+- name: "Show Variable."
+  debug:
       var: win2016_rdp_enabled.value

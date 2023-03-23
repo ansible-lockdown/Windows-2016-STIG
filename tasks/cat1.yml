@@ -2,15 +2,15 @@
 
 - name: "HIGH | WN16-00-000010 | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks."
   block:
-      - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks."
+      - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and falsermal operational tasks."
         win_shell: echo true
         register: wn16_00_000010_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-00-000010 | PATCH | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_00_000010
   tags:
@@ -18,7 +18,7 @@
       - SV-87869r1
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
-      - notimplemented
+      - falsetimplemented
       - notest
 
 - name: "HIGH | WN16-DC-000010 | Only administrators responsible for the domain controller must have Administrator rights on the system."
@@ -26,12 +26,12 @@
       - name: "HIGH | WN16-DC-000010 | AUDIT | Only administrators responsible for the domain controller must have Administrator rights on the system."
         win_shell: echo true
         register: wn16_dc_000010_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000010 | PATCH | Only administrators responsible for the domain controller must have Administrator rights on the system."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_dc_000010
       - ansible_windows_domain_role == "Primary domain controller"
@@ -49,7 +49,7 @@
       - name: "HIGH | WN16-MS-000010 | AUDIT | Only administrators responsible for the member server or standalone system must have Administrator rights on the system."
         win_shell: Get-LocalGroupMember -Name 'Administrators'
         register: wn16_ms_000010_audit
-        changed_when: no
+        changed_when: false
       - name: "HIGH | WN16-MS-000010 | AUDIT | Only administrators responsible for the member server or standalone system must have Administrator rights on the system."
         debug:
             msg:
@@ -71,12 +71,12 @@
       - name: "HIGH | WN16-00-000040 | AUDIT | Administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email."
         win_shell: echo true
         register: wn16_00_000040_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-00-000040 | PATCH | Administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_00_000040
   tags:
@@ -96,7 +96,7 @@
             name: CurrentMajorVersionNumber
         register: wn16_00_000110_audit_currentmajorversionnumber
         failed_when: wn16_00_000110_audit_currentmajorversionnumber.value is not version('10', '>=')
-        changed_when: no
+        changed_when: false
 
       - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Build (currentNumber)."
         win_reg_stat:
@@ -104,7 +104,7 @@
             name: CurrentBuildNumber
         register: wn16_00_000110_audit_currentbuildnumber
         failed_when: wn16_00_000110_audit_currentbuildnumber.value is not version('14393', '>=')
-        changed_when: no
+        changed_when: false
 
       - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Release"
         win_reg_stat:
@@ -112,7 +112,7 @@
             name: ReleaseId
         register: wn16_00_000110_audit_releaseid
         failed_when: wn16_00_000110_audit_releaseid.value is not version('1607', '>=')
-        changed_when: no
+        changed_when: false
 
       - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Build"
         win_reg_stat:
@@ -120,7 +120,7 @@
             name: CurrentBuild
         register: wn16_00_000110_audit_currentbuild
         failed_when: wn16_00_000110_audit_currentbuildnumber.value is not version('14393', '>=')
-        changed_when: no
+        changed_when: false
   when:
       - wn16_00_000110
   tags:
@@ -138,12 +138,12 @@
       - name: "HIGH | WN16-00-000120 | AUDIT | The Windows Server 2016 system must use an anti-virus program."
         win_shell: echo true
         register: wn16_00_000120_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-00-000120 | PATCH | The Windows Server 2016 system must use an anti-virus program."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_00_000120
   tags:
@@ -169,8 +169,8 @@
       - name: "HIGH | WN16-00-000150 | AUDIT | Local volumes must use a format that supports NTFS attributes."
         win_shell: echo true
         register: wn16_00_000150_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
   when:
       - wn16_00_000150
   tags:
@@ -188,15 +188,17 @@
         win_shell: Get-LocalUser -Name * | Select-Object name,AllowReversiblePasswordEncryption
         register: wn16_ac_000090_audit
         # failed_when: wn16_ac_000090_audit
-        changed_when: no
-      - debug:
+        changed_when: false
+
+      - name: "HIGH | WN16-AC-000090 | AUDIT | Windows Server 2016 reversible password encryption must be disabled. | Set Variable."
+        debug:
             var: wn16_ac_000090_audit.stdout_lines
 
       - name: "HIGH | WN16-AC-000090 | PATCH | Windows Server 2016 reversible password encryption must be disabled."
         win_shell: echo true
         # this would be on a DC however?
         # Get-ADUser -Filter * | Set-ADUser -AllowReversiblePasswordEncryption $false
-        changed_when: no
+        changed_when: false
   when:
       - wn16_ac_000090
   tags:
@@ -212,12 +214,12 @@
       - name: "HIGH | WN16-DC-000070 | AUDIT | Permissions on the Active Directory data files must only allow System and Administrators access."
         win_shell: echo true
         register: wn16_dc_000070_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000070 | PATCH | Permissions on the Active Directory data files must only allow System and Administrators access."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
 
   when:
       - wn16_dc_000070
@@ -235,12 +237,12 @@
       - name: "HIGH | WN16-DC-000080 | AUDIT | The Active Directory SYSVOL directory must have the proper access control permissions."
         win_shell: echo true
         register: wn16_dc_000080_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000080 | PATCH | The Active Directory SYSVOL directory must have the proper access control permissions."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
 
   when:
       - wn16_dc_000080
@@ -258,12 +260,12 @@
       - name: "HIGH | WN16-DC-000090 | AUDIT | Active Directory Group Policy objects must have proper access control permissions."
         win_shell: echo true
         register: wn16_dc_000090_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000090 | PATCH | Active Directory Group Policy objects must have proper access control permissions."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
 
   when:
       - wn16_dc_000090
@@ -281,12 +283,12 @@
       - name: "HIGH | WN16-DC-000100 | AUDIT | The Active Directory Domain Controllers Organizational Unit (OU) object must have the proper access control permissions."
         win_shell: echo true
         register: wn16_dc_000100_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000100 | PATCH | The Active Directory Domain Controllers Organizational Unit (OU) object must have the proper access control permissions."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
 
   when:
       - wn16_dc_000100
@@ -304,12 +306,12 @@
       - name: "HIGH | WN16-DC-000110 | AUDIT | Domain-created Active Directory Organizational Unit (OU) objects must have proper access control permissions."
         win_shell: echo true
         register: wn16_dc_000110_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000110 | PATCH | Domain-created Active Directory Organizational Unit (OU) objects must have proper access control permissions."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_dc_000110
       - ansible_windows_domain_role == "Primary domain controller"
@@ -326,12 +328,12 @@
       - name: "HIGH | WN16-DC-000150 | AUDIT | Directory data (outside the root DSE) of a non-public directory must be configured to prevent anonymous access."
         win_shell: echo true
         register: wn16_dc_000150_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000150 | PATCH | Directory data (outside the root DSE) of a non-public directory must be configured to prevent anonymous access."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
 
   when:
       - wn16_dc_000150
@@ -470,12 +472,12 @@
       - name: "HIGH | WN16-DC-000290 | AUDIT | Domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
         win_shell: echo true
         register: wn16_dc_000290_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000290 | PATCH | Domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
 
   when:
       - wn16_dc_000290
@@ -493,12 +495,12 @@
       - name: "HIGH | WN16-DC-000300 | AUDIT | PKI certificates associated with user accounts must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
         win_shell: echo true
         register: wn16_dc_000300_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
 
       - name: "HIGH | WN16-DC-000300 | PATCH | PKI certificates associated with user accounts must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_dc_000300
   tags:
