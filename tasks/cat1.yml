@@ -2,7 +2,7 @@
 
 - name: "HIGH | WN16-00-000010 | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks."
   block:
-      - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and falsermal operational tasks."
+      - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks."
         win_shell: echo true
         register: wn16_00_000010_audit
         check_mode: false
