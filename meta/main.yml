@@ -4,6 +4,8 @@ galaxy_info:
     description: Apply the DISA Windows Server 2016 STIG
     company: "MindPoint Group"
     license: MIT
+    role_name: windows_2016_stig
+    namespace: mindpointgroup
     min_ansible_version: 2.6
 
     platforms:
@@ -16,7 +18,10 @@ galaxy_info:
         - security
         - stig
         - hardening
+        - benchmark
         - microsoft
         - windows
+        - complianceascode
+        - compliance
 
     dependencies: []

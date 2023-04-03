@@ -4,11 +4,12 @@
       - name: "LOW | WN16-00-000200 | AUDIT | Non-administrative accounts or groups must only have print permissions on printer shares."
         win_shell: echo true
         register: wn16_00_000200_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
+
       - name: "LOW | WN16-00-000200 | PATCH | Non-administrative accounts or groups must only have print permissions on printer shares."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_00_000200
   tags:
@@ -21,11 +22,12 @@
       - name: "LOW | WN16-00-000450 | AUDIT | The time service must synchronize with an appropriate DoD time source."
         win_shell: echo true
         register: wn16_00_000450_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
+
       - name: "LOW | WN16-00-000450 | PATCH | The time service must synchronize with an appropriate DoD time source."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_00_000450
   tags:
@@ -38,11 +40,12 @@
       - name: "LOW | WN16-DC-000160 | AUDIT | The directory service must be configured to terminate LDAP-based network connections to the directory server after 5 minutes of inactivity."
         win_shell: echo true
         register: wn16_dc_000160_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
+
       - name: "LOW | WN16-DC-000160 | PATCH | The directory service must be configured to terminate LDAP-based network connections to the directory server after 5 minutes of inactivity."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_dc_000160
   tags:
@@ -120,11 +123,11 @@
       - name: "LOW | WN16-CC-000350 | AUDIT | Turning off File Explorer heap termination on corruption must be disabled."
         win_shell: echo true
         register: wn16_cc_000350_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
       - name: "LOW | WN16-CC-000350 | PATCH | Turning off File Explorer heap termination on corruption must be disabled."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_cc_000350
   tags:
@@ -151,11 +154,12 @@
       - name: "LOW | WN16-SO-000450 | AUDIT | The default permissions of global system objects must be strengthened."
         win_shell: echo true
         register: wn16_so_000450_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
+
       - name: "LOW | WN16-SO-000450 | PATCH | The default permissions of global system objects must be strengthened."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_so_000450
   tags:
@@ -168,11 +172,12 @@
       - name: "LOW | WN16-00-000470 | AUDIT | Secure Boot must be enabled on Windows Server 2016 systems."
         win_shell: echo true
         register: wn16_00_000470_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
+
       - name: "LOW | WN16-00-000470 | PATCH | Secure Boot must be enabled on Windows Server 2016 systems."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_00_000470
   tags:
@@ -185,11 +190,12 @@
       - name: "LOW | WN16-00-000480 | AUDIT | Windows 2016 systems must have Unified Extensible Firmware Interface (UEFI) firmware and be configured to run in UEFI mode, not Legacy BIOS."
         win_shell: echo true
         register: wn16_00_000480_audit
-        check_mode: no
-        changed_when: no
+        check_mode: false
+        changed_when: false
+
       - name: "LOW | WN16-00-000480 | PATCH | Windows 2016 systems must have Unified Extensible Firmware Interface (UEFI) firmware and be configured to run in UEFI mode, not Legacy BIOS."
         win_shell: echo true
-        changed_when: no
+        changed_when: false
   when:
       - wn16_00_000480
   tags:
