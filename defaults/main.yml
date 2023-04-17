@@ -73,7 +73,6 @@ wn16_ur_000030: true
 wn16_ur_000090: true
 wn16_ur_000130: true
 
-
 # CAT 2 rules
 wn16_00_000030: true
 wn16_00_000050: true
@@ -303,7 +302,6 @@ wn16_au_000285: true
 wn16_au_000286: true
 wn16_dc_000430: true
 
-
 # CAT 3 rules
 wn16_00_000200: true
 wn16_00_000450: true
@@ -318,7 +316,6 @@ wn16_so_000160: true
 wn16_so_000450: true
 wn16_00_000470: true
 wn16_00_000480: true
-
 
 # CAT 1 defaults
 # This SID is the same for standalone, member, domain controller for 'Administrators' group
