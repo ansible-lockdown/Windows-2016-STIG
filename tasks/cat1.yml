@@ -16,10 +16,11 @@
   tags:
       - WN16-00-000010
       - CAT1
-      - SV-87869r1
+      - SV-87869r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
-      - falsetimplemented
+      - notimplemented
+
 
 - name: "HIGH | WN16-DC-000010 | Only administrators responsible for the domain controller must have Administrator rights on the system."
   block:
@@ -38,7 +39,7 @@
   tags:
       - WN16-DC-000010
       - CAT1
-      - SV-87871r1
+      - SV-87871r1_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
       - notimplemented
@@ -63,7 +64,7 @@
   tags:
       - WN16-MS-000010
       - CAT1
-      - SV-87873r2
+      - SV-87873r2_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
 
@@ -83,11 +84,10 @@
   tags:
       - WN16-00-000040
       - CAT1
-      - SV-87877r1
+      - SV-87877r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
-      - nofix
 
 - name: "HIGH | WN16-00-000110 | Systems must be maintained at a supported servicing level."
   block:
@@ -127,7 +127,7 @@
   tags:
       - WN16-00-000110
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-87891r1_rule
+      - SV-87891r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
 
@@ -151,7 +151,7 @@
   tags:
       - WN16-00-000120
       - CAT1
-      - SV-87893r2
+      - SV-87893r2_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
@@ -177,7 +177,7 @@
   tags:
       - WN16-00-000150
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-87899r1_rule
+      - SV-87899r1_rule
       - SRG-OS-000080-GPOS-00048
       - CCI-000213
       - notimplemented
@@ -205,7 +205,7 @@
   tags:
       - WN16-AC-000090
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-87977r2_rule
+      - SV-87977r2_rule
       - SRG-OS-000073-GPOS-00041
       - CCI-000196
       - notimplemented
@@ -228,7 +228,7 @@
   tags:
       - WN16-DC-000070
       - CAT1
-      - SV-88021r1
+      - SV-88021r1_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
       - notimplemented
@@ -251,7 +251,7 @@
   tags:
       - WN16-DC-000080
       - CAT1
-      - SV-88023r1
+      - SV-88023r1_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
       - notimplemented
@@ -274,7 +274,7 @@
   tags:
       - WN16-DC-000090
       - CAT1
-      - SV-88025r1
+      - SV-88025r1_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
       - notimplemented
@@ -297,7 +297,7 @@
   tags:
       - WN16-DC-000100
       - CAT1
-      - SV-88027r2
+      - SV-88027r2_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
       - notimplemented
@@ -372,8 +372,6 @@
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
-      - notest
-      - needstesting
 
 - name: "HIGH | WN16-CC-000250 | AutoPlay must be turned off for non-volume devices."
   ansible.windows.win_regedit:
@@ -387,8 +385,7 @@
   tags:
       - WN16-CC-000250
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88209r1_rule
-      - tested
+      - SV-88209r1_rule
 
 - name: "HIGH | WN16-CC-000260 | The default AutoRun behavior must be configured to prevent AutoRun commands."
   ansible.windows.win_regedit:
@@ -402,10 +399,9 @@
   tags:
       - WN16-CC-000260
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88211r1_rule
+      - SV-88211r1_rule
       - SRG-OS-000368-GPOS-00154
       - CCI-001764
-      - tested
 
 - name: "HIGH | WN16-CC-000270 | AutoPlay must be disabled for all drives."
   ansible.windows.win_regedit:
@@ -419,10 +415,9 @@
   tags:
       - WN16-CC-000270
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88213r1_rule
+      - SV-88213r1_rule
       - SRG-OS-000368-GPOS-00154
       - CCI-001764
-      - tested
 
 - name: "HIGH | WN16-CC-000460 | The Windows Installer Always install with elevated privileges option must be disabled."
   ansible.windows.win_regedit:
@@ -439,7 +434,6 @@
       - xccdf_mil.disa.stig_rule_SV-88249r1_rule
       - SRG-OS-000362-GPOS-00149
       - CCI-001812
-      - tested
 
 - name: "HIGH | WN16-CC-000500 | The Windows Remote Management (WinRM) client must not use Basic authentication."
   ansible.windows.win_regedit:
@@ -453,10 +447,9 @@
   tags:
       - WN16-CC-000500
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88257r1_rule
+      - SV-88257r1_rule
       - SRG-OS-000125-GPOS-00065
       - CCI-000877
-      - tested
 
 - name: "HIGH | WN16-CC-000530 | The Windows Remote Management (WinRM) service must not use Basic authentication."
   ansible.windows.win_regedit:
@@ -470,10 +463,9 @@
   tags:
       - WN16-CC-000530
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88263r1_rule
+      - SV-88263r1_rule
       - SRG-OS-000125-GPOS-00065
       - CCI-000877
-      - tested
 
 - name: "HIGH | WN16-DC-000290 | Domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
   block:
@@ -496,7 +488,6 @@
       - SRG-OS-000066-GPOS-00034
       - CCI-000185
       - notimplemented
-      - notest
 
 # add some task/eternal variable for approved CAs, check for DoD and how pull programatically
 - name: "HIGH | WN16-DC-000300 | PKI certificates associated with user accounts must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
@@ -519,7 +510,6 @@
       - SRG-OS-000066-GPOS-00034
       - CCI-000185
       - notimplemented
-      - notest
 
 - name: "HIGH | WN16-SO-000020 | Local accounts with blank passwords must be restricted to prevent access from the network."
   ansible.windows.win_regedit:
@@ -532,7 +522,7 @@
   tags:
       - WN16-SO-000020
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88285r1_rule
+      - SV-88285r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
 
@@ -548,7 +538,7 @@
   tags:
       - WN16-SO-000250
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88329r2_rule
+      - SV-88329r2_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
 
@@ -565,7 +555,7 @@
   tags:
       - WN16-SO-000260
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88331r1_rule
+      - SV-88331r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
 # fails_openscap_borked_regkey_casesensitive
@@ -583,7 +573,7 @@
   tags:
       - WN16-SO-000270
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88333r1_rule
+      - SV-88333r1_rule
       - SRG-OS-000138-GPOS-00069
       - CCI-001090
 # fails_openscap_borked_regkey_casesensitive
@@ -600,9 +590,9 @@
   tags:
       - WN16-SO-000300
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88339r1_rule
+      - SV-88339r1_rule
       - SRG-OS-000138-GPOS-00069
-      - CI-001090
+      - CCI-001090
 
 - name: "HIGH | WN16-SO-000360 | Windows Server 2016 must be configured to prevent the storage of the LAN Manager hash of passwords."
   ansible.windows.win_regedit:
@@ -616,7 +606,7 @@
   tags:
       - WN16-SO-000360
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88351r1_rule
+      - SV-88351r1_rule
       - SRG-OS-000073-GPOS-00041
       - CCI-000196
 # fails_openscap_borked_regkey_casesensitive
@@ -633,7 +623,7 @@
   tags:
       - WN16-SO-000380
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88355r1_rule
+      - SV-88355r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
 
@@ -647,7 +637,7 @@
   tags:
       - WN16-UR-000030
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88399r2_rule
+      - SV-88399r2_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
 
@@ -661,7 +651,7 @@
   tags:
       - WN16-UR-000090
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88411r2_rule
+      - SV-88411r2_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
 
@@ -679,6 +669,6 @@
   tags:
       - WN16-UR-000130
       - CAT1
-      - xccdf_mil.disa.stig_rule_SV-88419r2_rule
+      - SV-88419r2_rule
       - SRG-OS-000324-GPOS-00125
       - CCI-002235

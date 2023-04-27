@@ -41,7 +41,7 @@
   tags:
       - WN16-00-000030
       - CAT2
-      - SV-87875r2
+      - SV-87875r2_rule
 
 - name: "MEDIUM | WN16-00-000050 | Members of the Backup Operators group must have separate accounts for backup duties and normal operational tasks."
   block:
@@ -65,7 +65,7 @@
   tags:
       - WN16-00-000050
       - CAT2
-      - SV-87879r1
+      - SV-87879r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
 
@@ -85,7 +85,7 @@
   tags:
       - WN16-00-000060
       - CAT2
-      - SV-87881r1
+      - SV-87881r1_rule
       - notimplemented
       # how to make this list?
 
@@ -105,7 +105,7 @@
   tags:
       - WN16-00-000070
       - CAT2
-      - SV-87883r2
+      - SV-87883r2_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
@@ -127,7 +127,7 @@
   tags:
       - WN16-00-000080
       - CAT2
-      - SV-87885r2
+      - SV-87885r2_rule
       - notimplemented
       # org has to supply a list? shared acct must be in SSP?
 
@@ -147,7 +147,7 @@
   tags:
       - WN16-00-000090
       - CAT2
-      - SV-87887r2
+      - SV-87887r2_rule
       - notimplemented
       # Get-AppLockerPolicy -Effective
 
@@ -168,7 +168,7 @@
   tags:
       - WN16-00-000100
       - CAT2
-      - SV-87889r2
+      - SV-87889r2_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
@@ -191,7 +191,7 @@
   tags:
       - WN16-00-000140
       - CAT2
-      - SV-87897r1
+      - SV-87897r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
@@ -213,7 +213,7 @@
   tags:
       - WN16-00-000160
       - CAT2
-      - SV-87901r1
+      - SV-87901r1_rule
       - notimplemented
       # investigate icacls https://ss64.com/nt/icacls.html ?
 
@@ -233,7 +233,7 @@
   tags:
       - WN16-00-000170
       - CAT2
-      - SV-87903r1
+      - SV-87903r1_rule
       - notimplemented
       # same icalcs as above?
 
@@ -253,7 +253,7 @@
   tags:
       - WN16-00-000180
       - CAT2
-      - SV-87905r1
+      - SV-87905r1_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-00-000190 | Default permissions for the HKEY_LOCAL_MACHINE registry hive must be maintained."
@@ -272,7 +272,7 @@
   tags:
       - WN16-00-000190
       - CAT2
-      - SV-87907r1
+      - SV-87907r1_rule
       - notimplemented
       # Get-Acl -Path HKLM:\"Software"
 
@@ -292,7 +292,7 @@
   tags:
       - WN16-00-000210
       - CAT2
-      - SV-87911r2
+      - SV-87911r2_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-00-000220 | Windows Server 2016 accounts must require passwords."
@@ -335,7 +335,7 @@
   tags:
       - WN16-00-000220
       - CAT2
-      - SV-87913r4
+      - SV-87913r4_rule
 
 - name: "MEDIUM | WN16-00-000230 | Passwords must be configured to expire."
   block:
@@ -353,7 +353,7 @@
   tags:
       - WN16-00-000230
       - CAT2
-      - SV-87915r2
+      - SV-87915r2_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-00-000240 | System files must be monitored for unauthorized changes."
@@ -372,9 +372,9 @@
   tags:
       - WN16-00-000240
       - CAT2
-      - SV-87917r1
+      - SV-87917r1_rule
       - notimplemented
-      - mcaffee?
+      - mcaffee
 
 - name: "MEDIUM | WN16-00-000250 | Non-system-created file shares on a system must limit access to groups that require it."
   block:
@@ -396,7 +396,7 @@
   tags:
       - WN16-00-000250
       - CAT2
-      - SV-87919r1
+      - SV-87919r1_rule
       - notimplemented
 
 # https://stackoverflow.com/questions/31049454/how-to-retrieve-recursively-any-files-with-a-specific-extensions-in-powershell/31049571
@@ -424,7 +424,7 @@
   tags:
       - WN16-00-000270
       - CAT2
-      - SV-87923r2
+      - SV-87923r2_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
@@ -445,9 +445,8 @@
   tags:
       - WN16-00-000280
       - CAT2
-      - SV-87925r1
+      - SV-87925r1_rule
       - notimplemented
-      - notest
 
 - name: "MEDIUM | WN16-00-000290 | Protection methods such as TLS, encrypted VPNs, or IPsec must be implemented if the data owner has a strict requirement for ensuring data integrity and confidentiality is maintained at every step of the data transfer and handling process."
   block:
@@ -465,7 +464,7 @@
   tags:
       - WN16-00-000290
       - CAT2
-      - SV-87927r1
+      - SV-87927r1_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-00-000310 | A host-based firewall must be installed and enabled on the system."
@@ -484,7 +483,7 @@
   tags:
       - WN16-00-000310
       - CAT2
-      - SV-87931r1
+      - SV-87931r1_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-00-000320 | Windows Server 2016 must employ automated mechanisms to determine the state of system components with regard to flaw remediation using the following frequency: continuously, where Host Based Security System (HBSS) is used; 30 days, for any additional internal network scans not covered by HBSS; and annually, for external scans by Computer Network Defense Service Provider (CNDSP)."
@@ -503,7 +502,7 @@
   tags:
       - WN16-00-000320
       - CAT2
-      - SV-87933r2
+      - SV-87933r2_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-00-000330 | Windows Server 2016 must automatically remove or disable temporary user accounts after 72 hours."
@@ -522,7 +521,7 @@
   tags:
       - WN16-00-000330
       - CAT2
-      - SV-87935r1
+      - SV-87935r1_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-00-000340 | Windows Server 2016 must automatically remove or disable emergency accounts after the crisis is resolved or within 72 hours."
@@ -555,8 +554,7 @@
   tags:
       - WN16-00-000350
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-87939r1_rule
-      - tested
+      - SV-87939r1_rule
 
 - name: "MEDIUM | WN16-00-000360 | The Microsoft FTP service must not be installed unless required."
   ansible.windows.win_feature:
@@ -569,8 +567,7 @@
   tags:
       - WN16-00-000360
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-87941r1_rule
-      - tested
+      - SV-87941r1_rule
 
 - name: "MEDIUM | WN16-00-000370 | The Peer Name Resolution Protocol must not be installed."
   ansible.windows.win_feature:
@@ -583,8 +580,7 @@
   tags:
       - WN16-00-000370
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-87943r1_rule
-      - tested
+      - SV-87943r1_rule
 
 - name: "MEDIUM | WN16-00-000380 | Simple TCP/IP Services must not be installed."
   ansible.windows.win_feature:
@@ -595,8 +591,7 @@
   tags:
       - WN16-00-000380
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-87945r1_rule
-      - tested
+      - SV-87945r1_rule
 
 - name: "MEDIUM | WN16-00-000390 | The Telnet Client must not be installed."
   ansible.windows.win_feature:
@@ -607,8 +602,7 @@
   tags:
       - WN16-00-000390
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-87947r1_rule
-      - tested
+      - SV-87947r1_rule
 
 - name: "MEDIUM | WN16-00-000400 | The TFTP Client must not be installed."
   ansible.windows.win_feature:
@@ -619,8 +613,7 @@
   tags:
       - WN16-00-000400
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-87949r1_rule
-      - tested
+      - SV-87949r1_rule
 
 - name: "MEDIUM | WN16-00-000410 | The Server Message Block (SMB) v1 protocol must be uninstalled."
   ansible.windows.win_feature:
@@ -631,8 +624,7 @@
   tags:
       - WN16-00-000410
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-87951r2_rule
-      - tested
+      - SV-87951r2_rule
 
 - name: "MEDIUM | WN16-00-000420 | Windows PowerShell 2.0 must not be installed."
   ansible.windows.win_feature:
@@ -643,8 +635,8 @@
   tags:
       - WN16-00-000420
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-87953r1_rule
-      - tested
+      - SV-87953r1_rule
+
 
 - name: "MEDIUM | WN16-00-000430 | FTP servers must be configured to prevent anonymous logons."
   block:
@@ -662,7 +654,7 @@
   tags:
       - WN16-00-000430
       - CAT2
-      - SV-87955r1
+      - SV-87955r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
@@ -683,7 +675,7 @@
   tags:
       - WN16-00-000440
       - CAT2
-      - SV-87957r1
+      - SV-87957r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
@@ -698,7 +690,7 @@
   tags:
       - WN16-AC-000020
       - CAT2
-      - SV-87963r2
+      - SV-87963r2_rule
 
 # below task is dependent on WN16-AC-000020, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'ResetLockoutCount' in section 'System Access' is not a valid key, cannot set this value"
 - name: "MEDIUM | WN16-AC-000030 | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
@@ -719,7 +711,7 @@
   tags:
       - WN16-AC-000030
       - CAT2
-      - SV-87965r2
+      - SV-87965r2_rule
 
 # below task is dependent on WN16-AC-000020 and WN16-AC-000030, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'LockoutDuration' in section 'System Access' is not a valid key, cannot set this value"
 - name: "MEDIUM | WN16-AC-000010 | Windows 2016 account lockout duration must be configured to 15 minutes or greater."
@@ -740,7 +732,7 @@
   tags:
       - WN16-AC-000010
       - CAT2
-      - SV-87961r3
+      - SV-87961r3_rule
 
 - name: "MEDIUM | WN16-AC-000040 | Windows Server 2016 password history must be configured to 24 passwords remembered."
   block:
@@ -780,7 +772,7 @@
   tags:
       - WN16-AC-000050
       - CAT2
-      - SV-87969r2
+      - SV-87969r2_rule
 
 - name: "MEDIUM | WN16-AC-000060 | Windows Server 2016 minimum password age must be configured to at least one day."
   block:
@@ -1121,7 +1113,7 @@
   tags:
       - WN16-AU-000020
       - CAT2
-      - SV-88055r1
+      - SV-88055r1_rule
       - notimplemented
       # hard one, either need to standardize on say log shipping like splunk or other is set?
 
@@ -1141,7 +1133,7 @@
   tags:
       - WN16-AU-000030
       - CAT2
-      - SV-88057r1
+      - SV-88057r1_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-AU-000040 | Permissions for the Security event log must prevent access by non-privileged accounts."
@@ -1214,7 +1206,7 @@
   tags:
       - WN16-AU-000070
       - CAT2
-      - SV-88065r1
+      - SV-88065r1_rule
 
 - name: "MEDIUM | WN16-AU-000080 | Windows Server 2016 must be configured to audit Account Logon - Credential Validation failures."
   block:
@@ -1232,7 +1224,7 @@
   tags:
       - WN16-AU-000080
       - CAT2
-      - SV-88067r1
+      - SV-88067r1_rule
 
 - name: "MEDIUM | WN16-DC-000230 | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes."
   block:
@@ -1251,7 +1243,7 @@
   tags:
       - WN16-DC-000230
       - CAT2
-      - SV-88069r1
+      - SV-88069r1_rule
 
 - name: "MEDIUM | WN16-AU-000100 | Windows Server 2016 must be configured to audit Account Management - Other Account Management Events successes."
   block:
@@ -1269,7 +1261,7 @@
   tags:
       - WN16-AU-000100
       - CAT2
-      - SV-88071r1
+      - SV-88071r1_rule
 
 - name: "MEDIUM | WN16-AU-000120 | Windows Server 2016 must be configured to audit Account Management - Security Group Management successes."
   block:
@@ -1287,7 +1279,7 @@
   tags:
       - WN16-AU-000120
       - CAT2
-      - SV-88075r1
+      - SV-88075r1_rule
 
 - name: "MEDIUM | WN16-AU-000140 | Windows Server 2016 must be configured to audit Account Management - User Account Management successes."
   block:
@@ -1305,7 +1297,7 @@
   tags:
       - WN16-AU-000140
       - CAT2
-      - SV-88079r1
+      - SV-88079r1_rule
 
 - name: "MEDIUM | WN16-AU-000150 | Windows Server 2016 must be configured to audit Account Management - User Account Management failures."
   block:
@@ -1323,7 +1315,7 @@
   tags:
       - WN16-AU-000150
       - CAT2
-      - SV-88081r1
+      - SV-88081r1_rule
 
 - name: "MEDIUM | WN16-AU-000160 | Windows Server 2016 must be configured to audit Detailed Tracking - Plug and Play Events successes."
   block:
@@ -1341,7 +1333,7 @@
   tags:
       - WN16-AU-000160
       - CAT2
-      - SV-88083r2
+      - SV-88083r2_rule
 
 - name: "MEDIUM | WN16-AU-000170 | Windows Server 2016 must be configured to audit Detailed Tracking - Process Creation successes."
   block:
@@ -1359,7 +1351,7 @@
   tags:
       - WN16-AU-000170
       - CAT2
-      - SV-88085r1
+      - SV-88085r1_rule
 
 - name: "MEDIUM | WN16-DC-000240 | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes."
   block:
@@ -1378,7 +1370,7 @@
   tags:
       - WN16-DC-000240
       - CAT2
-      - SV-88087r1
+      - SV-88087r1_rule
 
 - name: "MEDIUM | WN16-DC-000250 | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures."
   block:
@@ -1397,7 +1389,7 @@
   tags:
       - WN16-DC-000250
       - CAT2
-      - SV-88089r1
+      - SV-88089r1_rule
 
 - name: "MEDIUM | WN16-DC-000260 | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes."
   block:
@@ -1416,7 +1408,7 @@
   tags:
       - WN16-DC-000260
       - CAT2
-      - SV-88091r1
+      - SV-88091r1_rule
 
 - name: "MEDIUM | WN16-DC-000270 | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes failures."
   block:
@@ -1435,7 +1427,7 @@
   tags:
       - WN16-DC-000270
       - CAT2
-      - SV-88093r1
+      - SV-88093r1_rule
 
 - name: "MEDIUM | WN16-AU-000220 | Windows Server 2016 must be configured to audit Logon/Logoff - Account Lockout successes."
   block:
@@ -1453,7 +1445,7 @@
   tags:
       - WN16-AU-000220
       - CAT2
-      - SV-88095r3
+      - SV-88095r3_rule
 
 - name: "MEDIUM | WN16-AU-000230 | Windows Server 2016 must be configured to audit Logon/Logoff - Account Lockout failures."
   block:
@@ -1471,7 +1463,7 @@
   tags:
       - WN16-AU-000230
       - CAT2
-      - SV-88097r3
+      - SV-88097r3_rule
 
 - name: "MEDIUM | WN16-AU-000240 | Windows Server 2016 must be configured to audit Logon/Logoff - Group Membership successes."
   block:
@@ -1489,7 +1481,7 @@
   tags:
       - WN16-AU-000240
       - CAT2
-      - SV-88099r2
+      - SV-88099r2_rule
 
 - name: "MEDIUM | WN16-AU-000250 | Windows Server 2016 must be configured to audit Logon/Logoff - Logoff successes."
   block:
@@ -1507,7 +1499,7 @@
   tags:
       - WN16-AU-000250
       - CAT2
-      - SV-88101r1
+      - SV-88101r1_rule
 
 - name: "MEDIUM | WN16-AU-000260 | Windows Server 2016 must be configured to audit Logon/Logoff - Logon successes."
   block:
@@ -1525,7 +1517,7 @@
   tags:
       - WN16-AU-000260
       - CAT2
-      - SV-88103r1
+      - SV-88103r1_rule
 
 - name: "MEDIUM | WN16-AU-000270 | Windows Server 2016 must be configured to audit Logon/Logoff - Logon failures."
   block:
@@ -1543,7 +1535,7 @@
   tags:
       - WN16-AU-000270
       - CAT2
-      - SV-88105r1
+      - SV-88105r1_rule
 
 - name: "MEDIUM | WN16-AU-000280 | Windows Server 2016 must be configured to audit Logon/Logoff - Special Logon successes."
   block:
@@ -1561,7 +1553,7 @@
   tags:
       - WN16-AU-000280
       - CAT2
-      - SV-88107r1
+      - SV-88107r1_rule
 
 - name: "MEDIUM | WN16-AU-000290 | Windows Server 2016 must be configured to audit Object Access - Removable Storage successes."
   block:
@@ -1579,7 +1571,7 @@
   tags:
       - WN16-AU-000290
       - CAT2
-      - SV-88109r1
+      - SV-88109r1_rule
 
 - name: "MEDIUM | WN16-AU-000300 | Windows Server 2016 must be configured to audit Object Access - Removable Storage failures."
   block:
@@ -1597,7 +1589,7 @@
   tags:
       - WN16-AU-000300
       - CAT2
-      - SV-88111r1
+      - SV-88111r1_rule
 
 - name: "MEDIUM | WN16-AU-000310 | Windows Server 2016 must be configured to audit Policy Change - Audit Policy Change successes."
   block:
@@ -1615,7 +1607,7 @@
   tags:
       - WN16-AU-000310
       - CAT2
-      - SV-88113r1
+      - SV-88113r1_rule
 
 - name: "MEDIUM | WN16-AU-000320 | Windows Server 2016 must be configured to audit Policy Change - Audit Policy Change failures."
   block:
@@ -1633,7 +1625,7 @@
   tags:
       - WN16-AU-000320
       - CAT2
-      - SV-88115r1
+      - SV-88115r1_rule
 
 - name: "MEDIUM | WN16-AU-000330 | Windows Server 2016 must be configured to audit Policy Change - Authentication Policy Change successes."
   block:
@@ -1651,7 +1643,7 @@
   tags:
       - WN16-AU-000330
       - CAT2
-      - SV-88117r1
+      - SV-88117r1_rule
 
 - name: "MEDIUM | WN16-AU-000340 | Windows Server 2016 must be configured to audit Policy Change - Authorization Policy Change successes."
   block:
@@ -1669,7 +1661,7 @@
   tags:
       - WN16-AU-000340
       - CAT2
-      - SV-88119r1
+      - SV-88119r1_rule
 
 - name: "MEDIUM | WN16-AU-000350 | Windows Server 2016 must be configured to audit Privilege Use - Sensitive Privilege Use successes."
   block:
@@ -1687,7 +1679,7 @@
   tags:
       - WN16-AU-000350
       - CAT2
-      - SV-88121r1
+      - SV-88121r1_rule
 
 - name: "MEDIUM | WN16-AU-000360 | Windows Server 2016 must be configured to audit Privilege Use - Sensitive Privilege Use failures."
   block:
@@ -1705,7 +1697,7 @@
   tags:
       - WN16-AU-000360
       - CAT2
-      - SV-88123r1
+      - SV-88123r1_rule
 
 - name: "MEDIUM | WN16-AU-000370 | Windows Server 2016 must be configured to audit System - IPsec Driver successes."
   block:
@@ -1723,8 +1715,7 @@
   tags:
       - WN16-AU-000370
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88125r1_rule
-      - tested
+      - SV-88125r1_rule
 
 - name: "MEDIUM | WN16-AU-000380 | Windows Server 2016 must be configured to audit System - IPsec Driver failures."
   block:
@@ -1746,8 +1737,7 @@
   tags:
       - WN16-AU-000380
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88127r1_rule
-      - tested
+      - SV-88127r1_rule
 
 - name: "MEDIUM | WN16-AU-000390 | Windows Server 2016 must be configured to audit System - Other System Events successes."
   block:
@@ -1765,8 +1755,7 @@
   tags:
       - WN16-AU-000390
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88129r3_rule
-      - tested
+      - SV-88129r3_rule
 
 - name: "MEDIUM | WN16-AU-000400 | Windows Server 2016 must be configured to audit System - Other System Events failures."
   block:
@@ -1785,8 +1774,7 @@
   tags:
       - WN16-AU-000400
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88131r3_rule
-      - tested
+      - SV-88131r3_rule
 
 - name: "MEDIUM | WN16-AU-000410 | Windows Server 2016 must be configured to audit System - Security State Change successes."
   block:
@@ -1805,8 +1793,7 @@
   tags:
       - WN16-AU-000410
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88133r1_rule
-      - tested
+      - SV-88133r1_rule
 
 - name: "MEDIUM | WN16-AU-000420 | Windows Server 2016 must be configured to audit System - Security System Extension successes."
   block:
@@ -1825,8 +1812,7 @@
   tags:
       - WN16-AU-000420
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88135r1_rule
-      - tested
+      - SV-88135r1_rule
 
 - name: "MEDIUM | WN16-CC-000280 | Administrator accounts must not be enumerated during elevation."
   ansible.windows.win_regedit:
@@ -1840,8 +1826,7 @@
   tags:
       - WN16-CC-000280
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88139r1_rule
-      - tested
+      - SV-88139r1_rule
 
 - name: "MEDIUM | WN16-AU-000440 | Windows Server 2016 must be configured to audit System - System Integrity successes."
   block:
@@ -1860,8 +1845,7 @@
   tags:
       - WN16-AU-000440
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88141r1_rule
-      - tested
+      - SV-88141r1_rule
 
 - name: "MEDIUM | WN16-AU-000450 | Windows Server 2016 must be configured to audit System - System Integrity failures."
   block:
@@ -1880,8 +1864,7 @@
   tags:
       - WN16-AU-000450
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88143r1_rule
-      - tested
+      - SV-88143r1_rule
 
 # some versions may be core/no gui, may need a prelim to detect?
 - name: "MEDIUM | WN16-CC-000010 | The display of slide shows on the lock screen must be disabled."
@@ -1896,8 +1879,7 @@
   tags:
       - WN16-CC-000010
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88145r1_rule
-      - tested
+      - SV-88145r1_rule
 
 - name: "MEDIUM | WN16-MS-000020 | Local administrator accounts must have their privileged token filtered to prevent elevated privileges from being used over the network on domain systems."
   ansible.windows.win_regedit:
@@ -1912,7 +1894,7 @@
   tags:
       - WN16-MS-000020
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88147r1_rule
+      - SV-88147r1_rule
 
 - name: "MEDIUM | WN16-CC-000030 | WDigest Authentication must be disabled on Windows Server 2016."
   ansible.windows.win_regedit:
@@ -1926,8 +1908,7 @@
   tags:
       - WN16-CC-000030
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88149r2_rule
-      - tested
+      - SV-88149r2_rule
 
 - name: "MEDIUM | WN16-CC-000080 | Insecure logons to an SMB server must be disabled."
   ansible.windows.win_regedit:
@@ -1941,7 +1922,7 @@
   tags:
       - WN16-CC-000080
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88159r1_rule
+      - SV-88159r1_rule
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
 
@@ -1962,7 +1943,7 @@
   tags:
       - WN16-CC-000090
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88161r1_rule
+      - SV-88161r1_rule
 
 - name: "MEDIUM | WN16-CC-000100 | Command line data must be included in process creation events."
   ansible.windows.win_regedit:
@@ -1976,8 +1957,7 @@
   tags:
       - WN16-CC-000100
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88163r1_rule
-      - tested
+      - SV-88163r1_rule
 
 - name: "MEDIUM | WN16-CC-000110 | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection."
   block:
@@ -2011,8 +1991,7 @@
   tags:
       - WN16-CC-000140
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88173r1_rule
-      - tested
+      - SV-88173r1_rule
 
 - name: "MEDIUM | WN16-CC-000150 | Group Policy objects must be reprocessed even if they have not changed."
   ansible.windows.win_regedit:
@@ -2026,8 +2005,7 @@
   tags:
       - WN16-CC-000150
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88177r1_rule
-      - tested
+      - SV-88177r1_rule
 
 - name: "MEDIUM | WN16-CC-000160 | Downloading print driver packages over HTTP must be prevented."
   ansible.windows.win_regedit:
@@ -2041,8 +2019,7 @@
   tags:
       - WN16-CC-000160
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88179r1_rule
-      - tested
+      - SV-88179r1_rule
 
 - name: "MEDIUM | WN16-CC-000170 | Printing over HTTP must be prevented."
   ansible.windows.win_regedit:
@@ -2056,8 +2033,7 @@
   tags:
       - WN16-CC-000170
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88181r1_rule
-      - tested
+      - SV-88181r1_rule
 
 - name: "MEDIUM | WN16-CC-000180 | The network selection user interface (UI) must not be displayed on the logon screen."
   ansible.windows.win_regedit:
@@ -2071,8 +2047,7 @@
   tags:
       - WN16-CC-000180
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88185r1_rule
-      - tested
+      - SV-88185r1_rule
 
 - name: "MEDIUM | WN16-MS-000030 | Local users on domain-joined computers must not be enumerated."
   ansible.windows.win_regedit:
@@ -2087,8 +2062,7 @@
   tags:
       - WN16-MS-000030
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88187r1_rule
-      - tested
+      - SV-88187r1_rule
 
 - name: "MEDIUM | WN16-CC-000210 | Users must be prompted to authenticate when the system wakes from sleep (on battery)."
   ansible.windows.win_regedit:
@@ -2102,8 +2076,7 @@
   tags:
       - WN16-CC-000210
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88197r1_rule
-      - tested
+      - SV-88197r1_rule
 
 - name: "MEDIUM | WN16-CC-000220 | Users must be prompted to authenticate when the system wakes from sleep (plugged in)."
   ansible.windows.win_regedit:
@@ -2117,8 +2090,7 @@
   tags:
       - WN16-CC-000220
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88201r1_rule
-      - tested
+      - SV-88201r1_rule
 
 - name: "MEDIUM | WN16-MS-000040 | Unauthenticated Remote Procedure Call (RPC) clients must be restricted from connecting to the RPC server."
   ansible.windows.win_regedit:
@@ -2132,8 +2104,7 @@
   tags:
       - WN16-MS-000040
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88203r1_rule
-      - tested
+      - SV-88203r1_rule
 
 - name: "MEDIUM | WN16-CC-000290 | Windows Telemetry must be configured to Security or Basic."
   ansible.windows.win_regedit:
@@ -2147,8 +2118,7 @@
   tags:
       - WN16-CC-000290
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88215r1_rule
-      - tested
+      - SV-88215r1_rule
 
 - name: "MEDIUM | WN16-CC-000300 | The Application event log size must be configured to 32768 KB or greater."
   block:
@@ -2172,8 +2142,7 @@
   tags:
       - WN16-CC-000300
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88217r1_rule
-      - tested
+      - SV-88217r1_rule
 
 - name: "MEDIUM | WN16-CC-000310 | The Security event log size must be configured to 196608 KB or greater."
   block:
@@ -2196,8 +2165,7 @@
   tags:
       - WN16-CC-000310
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88219r1_rule
-      - tested
+      - SV-88219r1_rule
 
 - name: "MEDIUM | WN16-CC-000320 | The System event log size must be configured to 32768 KB or greater."
   block:
@@ -2221,8 +2189,7 @@
   tags:
       - WN16-CC-000320
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88221r1_rule
-      - tested
+      - SV-88221r1_rule
 
 - name: "MEDIUM | WN16-CC-000330 | Windows Server 2016 Windows SmartScreen must be enabled."
   ansible.windows.win_regedit:
@@ -2236,8 +2203,7 @@
   tags:
       - WN16-CC-000330
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88223r2_rule
-      - tested
+      - SV-88223r2_rule
 
 - name: "MEDIUM | WN16-CC-000340 | Explorer Data Execution Prevention must be enabled."
   ansible.windows.win_regedit:
@@ -2251,8 +2217,7 @@
   tags:
       - WN16-CC-000340
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88225r1_rule
-      - tested
+      - SV-88225r1_rule
 
 - name: "MEDIUM | WN16-CC-000360 | File Explorer shell protocol must run in protected mode."
   ansible.windows.win_regedit:
@@ -2266,8 +2231,7 @@
   tags:
       - WN16-CC-000360
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88229r1_rule
-      - tested
+      - SV-88229r1_rule
 
 - name: "MEDIUM | WN16-CC-000370 | Passwords must not be saved in the Remote Desktop Client."
   ansible.windows.win_regedit:
@@ -2281,8 +2245,7 @@
   tags:
       - WN16-CC-000370
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88231r1_rule
-      - tested
+      - SV-88231r1_rule
 
 - name: "MEDIUM | WN16-CC-000380 | Local drives must be prevented from sharing with Remote Desktop Session Hosts."
   ansible.windows.win_regedit:
@@ -2296,8 +2259,7 @@
   tags:
       - WN16-CC-000380
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88233r1_rule
-      - tested
+      - SV-88233r1_rule
 
 - name: "MEDIUM | WN16-CC-000390 | Remote Desktop Services must always prompt a client for passwords upon connection."
   ansible.windows.win_regedit:
@@ -2311,8 +2273,7 @@
   tags:
       - WN16-CC-000390
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88235r1_rule
-      - tested
+      - SV-88235r1_rule
 
 - name: "MEDIUM | WN16-CC-000400 | The Remote Desktop Session Host must require secure Remote Procedure Call (RPC) communications."
   ansible.windows.win_regedit:
@@ -2326,8 +2287,7 @@
   tags:
       - WN16-CC-000400
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88237r1_rule
-      - tested
+      - SV-88237r1_rule
 
 - name: "MEDIUM | WN16-CC-000410 | Remote Desktop Services must be configured with the client connection encryption set to High Level."
   ansible.windows.win_regedit:
@@ -2341,8 +2301,7 @@
   tags:
       - WN16-CC-000410
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88239r1_rule
-      - tested
+      - SV-88239r1_rule
 
 - name: "MEDIUM | WN16-CC-000420 | Attachments must be prevented from being downloaded from RSS feeds."
   ansible.windows.win_regedit:
@@ -2356,8 +2315,7 @@
   tags:
       - WN16-CC-000420
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88241r1_rule
-      - tested
+      - SV-88241r1_rule
 
 - name: "MEDIUM | WN16-CC-000421 | The Windows Explorer Preview pane must be disabled for Windows Server 2016."
   ansible.windows.win_regedit:
@@ -2371,7 +2329,7 @@
   tags:
       - WN16-CC-000421
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-224950r569186_rule
+      - SV-224950r569186_rule
 
 - name: "MEDIUM | WN16-CC-000430 | Basic authentication for RSS feeds over HTTP must not be used."
   ansible.windows.win_regedit:
@@ -2385,8 +2343,7 @@
   tags:
       - WN16-CC-000430
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88243r1_rule
-      - tested
+      - SV-88243r1_rule
 
 - name: "MEDIUM | WN16-CC-000440 | Indexing of encrypted files must be turned off."
   ansible.windows.win_regedit:
@@ -2400,8 +2357,7 @@
   tags:
       - WN16-CC-000440
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88245r1_rule
-      - tested
+      - SV-88245r1_rule
 
 - name: "MEDIUM | WN16-CC-000450 | Users must be prevented from changing installation options."
   ansible.windows.win_regedit:
@@ -2415,8 +2371,7 @@
   tags:
       - WN16-CC-000450
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88247r1_rule
-      - tested
+      - SV-88247r1_rule
 
 - name: "MEDIUM | WN16-CC-000470 | Users must be notified if a web-based program attempts to install software."
   ansible.windows.win_regedit:
@@ -2430,8 +2385,7 @@
   tags:
       - WN16-CC-000470
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88251r1_rule
-      - tested
+      - SV-88251r1_rule
 
 - name: "MEDIUM | WN16-CC-000480 | Automatically signing in the last interactive user after a system-initiated restart must be disabled."
   ansible.windows.win_regedit:
@@ -2445,8 +2399,7 @@
   tags:
       - WN16-CC-000480
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88253r1_rule
-      - tested
+      - SV-88253r1_rule
 
 - name: "MEDIUM | WN16-CC-000490 | PowerShell script block logging must be enabled."
   ansible.windows.win_regedit:
@@ -2460,8 +2413,7 @@
   tags:
       - WN16-CC-000490
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88255r1_rule
-      - tested
+      - SV-88255r1_rule
 
 - name: "MEDIUM | WN16-CC-000510 | The Windows Remote Management (WinRM) client must not allow unencrypted traffic."
   ansible.windows.win_regedit:
@@ -2476,8 +2428,7 @@
   tags:
       - WN16-CC-000510
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88259r1_rule
-      - tested
+      - SV-88259r1_rule
 
 - name: "MEDIUM | WN16-CC-000520 | The Windows Remote Management (WinRM) client must not use Digest authentication."
   ansible.windows.win_regedit:
@@ -2491,8 +2442,7 @@
   tags:
       - WN16-CC-000520
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88261r1_rule
-      - tested
+      - SV-88261r1_rule
 
 - name: "MEDIUM | WN16-CC-000540 | The Windows Remote Management (WinRM) service must not allow unencrypted traffic."
   ansible.windows.win_regedit:
@@ -2507,8 +2457,7 @@
   tags:
       - WN16-CC-000540
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88265r1_rule
-      - tested
+      - SV-88265r1_rule
 
 - name: "MEDIUM | WN16-CC-000550 | The Windows Remote Management (WinRM) service must not store RunAs credentials."
   ansible.windows.win_regedit:
@@ -2523,8 +2472,7 @@
   tags:
       - WN16-CC-000550
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88267r1_rule
-      - tested
+      - SV-88267r1_rule
 
 # https://dl.dod.cyber.mil/wp-content/uploads/pki-pke/zip/certificates_pkcs7_v5-6_dod.zip ?
 - name: "MEDIUM | WN16-PK-000010 | The DoD Root CA certificates must be installed in the Trusted Root Store."
@@ -2543,8 +2491,7 @@
   tags:
       - WN16-PK-000010
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88269r3_rule
-      - notimplemented
+      - SV-88269r3_rule
 
 - name: "MEDIUM | WN16-PK-000020 | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems."
   block:
@@ -2581,7 +2528,7 @@
   tags:
       - WN16-PK-000030
       - CAT2
-      - SV-88273r3
+      - SV-88273r3_rule
       - notimplemented
 
 - name: "MEDIUM | WN16-DC-000280 | Domain controllers must have a PKI server certificate."
@@ -2632,7 +2579,7 @@
   tags:
       - WN16-SO-000030
       - CAT2
-      - SV-88287r2
+      - SV-88287r2_rule
 
 - name: "MEDIUM | WN16-SO-000040 | Windows Server 2016 built-in guest account must be renamed."
   community.windows.win_security_policy:
@@ -2658,7 +2605,7 @@
   tags:
       - WN16-SO-000050
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88291r1_rule
+      - SV-88291r1_rule
 
 - name: "MEDIUM | WN16-DC-000320 | Domain controllers must require LDAP access signing."
   ansible.windows.win_regedit:
@@ -2703,7 +2650,7 @@
   tags:
       - WN16-SO-000080
       - CAT2
-      - SV-88297r1
+      - SV-88297r1_rule
 
 - name: "MEDIUM | WN16-SO-000090 | The setting Domain member: Digitally encrypt secure channel data (when possible) must be configured to enabled."
   ansible.windows.win_regedit:
@@ -2718,7 +2665,7 @@
   tags:
       - WN16-SO-000090
       - CAT2
-      - SV-88299r1
+      - SV-88299r1_rule
 
 - name: "MEDIUM | WN16-SO-000100 | The setting Domain member: Digitally sign secure channel data (when possible) must be configured to Enabled."
   ansible.windows.win_regedit:
@@ -2733,7 +2680,7 @@
   tags:
       - WN16-SO-000100
       - CAT2
-      - SV-88301r1
+      - SV-88301r1_rule
 
 - name: "MEDIUM | WN16-SO-000110 | The computer account password must not be prevented from being reset."
   ansible.windows.win_regedit:
@@ -2747,7 +2694,7 @@
   tags:
       - WN16-SO-000110
       - CAT2
-      - SV-88303r1
+      - SV-88303r1_rule
 
 - name: "MEDIUM | WN16-SO-000120 | The maximum age for machine account passwords must be configured to 30 days or less."
   ansible.windows.win_regedit:
@@ -2761,7 +2708,7 @@
   tags:
       - WN16-SO-000120
       - CAT2
-      - SV-88305r1
+      - SV-88305r1_rule
 
 - name: "MEDIUM | WN16-SO-000130 | Windows Server 2016 must be configured to require a strong session key."
   ansible.windows.win_regedit:
@@ -2775,7 +2722,7 @@
   tags:
       - WN16-SO-000130
       - CAT2
-      - SV-88307r1
+      - SV-88307r1_rule
 
 - name: "MEDIUM | WN16-SO-000140 | The machine inactivity limit must be set to 15 minutes, locking the system with the screen saver."
   ansible.windows.win_regedit:
@@ -2789,7 +2736,7 @@
   tags:
       - WN16-SO-000140
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88309r2_rule
+      - SV-88309r2_rule
 
 - name: "MEDIUM | WN16-SO-000150 | The required legal notice must be configured to display before console logon."
   ansible.windows.win_regedit:
@@ -2803,8 +2750,7 @@
   tags:
       - WN16-SO-000150
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88311r2_rule
-      - borked_regkey_casesensitive
+      - SV-88311r2_rule
 
 - name: "MEDIUM | WN16-MS-000050 | Caching of logon credentials must be limited."
   ansible.windows.win_regedit:
@@ -2819,7 +2765,7 @@
   tags:
       - WN16-MS-000050
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88315r1_rule
+      - SV-88315r1_rule
 
 - name: "MEDIUM | WN16-SO-000190 | The setting Microsoft network client: Digitally sign communications (always) must be configured to Enabled."
   ansible.windows.win_regedit:
@@ -2833,7 +2779,7 @@
   tags:
       - WN16-SO-000190
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88317r1_rule
+      - SV-88317r1_rule
 
 - name: "MEDIUM | WN16-SO-000200 | The setting Microsoft network client: Digitally sign communications (if server agrees) must be configured to Enabled."
   ansible.windows.win_regedit:
@@ -2847,7 +2793,7 @@
   tags:
       - WN16-SO-000200
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88319r1_rule
+      - SV-88319r1_rule
 
 - name: "MEDIUM | WN16-SO-000210 | Unencrypted passwords must not be sent to third-party Server Message Block (SMB) servers."
   ansible.windows.win_regedit:
@@ -2875,8 +2821,7 @@
   tags:
       - WN16-SO-000230
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88325r1_rule
-      - borked_regkey_casesensitive
+      - SV-88325r1_rule
 
 - name: "MEDIUM | WN16-SO-000240 | The setting Microsoft network server: Digitally sign communications (if client agrees) must be configured to Enabled."
   ansible.windows.win_regedit:
@@ -2890,8 +2835,7 @@
   tags:
       - WN16-SO-000240
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88327r1_rule
-      - borked_regkey_casesensitive
+      - SV-88327r1_rule
 
 - name: "MEDIUM | WN16-SO-000290 | Windows Server 2016 must be configured to prevent anonymous users from having the same permissions as the Everyone group."
   ansible.windows.win_regedit:
@@ -2905,8 +2849,7 @@
   tags:
       - WN16-SO-000290
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88337r1_rule
-      - borked_regkey_casesensitive
+      - SV-88337r1_rule
 
 - name: "MEDIUM | WN16-MS-000310 | Remote calls to the Security Account Manager (SAM) must be restricted to Administrators."
   ansible.windows.win_regedit:
@@ -2920,7 +2863,7 @@
   tags:
       - WN16-MS-000310
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88341r2_rule
+      - SV-88341r2_rule
 
 - name: "MEDIUM | WN16-SO-000320 | Services using Local System that use Negotiate when reverting to NTLM authentication must use the computer identity instead of authenticating anonymously."
   ansible.windows.win_regedit:
@@ -2934,7 +2877,7 @@
   tags:
       - WN16-SO-000320
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88343r1_rule
+      - SV-88343r1_rule
 
 - name: "MEDIUM | WN16-SO-000330 | NTLM must be prevented from falling back to a Null session."
   ansible.windows.win_regedit:
@@ -2948,7 +2891,7 @@
   tags:
       - WN16-SO-000330
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88345r1_rule
+      - SV-88345r1_rule
 
 - name: "MEDIUM | WN16-SO-000340 | PKU2U authentication using online identities must be prevented."
   ansible.windows.win_regedit:
@@ -2962,7 +2905,7 @@
   tags:
       - WN16-SO-000340
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88347r1_rule
+      - SV-88347r1_rule
 
 - name: "MEDIUM | WN16-SO-000350 | Kerberos encryption types must be configured to prevent the use of DES and RC4 encryption suites."
   ansible.windows.win_regedit:
@@ -2976,7 +2919,7 @@
   tags:
       - WN16-SO-000350
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88349r2_rule
+      - SV-88349r2_rule
 
 - name: "MEDIUM | WN16-SO-000390 | Windows Server 2016 must be configured to at least negotiate signing for LDAP client signing."
   ansible.windows.win_regedit:
@@ -2990,8 +2933,7 @@
   tags:
       - WN16-SO-000390
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88357r1_rule
-      - borked_regkey_casesensitive
+      - SV-88357r1_rule
 
 - name: "MEDIUM | WN16-SO-000400 | Session security for NTLM SSP-based clients must be configured to require NTLMv2 session security and 128-bit encryption."
   ansible.windows.win_regedit:
@@ -3005,8 +2947,7 @@
   tags:
       - WN16-SO-000400
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88359r1_rule
-      - borked_regkey_casesensitive
+      - SV-88359r1_rule
 
 - name: "MEDIUM | WN16-SO-000410 | Session security for NTLM SSP-based servers must be configured to require NTLMv2 session security and 128-bit encryption."
   ansible.windows.win_regedit:
@@ -3020,8 +2961,7 @@
   tags:
       - WN16-SO-000410
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88361r1_rule
-      - borked_regkey_casesensitive
+      - SV-88361r1_rule
 
 - name: "MEDIUM | WN16-SO-000420 | Users must be required to enter a password to access private keys stored on the computer."
   ansible.windows.win_regedit:
@@ -3035,7 +2975,7 @@
   tags:
       - WN16-SO-000420
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88363r1_rule
+      - SV-88363r1_rule
 
 - name: "MEDIUM | WN16-SO-000430 | Windows Server 2016 must be configured to use FIPS-compliant algorithms for encryption, hashing, and signing."
   ansible.windows.win_regedit:
@@ -3049,7 +2989,7 @@
   tags:
       - WN16-SO-000430
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88365r1_rule
+      - SV-88365r1_rule
 
 - name: "MEDIUM | WN16-SO-000460 | User Account Control approval mode for the built-in Administrator must be enabled."
   ansible.windows.win_regedit:
@@ -3064,7 +3004,7 @@
   tags:
       - WN16-SO-000460
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88371r1_rule
+      - SV-88371r1_rule
       # - exclusions for server core? think its NA there
 
 - name: "MEDIUM | WN16-SO-000470 | UIAccess applications must not be allowed to prompt for elevation without using the secure desktop."
@@ -3079,7 +3019,7 @@
   tags:
       - WN16-SO-000470
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88373r1_rule
+      - SV-88373r1_rule
 
 - name: "MEDIUM | WN16-SO-000480 | User Account Control must, at a minimum, prompt administrators for consent on the secure desktop."
   ansible.windows.win_regedit:
@@ -3107,7 +3047,7 @@
   tags:
       - WN16-SO-000490
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88377r1_rule
+      - SV-88377r1_rule
 
 - name: "MEDIUM | WN16-SO-000500 | User Account Control must be configured to detect application installations and prompt for elevation."
   ansible.windows.win_regedit:
@@ -3121,7 +3061,7 @@
   tags:
       - WN16-SO-000500
       - CAT2
-      - SV-88379r1
+      - SV-88379r1_rule
 
 - name: "MEDIUM | WN16-SO-000510 | User Account Control must only elevate UIAccess applications that are installed in secure locations."
   ansible.windows.win_regedit:
@@ -3135,7 +3075,7 @@
   tags:
       - WN16-SO-000510
       - CAT2
-      - SV-88381r1
+      - SV-88381r1_rule
 
 - name: "MEDIUM | WN16-SO-000520 | User Account Control must run all administrators in Admin Approval Mode, enabling UAC."
   ansible.windows.win_regedit:
@@ -3149,7 +3089,7 @@
   tags:
       - WN16-SO-000520
       - CAT2
-      - SV-88383r1
+      - SV-88383r1_rule
 
 - name: "MEDIUM | WN16-SO-000530 | User Account Control must virtualize file and registry write failures to per-user locations."
   ansible.windows.win_regedit:
@@ -3219,7 +3159,7 @@
   tags:
       - WN16-MS-000340
       - CAT2
-      - SV-88397r3
+      - SV-88397r3_rule
 
 - name: "MEDIUM | WN16-DC-000350 | The Add workstations to domain user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3244,7 +3184,7 @@
   tags:
       - WN16-UR-000050
       - CAT2
-      - SV-88403r2
+      - SV-88403r2_rule
 
 - name: "MEDIUM | WN16-DC-000360 | The Allow log on through Remote Desktop Services user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3257,7 +3197,7 @@
   tags:
       - WN16-DC-000360
       - CAT2
-      - SV-88405r2
+      - SV-88405r2_rule
 
 - name: "MEDIUM | WN16-UR-000070 | The Back up files and directories user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3269,8 +3209,7 @@
   tags:
       - WN16-UR-000070
       - CAT2
-      - SV-88407r2
-      - borked_passes_when_empty
+      - SV-88407r2_rule
 
 - name: "MEDIUM | WN16-UR-000080 | The Create a pagefile user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3282,8 +3221,7 @@
   tags:
       - WN16-UR-000080
       - CAT2
-      - SV-88409r2
-      - borked_passes_when_empty
+      - SV-88409r2_rule
 
 - name: "MEDIUM | WN16-UR-000100 | The Create global objects user right must only be assigned to Administrators, Service, Local Service, and Network Service."
   ansible.windows.win_user_right:
@@ -3299,7 +3237,7 @@
   tags:
       - WN16-UR-000100
       - CAT2
-      - SV-88413r2
+      - SV-88413r2_rule
 
 - name: "MEDIUM | WN16-UR-000110 | The Create permanent shared objects user right must not be assigned to any groups or accounts."
   community.windows.win_security_policy:
@@ -3311,7 +3249,7 @@
   tags:
       - WN16-UR-000110
       - CAT2
-      - SV-88415r2
+      - SV-88415r2_rule
 
 - name: "MEDIUM | WN16-UR-000120 | The Create symbolic links user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3323,7 +3261,7 @@
   tags:
       - WN16-UR-000120
       - CAT2
-      - SV-88417r2
+      - SV-88417r2_rule
 
 - name: "MEDIUM | WN16-DC-000370 | The Deny access to this computer from the network user right on domain controllers must be configured to prevent unauthenticated access."
   ansible.windows.win_user_right:
@@ -3336,7 +3274,7 @@
   tags:
       - WN16-DC-000370
       - CAT2
-      - SV-88421r2
+      - SV-88421r2_rule
 
 - name: "MEDIUM | WN16-MS-000370 | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems."
   block:
@@ -3363,8 +3301,7 @@
   tags:
       - WN16-MS-000370
       - CAT2
-      - SV-88423r3
-      - borked_if_ansible_svc_is_admin_domain_member_fails_after
+      - SV-88423r3_rule
 
 - name: "MEDIUM | WN16-DC-000380 | The Deny log on as a batch job user right on domain controllers must be configured to prevent unauthenticated access."
   ansible.windows.win_user_right:
@@ -3377,7 +3314,7 @@
   tags:
       - WN16-DC-000380
       - CAT2
-      - SV-88425r2
+      - SV-88425r2_rule
 
 - name: "MEDIUM | WN16-MS-000380 | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
   block:
@@ -3403,7 +3340,7 @@
   tags:
       - WN16-MS-000380
       - CAT2
-      - SV-88427r2
+      - SV-88427r2_rule
 
 - name: "MEDIUM | WN16-DC-000390 | The Deny log on as a service user right must be configured to include no accounts or groups (blank) on domain controllers."
   community.windows.win_security_policy:
@@ -3416,7 +3353,7 @@
   tags:
       - WN16-DC-000390
       - CAT2
-      - SV-88429r2
+      - SV-88429r2_rule
 
 - name: "MEDIUM | WN16-MS-000390 | The Deny log on as a service user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems. No other groups or accounts must be assigned this right."
   ansible.windows.win_user_right:
@@ -3431,7 +3368,7 @@
   tags:
       - WN16-MS-000390
       - CAT2
-      - SV-88431r2
+      - SV-88431r2_rule
 
 - name: "MEDIUM | WN16-DC-000400 | The Deny log on locally user right on domain controllers must be configured to prevent unauthenticated access."
   ansible.windows.win_user_right:
@@ -3444,7 +3381,7 @@
   tags:
       - WN16-DC-000400
       - CAT2
-      - SV-88433r2
+      - SV-88433r2_rule
 
 - name: "MEDIUM | WN16-MS-000400 | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
   block:
@@ -3470,7 +3407,7 @@
   tags:
       - WN16-MS-000400
       - CAT2
-      - SV-88435r3
+      - SV-88435r3_rule
 
 - name: "MEDIUM | WN16-DC-000410 | The Deny log on through Remote Desktop Services user right on domain controllers must be configured to prevent unauthenticated access."
   ansible.windows.win_user_right:
@@ -3483,7 +3420,7 @@
   tags:
       - WN16-DC-000410
       - CAT2
-      - SV-88437r2
+      - SV-88437r2_rule
 
 - name: "MEDIUM | WN16-MS-000410 | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
   block:
@@ -3510,7 +3447,7 @@
   tags:
       - WN16-MS-000410
       - CAT2
-      - SV-88439r3
+      - SV-88439r3_rule
 
 - name: "MEDIUM | WN16-DC-000420 | The Enable computer and user accounts to be trusted for delegation user right must only be assigned to the Administrators group on domain controllers."
   ansible.windows.win_user_right:
@@ -3523,7 +3460,7 @@
   tags:
       - WN16-DC-000420
       - CAT2
-      - SV-88441r2
+      - SV-88441r2_rule
 
 - name: "MEDIUM | WN16-MS-000420 | The Enable computer and user accounts to be trusted for delegation user right must not be assigned to any groups or accounts on member servers."
   community.windows.win_security_policy:
@@ -3535,7 +3472,7 @@
   tags:
       - WN16-MS-000420
       - CAT2
-      - SV-88443r2
+      - SV-88443r2_rule
 
 - name: "MEDIUM | WN16-UR-000200 | The Force shutdown from a remote system user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3547,8 +3484,7 @@
   tags:
       - WN16-UR-000200
       - CAT2
-      - SV-88445r2
-      - borked_passes_when_empty
+      - SV-88445r2_rule
 
 - name: "MEDIUM | WN16-UR-000210 | The Generate security audits user right must only be assigned to Local Service and Network Service."
   ansible.windows.win_user_right:
@@ -3562,7 +3498,7 @@
   tags:
       - WN16-UR-000210
       - CAT2
-      - SV-88447r2
+      - SV-88447r2_rule
 
 - name: "MEDIUM | WN16-UR-000220 | The Impersonate a client after authentication user right must only be assigned to Administrators, Service, Local Service, and Network Service."
   ansible.windows.win_user_right:
@@ -3578,7 +3514,7 @@
   tags:
       - WN16-UR-000220
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88449r2_rule
+      - SV-88449r2_rule
 
 - name: "MEDIUM | WN16-UR-000230 | The Increase scheduling priority user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3590,8 +3526,7 @@
   tags:
       - WN16-UR-000230
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88451r2_rule
-      - borked_passes_when_empty
+      - SV-88451r2_rule
 
 - name: "MEDIUM | WN16-UR-000240 | The Load and unload device drivers user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3603,8 +3538,7 @@
   tags:
       - WN16-UR-000240
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88453r2_rule
-      - borked_passes_when_empty
+      - SV-88453r2_rule
 
 - name: "MEDIUM | WN16-UR-000250 | The Lock pages in memory user right must not be assigned to any groups or accounts."
   community.windows.win_security_policy:
@@ -3664,7 +3598,7 @@
   tags:
       - WN16-UR-000290
       - CAT2
-      - SV-88463r2
+      - SV-88463r2_rule
 
 - name: "MEDIUM | WN16-UR-000300 | The Restore files and directories user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
@@ -3702,7 +3636,7 @@
   tags:
       - WN16-SO-000180
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-88473r1_rule
+      - SV-88473r1_rule
 
 - name: "MEDIUM | WN16-SO-000010 | Windows Server 2016 built-in guest account must be disabled."
   community.windows.win_security_policy:
@@ -3714,7 +3648,7 @@
   tags:
       - WN16-SO-000010
       - CAT2
-      - SV-88475r2
+      - SV-88475r2_rule
 
 - name: "MEDIUM | WN16-00-000411 | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server."
   ansible.windows.win_regedit:
@@ -3728,7 +3662,7 @@
   tags:
       - WN16-00-000411
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-92829r1_rule
+      - SV-92829r1_rule
 
 - name: "MEDIUM | WN16-00-000412 | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client."
   block:
@@ -3751,8 +3685,7 @@
   tags:
       - WN16-00-000412
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-92831r1_rule
-      - dfed_ask_if_use_loop
+      - SV-92831r1_rule
 
 - name: "MEDIUM | WN16-00-000460 | Orphaned security identifiers (SIDs) must be removed from user rights on Windows 2016."
   block:
@@ -3783,7 +3716,7 @@
   tags:
       - WN16-AU-00028
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-101009r1_rule
+      - SV-101009r1_rule
 
 - name: "MEDIUM | WN16-AU-000286 | Windows 2016 must be configured to audit Object Access - Other Object Access Events failures."
   community.windows.win_audit_policy_system:
@@ -3794,7 +3727,7 @@
   tags:
       - WN16-AU-000286
       - CAT2
-      - xccdf_mil.disa.stig_rule_SV-101011r1_rule
+      - SV-101011r1_rule
 
 - name: "MEDIUM | WN16-DC-000430 | The password for the krbtgt account on a domain must be reset at least every 180 days."
   block:
@@ -3834,5 +3767,5 @@
   tags:
       - WN16-00-000300
       - CAT2
-      - SV-87929r1
+      - SV-87929r1_rule
       - notimplemented

@@ -65,7 +65,7 @@
   tags:
       - WN16-CC-000040
       - CAT3
-      - xccdf_mil.disa.stig_rule_SV-88151r1_rule
+      - SV-88151r1_rule
 
 - name: "LOW | WN16-CC-000050 | Source routing must be configured to the highest protection level to prevent Internet Protocol (IP) source routing."
   ansible.windows.win_regedi:
@@ -79,7 +79,7 @@
   tags:
       - WN16-CC-000050
       - CAT3
-      - xccdf_mil.disa.stig_rule_SV-88153r1_rule
+      - SV-88153r1_rule
 
 - name: "LOW | WN16-CC-000060 | Windows Server 2016 must be configured to prevent Internet Control Message Protocol (ICMP) redirects from overriding Open Shortest Path First (OSPF)-generated routes."
   ansible.windows.win_regedi:
@@ -93,7 +93,7 @@
   tags:
       - WN16-CC-000060
       - CAT3
-      - xccdf_mil.disa.stig_rule_SV-88155r1_rule
+      - SV-88155r1_rule
 
 - name: "LOW | WN16-CC-000070 | Windows Server 2016 must be configured to ignore NetBIOS name release requests except from WINS servers."
   ansible.windows.win_regedi:
@@ -107,7 +107,7 @@
   tags:
       - WN16-CC-000070
       - CAT3
-      - xccdf_mil.disa.stig_rule_SV-88157r1_rule
+      - SV-88157r1_rule
 
 - name: "LOW | WN16-CC-000240 | The Application Compatibility Program Inventory must be prevented from collecting data and sending the information to Microsoft."
   ansible.windows.win_regedi:
@@ -121,7 +121,7 @@
   tags:
       - WN16-CC-000240
       - CAT3
-      - xccdf_mil.disa.stig_rule_SV-88207r1_rule
+      - SV-88207r1_rule
 
 - name: "LOW | WN16-CC-000350 | Turning off File Explorer heap termination on corruption must be disabled."
   block:
@@ -152,8 +152,7 @@
   tags:
       - WN16-SO-000160
       - CAT3
-      - xccdf_mil.disa.stig_rule_SV-88313r1_rule
-      - borked_regkey_casesensitive
+      - SV-88313r1_rule
 
 - name: "LOW | WN16-SO-000450 | The default permissions of global system objects must be strengthened."
   block:
