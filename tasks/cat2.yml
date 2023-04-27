@@ -637,7 +637,6 @@
       - CAT2
       - SV-87953r1_rule
 
-
 - name: "MEDIUM | WN16-00-000430 | FTP servers must be configured to prevent anonymous logons."
   block:
       - name: "MEDIUM | WN16-00-000430 | AUDIT | FTP servers must be configured to prevent anonymous logons."

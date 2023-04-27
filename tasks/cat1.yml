@@ -21,7 +21,6 @@
       - CCI-000366
       - notimplemented
 
-
 - name: "HIGH | WN16-DC-000010 | Only administrators responsible for the domain controller must have Administrator rights on the system."
   block:
       - name: "HIGH | WN16-DC-000010 | AUDIT | Only administrators responsible for the domain controller must have Administrator rights on the system."
