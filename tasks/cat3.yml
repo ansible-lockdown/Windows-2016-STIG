@@ -141,7 +141,7 @@
       - notimplemented
 
 - name: "LOW | WN16-SO-000160 | The Windows dialog box title for the legal banner must be configured with the appropriate text."
-  ansible.windows.win_regedi:
+  ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
       state: present
       value: LegalNoticeCaption

@@ -24,16 +24,18 @@ win2016stig_disruption_high: false
 # setting to make them stand out.
 win2016stig_audit_disruptive: true
 
-winstig_skip_for_travis: false
-
-# Some tasks need to be skipped for CI/CD testing to work correctly
-winstig_skip_for_test: false
-
-win2016stig_workaround_for_disa_benchmark: true
-win2016stig_workaround_for_ssg_benchmark: true
-
-# tweak role to run in a non-privileged container
-win2016stig_system_is_container: false
+# win_skip_for_test is used in the playbook to skip over certain controls that
+# may cause breaking changes when running it for testing purposes.
+# Controls that will be skipped:
+# WN16-CC-000500 - CAT1
+# WN16-CC-000530 - CAT1
+# WN16-SO-000030 - CAT2
+# WN16-SO-000460 - CAT2
+# WN16-00-000270 - CAT2
+# WN16-CC-000510 - CAT2
+# WN16-CC-000540 - CAT2
+# WN16-CC-000550 - CAT2
+win_skip_for_test: false
 
 # These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
 # PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
@@ -58,8 +60,10 @@ wn16_cc_000250: true
 wn16_cc_000260: true
 wn16_cc_000270: true
 wn16_cc_000460: true
+# WINRM CONTROL
 wn16_cc_000500: true
 wn16_cc_000530: true
+# WINRM CONTROL END
 wn16_dc_000290: true
 wn16_dc_000300: true
 wn16_so_000020: true
@@ -210,10 +214,12 @@ wn16_cc_000450: true
 wn16_cc_000470: true
 wn16_cc_000480: true
 wn16_cc_000490: true
+# WINRM CONTROL
 wn16_cc_000510: true
 wn16_cc_000520: true
 wn16_cc_000540: true
 wn16_cc_000550: true
+# WINRM CONTROL END
 wn16_pk_000010: true
 wn16_pk_000020: true
 wn16_pk_000030: true
