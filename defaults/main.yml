@@ -1,7 +1,7 @@
 ---
-win2016stig_cat1_patch: false
+win2016stig_cat1_patch: true
 win2016stig_cat2_patch: true
-win2016stig_cat3_patch: false
+win2016stig_cat3_patch: true
 
 win2016stig_min_ansible_version: "2.6"
 
@@ -36,9 +36,6 @@ win2016stig_audit_disruptive: true
 # WN16-CC-000540 - CAT2
 # WN16-CC-000550 - CAT2
 win2016stig_skip_for_test: false
-
-win2016stig_workaround_for_disa_benchmark: true
-win2016stig_workaround_for_ssg_benchmark: true
 
 # tweak role to run in a non-privileged container
 win2016stig_system_is_container: false
@@ -101,7 +98,6 @@ wn16_00_000220: true
 wn16_00_000230: true
 wn16_00_000240: true
 wn16_00_000250: true
-
 wn16_00_000270: true
 wn16_00_000280: true
 wn16_00_000290: true
