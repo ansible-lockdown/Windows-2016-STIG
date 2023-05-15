@@ -181,7 +181,7 @@ resource "local_file" "inventory" {
         run_audit: true
         system_is_ec2: true
         audit_git_version: devel
-        win2016stig_skip_for_test: true
+        win_skip_for_test: true
         ansible_connection: winrm
         ansible_winrm_server_cert_validation: ignore
         ansible_winrm_operation_timeout_sec: 120

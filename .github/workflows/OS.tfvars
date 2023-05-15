@@ -5,4 +5,4 @@ system_size    = "Standard_DC4s_v2"
 OS_publisher   = "MicrosoftWindowsServer"
 OS_version     = "2016"
 system_release = "datacenter-gensecond"
-hostname       = "LE2016
+hostname       = "Ansible_Lockdown_2016"
