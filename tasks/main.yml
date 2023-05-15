@@ -37,21 +37,21 @@
 
 - name: Execute the category 1 (highest severity) tasks
   ansible.builtin.include_tasks: cat1.yml
-  when: win2016stig_cat1_patch | bool
+  when: win2016stig_cat1_patch
   tags:
       - cat1
       - high
 
 - name: Execute the category 2 (medium severity) tasks
   ansible.builtin.include_tasks: cat2.yml
-  when: win2016stig_cat2_patch | bool
+  when: win2016stig_cat2_patch
   tags:
       - cat2
       - medium
 
 - name: Execute the category 3 (lowest severity) tasks
   ansible.builtin.include_tasks: cat3.yml
-  when: win2016stig_cat3_patch | bool
+  when: win2016stig_cat3_patch
   tags:
       - cat3
       - medium
