@@ -403,24 +403,17 @@
 - name: "MEDIUM | WN16-00-000270 | Software certificate installation files must be removed from Windows Server 2016."
   block:
       - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
-        ansible.windows.win_find:
-            paths: C:\
-            patterns: ['*.p12', '*.pfx']
-            hidden: true
-            recurse: true
-            follow: true
-        register: wn16_00_000270_audit
+        ansible.windows.win_shell: echo true
+        register: wn16_00_000280_audit
         check_mode: false
         changed_when: false
-        # do we need async; its very long running to search filesystems
 
       - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
-        ansible.builtin.debug:
-            msg: "{{ wn16_00_000270_audit.stdout_lines }}"
-        when: wn16_00_000270_audit.stdout != ""
+        ansible.windows.win_shell: echo true
+        changed_when: false
   when:
       - wn16_00_000270
-      - not winstig_skip_for_test
+      - not win2016stig_skip_for_test
   tags:
       - WN16-00-000270
       - CAT2
@@ -428,6 +421,23 @@
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
+
+#### NEED TO LOOK AT 000270
+# - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
+# ansible.windows.win_find:
+#     paths: C:\
+#     patterns: ['*.p12', '*.pfx']
+#     hidden: true
+#     recurse: true
+#     follow: true
+# register: wn16_00_000270_audit
+# check_mode: false
+# changed_when: false
+
+# - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
+# ansible.builtin.debug:
+#     msg: "{{ wn16_00_000270_audit.stdout_lines }}"
+# when: wn16_00_000270_audit.stdout != ""
 
 - name: "MEDIUM | WN16-00-000280 | Systems requiring data at rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest."
   block:
@@ -679,6 +689,7 @@
       - CCI-000366
       - notimplemented
 
+# THE FOLLOWING 3 CONTROLS WILL FAIL UNLESS THEY ARE IN THE FOLLOWING ORDER FOR LOCAL BASED SYSTEMS.
 - name: "MEDIUM | WN16-AC-000020 | Windows Server 2016 must have the number of allowed bad logon attempts configured to three or less."
   community.windows.win_security_policy:
       section: System Access
@@ -2423,7 +2434,7 @@
       datatype: dword
   when:
       - wn16_cc_000510
-      - not winstig_skip_for_test
+      - not win2016stig_skip_for_test
   tags:
       - WN16-CC-000510
       - CAT2
@@ -2452,7 +2463,7 @@
       datatype: dword
   when:
       - wn16_cc_000540
-      - not winstig_skip_for_test
+      - not win2016stig_skip_for_test
   tags:
       - WN16-CC-000540
       - CAT2
@@ -2467,7 +2478,7 @@
       datatype: dword
   when:
       - wn16_cc_000550
-      - not winstig_skip_for_test
+      - not win2016stig_skip_for_test
   tags:
       - WN16-CC-000550
       - CAT2
@@ -2574,7 +2585,7 @@
       value: "{{ wn16_so_000030_newadministratorname }}"
   when:
       - wn16_so_000030
-      - not winstig_skip_for_test
+      - not win2016stig_skip_for_test
   tags:
       - WN16-SO-000030
       - CAT2
@@ -2999,7 +3010,7 @@
       datatype: dword
   when:
       - wn16_so_000460
-      - not winstig_skip_for_test
+      - not win2016stig_skip_for_test
   tags:
       - WN16-SO-000460
       - CAT2

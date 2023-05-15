@@ -9,6 +9,11 @@
 
 ## Release Update
 
+May 2023 Updates
+- Updated pipeline for testing. 
+- Control WN16-00-000270 moved to notimplemented causing issues in virtual testing enviroment. 
+
+April 2023 Updates
 - Added Tags For Cat 1, 2, 3 Tags
 - Updated Module Names
 - Added Banner
