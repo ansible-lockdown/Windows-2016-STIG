@@ -413,7 +413,7 @@
         check_mode: false
         changed_when: false
 
-      - name: "Remove files"
+      - name: "MEDIUM | WN16-00-000270 | PATCH | Software certificate installation files must be removed from Windows Server 2016. | Remove files."
         win_file:
             path: "{{ item }}"
             state: absent
