@@ -44,7 +44,7 @@
 
 - name: Execute the category 2 (medium severity) tasks
   ansible.builtin.include_tasks: cat2.yml
-  when: win2016stig_cat2_patch | bool
+  when: win2016stig_cat2_patch
   tags:
       - cat2
       - medium
