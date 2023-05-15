@@ -403,17 +403,26 @@
 - name: "MEDIUM | WN16-00-000270 | Software certificate installation files must be removed from Windows Server 2016."
   block:
       - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
-        ansible.windows.win_shell: echo true
-        register: wn16_00_000280_audit
+        ansible.windows.win_find:
+            paths: C:\
+            patterns: ['*.p12', '*.pfx']
+            hidden: true
+            recurse: true
+            follow: true
+        register: wn16_00_000270_audit
         check_mode: false
         changed_when: false
 
-      - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
-        ansible.windows.win_shell: echo true
-        changed_when: false
+      - name: "Remove files"
+        win_file:
+            path: "{{ item }}"
+            state: absent
+        with_items:
+            - "{{ wn16_00_000270_audit.files | map(attribute='path')}}"
+        when: wn16_00_000270_audit.matched > 0
   when:
       - wn16_00_000270
-      - not win2016stig_skip_for_test
+      - not win_skip_for_test
   tags:
       - WN16-00-000270
       - CAT2
@@ -421,23 +430,6 @@
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - notimplemented
-
-#### NEED TO LOOK AT 000270
-# - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
-# ansible.windows.win_find:
-#     paths: C:\
-#     patterns: ['*.p12', '*.pfx']
-#     hidden: true
-#     recurse: true
-#     follow: true
-# register: wn16_00_000270_audit
-# check_mode: false
-# changed_when: false
-
-# - name: "MEDIUM | WN16-00-000270 | AUDIT | Software certificate installation files must be removed from Windows Server 2016."
-# ansible.builtin.debug:
-#     msg: "{{ wn16_00_000270_audit.stdout_lines }}"
-# when: wn16_00_000270_audit.stdout != ""
 
 - name: "MEDIUM | WN16-00-000280 | Systems requiring data at rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest."
   block:
@@ -2434,7 +2426,7 @@
       datatype: dword
   when:
       - wn16_cc_000510
-      - not win2016stig_skip_for_test
+      - not win_skip_for_test
   tags:
       - WN16-CC-000510
       - CAT2
@@ -2463,7 +2455,7 @@
       datatype: dword
   when:
       - wn16_cc_000540
-      - not win2016stig_skip_for_test
+      - not win_skip_for_test
   tags:
       - WN16-CC-000540
       - CAT2
@@ -2478,7 +2470,7 @@
       datatype: dword
   when:
       - wn16_cc_000550
-      - not win2016stig_skip_for_test
+      - not win_skip_for_test
   tags:
       - WN16-CC-000550
       - CAT2
@@ -2580,12 +2572,11 @@
 
 - name: "MEDIUM | WN16-SO-000030 | Windows Server 2016 built-in administrator account must be renamed."
   community.windows.win_security_policy:
-      section: System Access
       key: NewAdministratorName
       value: "{{ wn16_so_000030_newadministratorname }}"
   when:
       - wn16_so_000030
-      - not win2016stig_skip_for_test
+      - not win_skip_for_test
   tags:
       - WN16-SO-000030
       - CAT2
@@ -3010,7 +3001,7 @@
       datatype: dword
   when:
       - wn16_so_000460
-      - not win2016stig_skip_for_test
+      - not win_skip_for_test
   tags:
       - WN16-SO-000460
       - CAT2
