@@ -683,7 +683,7 @@
       - CCI-002235
       - CAT1
 
-- name: "HIGH | WN16-UR-000090 | The Create a token object user right must not be assigned to any groups or accounts."
+- name: "HIGH | WN16-UR-000090 | PATCH | The Create a token object user right must not be assigned to any groups or accounts."
   community.windows.win_security_policy:
       section: Privilege Rights
       key: SeCreateTokenPrivilege
