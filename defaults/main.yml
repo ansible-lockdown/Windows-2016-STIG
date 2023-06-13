@@ -29,6 +29,7 @@ win2016stig_audit_disruptive: true
 # Controls that will be skipped:
 # WN16-CC-000500 - CAT1
 # WN16-CC-000530 - CAT1
+
 # WN16-SO-000030 - CAT2
 # WN16-SO-000460 - CAT2
 # WN16-00-000270 - CAT2
@@ -42,20 +43,11 @@ win_skip_for_test: false
 # in order for the variables below to take effect.
 # CAT 1 rules
 wn16_00_000010: true
-wn16_dc_000010: true
-wn16_ms_000010: true
 wn16_00_000040: true
 wn16_00_000110: true
 wn16_00_000120: true
 wn16_00_000150: true
 wn16_ac_000090: true
-wn16_dc_000070: true
-wn16_dc_000080: true
-wn16_dc_000090: true
-wn16_dc_000100: true
-wn16_dc_000110: true
-wn16_dc_000150: true
-wn16_ms_000120: true
 wn16_cc_000250: true
 wn16_cc_000260: true
 wn16_cc_000270: true
@@ -64,11 +56,32 @@ wn16_cc_000460: true
 wn16_cc_000500: true
 wn16_cc_000530: true
 # WINRM CONTROL END
+wn16_dc_000010: true
+wn16_dc_000070: true
+wn16_dc_000080: true
+wn16_dc_000090: true
+wn16_dc_000100: true
+wn16_dc_000110: true
+wn16_dc_000150: true
 wn16_dc_000290: true
 wn16_dc_000300: true
+wn16_ms_000010: true
+wn16_ms_000120: true
 wn16_so_000020: true
 wn16_so_000250: true
 wn16_so_000260: true
+
+
+
+
+
+
+
+
+
+
+
+
 wn16_so_000270: true
 wn16_so_000300: true
 wn16_so_000360: true
@@ -322,6 +335,54 @@ wn16_so_000160: true
 wn16_so_000450: true
 wn16_00_000470: true
 wn16_00_000480: true
+
+
+
+
+
+# Variables related to individual tasks
+# CAT1
+
+# win16stig_av_sftw is the service name of the AV software you are using. This is Service Name, not Display Name
+# Windows Defender = WinDefend
+# AVG Antivirus = AVG Antivirus
+# Total AV Antivirus = SecurityService
+# ESET Antivirus = ekrn
+# Malwarebytes = MBAMServic
+# Bitdefender = VSSERV
+# Trend Micro = Amsp
+# Panda = PSUAService
+# Avast = AvastSvc
+# Kaspersky =
+# Norton =
+# McAfee =
+# To be STIG compliant you need to have either Windows Defender AV enabled/running or a 3rd party AV running (McAfee or Symantec for example)
+win16stig_av_sftw: WinDefend
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # CAT 1 defaults
 # This SID is the same for standalone, member, domain controller for 'Administrators' group
