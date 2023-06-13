@@ -1,6 +1,6 @@
 ---
-win2016stig_cat1_patch: true
-win2016stig_cat2_patch: true
+win2016stig_cat1_patch: false
+win2016stig_cat2_patch: false
 win2016stig_cat3_patch: true
 
 win2016stig_min_ansible_version: "2.6"
@@ -38,6 +38,8 @@ win2016stig_audit_disruptive: true
 # WN16-CC-000550 - CAT2
 win_skip_for_test: false
 
+wn16stig_cloud_based_system: false
+
 # These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
 # PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
 # in order for the variables below to take effect.
@@ -70,25 +72,20 @@ wn16_ms_000120: true
 wn16_so_000020: true
 wn16_so_000250: true
 wn16_so_000260: true
-
-
-
-
-
-
-
-
-
-
-
-
 wn16_so_000270: true
 wn16_so_000300: true
 wn16_so_000360: true
 wn16_so_000380: true
 wn16_ur_000030: true
-wn16_ur_000090: true
 wn16_ur_000130: true
+wn16_ur_000090: true
+
+
+
+
+
+
+
 
 # CAT 2 rules
 wn16_00_000030: true
@@ -324,17 +321,17 @@ wn16_dc_000430: true
 # CAT 3 rules
 wn16_00_000200: true
 wn16_00_000450: true
-wn16_dc_000160: true
+wn16_00_000470: true
+wn16_00_000480: true
 wn16_cc_000040: true
 wn16_cc_000050: true
 wn16_cc_000060: true
 wn16_cc_000070: true
 wn16_cc_000240: true
 wn16_cc_000350: true
+wn16_dc_000160: true
 wn16_so_000160: true
 wn16_so_000450: true
-wn16_00_000470: true
-wn16_00_000480: true
 
 
 
@@ -343,6 +340,7 @@ wn16_00_000480: true
 # Variables related to individual tasks
 # CAT1
 
+# WN16-00-000120
 # win16stig_av_sftw is the service name of the AV software you are using. This is Service Name, not Display Name
 # Windows Defender = WinDefend
 # AVG Antivirus = AVG Antivirus
@@ -359,15 +357,16 @@ wn16_00_000480: true
 # To be STIG compliant you need to have either Windows Defender AV enabled/running or a 3rd party AV running (McAfee or Symantec for example)
 win16stig_av_sftw: WinDefend
 
+# CAT 3
 
-
-
-
-
-
-
-
-
+# WN16-SO-000160
+# The Windows dialog box title for the legal banner must be configured with the appropriate text.
+# "DoD Notice and Consent Banner", "US Department of Defense Warning Statement", or an organization-defined equivalent.
+# If an organization-defined title is used, it can in no case contravene or modify the language of the banner text required in WN16-SO-000150.
+# Automated tools may only search for the titles defined above. If an organization-defined title is used, a manual review will be required.
+# "{{ wn16_so_000150_legalnoticetext }}" will call to the default DoD Notice and Consent Banner.  
+# Upon creating this both "DoD Notice and Consent Banner", "US Department of Defense Warning Statement" are the same.
+wn16_so_000160_legalnoticecaption: "{{ wn16_so_000150_legalnoticetext }}"
 
 
 
@@ -423,5 +422,4 @@ wn16_cc_000320_sys_maxsize: 32768
 
 wn16_dc_000430_pass_age: 180
 
-# CAT 3 defaults
-wn16_so_000160_legalnoticecaption: "DoD Notice and Consent Banner"
+

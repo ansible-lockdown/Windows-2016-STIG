@@ -1,5 +1,32 @@
 ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # we need a variable to the "changed" admin account name since control XXXX states acct must be renamed
 # enumerating on DC is different than standalone
 # DC == Get-ADUser -Filter * -Properties SID, PasswordLastSet | Where SID -Like "*-500" | Ft Name, SID, PasswordLastSet
