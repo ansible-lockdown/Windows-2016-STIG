@@ -38,6 +38,41 @@
       - CCI-000044
       - CAT2_CLOUD2
 
+# below task is dependent on WN16-AC-000020, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'ResetLockoutCount' in section 'System Access' is not a valid key, cannot set this value"
+- name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
+  block:
+      - name: MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
+        ansible.builtin.debug:
+            msg:
+                - "Warning!! You have a invalid number of days set for wn16stig_resetlockoutcount please read"
+                - "the notes for the variable and make the necessary change to the variable to be in compliance."
+        when:
+            - wn16stig_resetlockoutcount < 15
+
+      - name: MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater. | Warn Count."
+        ansible.builtin.import_tasks: warning_facts.yml
+        vars:
+            warn_control_id: 'WN16-AC-000030'
+        when:
+            - wn16stig_resetlockoutcount < 15
+
+      - name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater. | Apply Variable"
+        community.windows.win_security_policy:
+            section: System Access
+            key: ResetLockoutCount
+            value: "{{ wn16stig_resetlockoutcount }}"
+        when:
+            - wn16stig_resetlockoutcount >= 15
+  when:
+      - wn16_ac_000030
+  tags:
+      - WN16-AC-000030
+      - V-224868
+      - SV-224868r852302_rule
+      - SRG-OS-000021-GPOS-00005
+      - CCI-000044
+      - CAT2_CLOUD2
+
 # below task is dependent on WN16-AC-000020 and WN16-AC-000030, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'LockoutDuration' in section 'System Access' is not a valid key, cannot set this value"
 - name: "MEDIUM | WN16-AC-000010 | PATCH | Windows Server 2016 account lockout duration must be configured to 15 minutes or greater."
   block:
@@ -74,39 +109,4 @@
       - SRG-OS-000329-GPOS-00128
       - SV-205795r569188_rule
       - CCI-002238
-      - CAT2_CLOUD2
-
-# below task is dependent on WN16-AC-000020, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'ResetLockoutCount' in section 'System Access' is not a valid key, cannot set this value"
-- name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
-  block:
-      - name: MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
-        ansible.builtin.debug:
-            msg:
-                - "Warning!! You have a invalid number of days set for wn16stig_resetlockoutcount please read"
-                - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_resetlockoutcount < 15
-
-      - name: MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater. | Warn Count."
-        ansible.builtin.import_tasks: warning_facts.yml
-        vars:
-            warn_control_id: 'WN16-AC-000030'
-        when:
-            - wn16stig_resetlockoutcount < 15
-
-      - name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater. | Apply Variable"
-        community.windows.win_security_policy:
-            section: System Access
-            key: ResetLockoutCount
-            value: "{{ wn16stig_resetlockoutcount }}"
-        when:
-            - wn16stig_resetlockoutcount >= 15
-  when:
-      - wn16_ac_000030
-  tags:
-      - WN16-AC-000030
-      - V-224868
-      - SV-224868r852302_rule
-      - SRG-OS-000021-GPOS-00005
-      - CCI-000044
       - CAT2_CLOUD2
