@@ -49,9 +49,9 @@
   ansible.builtin.import_tasks: cat2_cloud.yml
   when:
       - win16stig_cloud_based_system
-      - wn19_ac_000010 or
-        wn19_ac_000020 or
-        wn19_ac_000030
+      - wn16_ac_000010 or
+        wn16_ac_000020 or
+        wn16_ac_000030
   tags:
       - CAT2_CLOUD2
 
