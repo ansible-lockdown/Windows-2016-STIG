@@ -159,9 +159,9 @@
       key: ClearTextPassword
       value: "0"
   when:
-      - wn19_ac_000090
+      - wn16_ac_000090
   tags:
-      - WN19-AC-000090
+      - WN16-AC-000090
       - V-224874
       - SV-224874r877397_rule
       - SRG-OS-000073-GPOS-00041
@@ -492,7 +492,7 @@
       - name: "HIGH | WN16-MS-000010 | AUDIT | Only administrators responsible for the member server or standalone system must have Administrator rights on the system. | Warning Message"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
-            warn_control_id: 'WN16-MS-000010'      
+            warn_control_id: 'WN16-MS-000010'
   when:
       - wn16_ms_000010
       - "'controller' not in ansible_windows_domain_role"

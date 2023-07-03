@@ -171,7 +171,7 @@
       - SV-224919r852324_rule
       - SRG-OS-000420-GPOS-00186
       - CCI-002385
-      - CAT3 
+      - CAT3
 
 - name: "LOW | WN16-CC-000240 | PATCH | The Application Compatibility Program Inventory must be prevented from collecting data and sending the information to Microsoft."
   ansible.windows.win_regedit:
@@ -233,7 +233,7 @@
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
       state: present
       value: LegalNoticeCaption
-      data: "{{ wn16_so_000160_legalnoticecaption }}"
+      data: "{{ wn16stig_legalnoticecaption }}"
       datatype: string
   when:
       - wn16_so_000160

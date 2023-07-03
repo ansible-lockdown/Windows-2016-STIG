@@ -1,6 +1,6 @@
 ---
-win2016stig_cat1_patch: false
-win2016stig_cat2_patch: false
+win2016stig_cat1_patch: true
+win2016stig_cat2_patch: true
 win2016stig_cat3_patch: true
 
 win2016stig_min_ansible_version: "2.6"
@@ -8,7 +8,7 @@ win2016stig_min_ansible_version: "2.6"
 # We've defined complexity-high to mean that we cannot automatically remediate
 # the rule in question.  In the future this might mean that the remediation
 # may fail in some cases.
-win2016stig_complexity_high: false
+win2016stig_complexity_high: true
 
 # Show "changed" for complex items not remediated per complexity-high setting
 # to make them stand out.  "changed" items on a second run of the role would
@@ -24,21 +24,26 @@ win2016stig_disruption_high: false
 # setting to make them stand out.
 win2016stig_audit_disruptive: true
 
+# This parameter disables controls that could have a very lengthy find. For example
+# removing all files of a specific file type that search the entire drive.
+# If there is an action tied to the lengthy search the action task will be disabled as well.
+# WN16-00-000270 - CAT2
+win16stig_lengthy_search: true
+
 # win_skip_for_test is used in the playbook to skip over certain controls that
 # may cause breaking changes when running it for testing purposes.
 # Controls that will be skipped:
 # WN16-CC-000500 - CAT1
 # WN16-CC-000530 - CAT1
-
-# WN16-SO-000030 - CAT2
-# WN16-SO-000460 - CAT2
-# WN16-00-000270 - CAT2
 # WN16-CC-000510 - CAT2
+# WN16-CC-000520 - CAT2
 # WN16-CC-000540 - CAT2
 # WN16-CC-000550 - CAT2
+# WN16-SO-000030 - CAT2
+# WN16-SO-000460 - CAT2
 win_skip_for_test: false
 
-wn16stig_cloud_based_system: false
+win16stig_cloud_based_system: false
 
 # These variables correspond with the STIG IDs defined in the STIG and allows you to enable/disable specific rules.
 # PLEASE NOTE: These work in coordination with the cat1, cat2, cat3 group variables. You must enable an entire group
@@ -80,13 +85,6 @@ wn16_ur_000030: true
 wn16_ur_000130: true
 wn16_ur_000090: true
 
-
-
-
-
-
-
-
 # CAT 2 rules
 wn16_00_000030: true
 wn16_00_000050: true
@@ -120,9 +118,12 @@ wn16_00_000380: true
 wn16_00_000390: true
 wn16_00_000400: true
 wn16_00_000410: true
+wn16_00_000411: true
+wn16_00_000412: true
 wn16_00_000420: true
 wn16_00_000430: true
 wn16_00_000440: true
+wn16_00_000460: true
 wn16_ac_000010: true
 wn16_ac_000020: true
 wn16_ac_000030: true
@@ -131,20 +132,6 @@ wn16_ac_000050: true
 wn16_ac_000060: true
 wn16_ac_000070: true
 wn16_ac_000080: true
-wn16_dc_000020: true
-wn16_dc_000030: true
-wn16_dc_000040: true
-wn16_dc_000050: true
-wn16_dc_000060: true
-wn16_dc_000120: true
-wn16_dc_000130: true
-wn16_dc_000140: true
-wn16_dc_000170: true
-wn16_dc_000180: true
-wn16_dc_000190: true
-wn16_dc_000200: true
-wn16_dc_000210: true
-wn16_dc_000220: true
 wn16_au_000010: true
 wn16_au_000020: true
 wn16_au_000030: true
@@ -153,24 +140,20 @@ wn16_au_000050: true
 wn16_au_000060: true
 wn16_au_000070: true
 wn16_au_000080: true
-wn16_dc_000230: true
 wn16_au_000100: true
 wn16_au_000120: true
 wn16_au_000140: true
 wn16_au_000150: true
 wn16_au_000160: true
 wn16_au_000170: true
-wn16_dc_000240: true
-wn16_dc_000250: true
-wn16_dc_000260: true
-wn16_dc_000270: true
-wn16_au_000220: true
 wn16_au_000230: true
 wn16_au_000240: true
 wn16_au_000250: true
 wn16_au_000260: true
 wn16_au_000270: true
 wn16_au_000280: true
+wn16_au_000285: true
+wn16_au_000286: true
 wn16_au_000290: true
 wn16_au_000300: true
 wn16_au_000310: true
@@ -185,11 +168,9 @@ wn16_au_000390: true
 wn16_au_000400: true
 wn16_au_000410: true
 wn16_au_000420: true
-wn16_cc_000280: true
 wn16_au_000440: true
 wn16_au_000450: true
 wn16_cc_000010: true
-wn16_ms_000020: true
 wn16_cc_000030: true
 wn16_cc_000080: true
 wn16_cc_000090: true
@@ -200,10 +181,9 @@ wn16_cc_000150: true
 wn16_cc_000160: true
 wn16_cc_000170: true
 wn16_cc_000180: true
-wn16_ms_000030: true
 wn16_cc_000210: true
 wn16_cc_000220: true
-wn16_ms_000040: true
+wn16_cc_000280: true
 wn16_cc_000290: true
 wn16_cc_000300: true
 wn16_cc_000310: true
@@ -217,7 +197,6 @@ wn16_cc_000390: true
 wn16_cc_000400: true
 wn16_cc_000410: true
 wn16_cc_000420: true
-wn16_cc_000421: true
 wn16_cc_000430: true
 wn16_cc_000440: true
 wn16_cc_000450: true
@@ -230,16 +209,57 @@ wn16_cc_000520: true
 wn16_cc_000540: true
 wn16_cc_000550: true
 # WINRM CONTROL END
+wn16_dc_000020: true
+wn16_dc_000030: true
+wn16_dc_000040: true
+wn16_dc_000050: true
+wn16_dc_000060: true
+wn16_dc_000120: true
+wn16_dc_000130: true
+wn16_dc_000140: true
+wn16_dc_000170: true
+wn16_dc_000180: true
+wn16_dc_000190: true
+wn16_dc_000200: true
+wn16_dc_000210: true
+wn16_dc_000220: true
+wn16_dc_000230: true
+wn16_dc_000240: true
+wn16_dc_000250: true
+wn16_dc_000260: true
+wn16_dc_000280: true
+wn16_dc_000310: true
+wn16_dc_000320: true
+wn16_dc_000330: true
+wn16_dc_000340: true
+wn16_dc_000350: true
+wn16_dc_000360: true
+wn16_dc_000370: true
+wn16_dc_000380: true
+wn16_dc_000390: true
+wn16_dc_000400: true
+wn16_dc_000410: true
+wn16_dc_000420: true
+wn16_dc_000430: true
+wn16_ms_000020: true
+wn16_ms_000030: true
+wn16_ms_000040: true
+wn16_ms_000050: true
+wn16_ms_000310: true
+wn16_ms_000340: true
+wn16_ms_000370: true
+wn16_ms_000380: true
+wn16_ms_000390: true
+wn16_ms_000400: true
+wn16_ms_000410: true
+wn16_ms_000420: true
 wn16_pk_000010: true
 wn16_pk_000020: true
 wn16_pk_000030: true
-wn16_dc_000280: true
-wn16_dc_000310: true
+wn16_so_000010: true
 wn16_so_000030: true
 wn16_so_000040: true
 wn16_so_000050: true
-wn16_dc_000320: true
-wn16_dc_000330: true
 wn16_so_000080: true
 wn16_so_000090: true
 wn16_so_000100: true
@@ -248,14 +268,13 @@ wn16_so_000120: true
 wn16_so_000130: true
 wn16_so_000140: true
 wn16_so_000150: true
-wn16_ms_000050: true
+wn16_so_000180: true
 wn16_so_000190: true
 wn16_so_000200: true
 wn16_so_000210: true
 wn16_so_000230: true
 wn16_so_000240: true
 wn16_so_000290: true
-wn16_ms_000310: true
 wn16_so_000320: true
 wn16_so_000330: true
 wn16_so_000340: true
@@ -275,28 +294,12 @@ wn16_so_000520: true
 wn16_so_000530: true
 wn16_uc_000030: true
 wn16_ur_000010: true
-wn16_dc_000340: true
-wn16_ms_000340: true
-wn16_dc_000350: true
 wn16_ur_000050: true
-wn16_dc_000360: true
 wn16_ur_000070: true
 wn16_ur_000080: true
 wn16_ur_000100: true
 wn16_ur_000110: true
 wn16_ur_000120: true
-wn16_dc_000370: true
-wn16_ms_000370: true
-wn16_dc_000380: true
-wn16_ms_000380: true
-wn16_dc_000390: true
-wn16_ms_000390: true
-wn16_dc_000400: true
-wn16_ms_000400: true
-wn16_dc_000410: true
-wn16_ms_000410: true
-wn16_dc_000420: true
-wn16_ms_000420: true
 wn16_ur_000200: true
 wn16_ur_000210: true
 wn16_ur_000220: true
@@ -309,14 +312,7 @@ wn16_ur_000280: true
 wn16_ur_000290: true
 wn16_ur_000300: true
 wn16_ur_000310: true
-wn16_so_000180: true
-wn16_so_000010: true
-wn16_00_000411: true
-wn16_00_000412: true
-wn16_00_000460: true
-wn16_au_000285: true
-wn16_au_000286: true
-wn16_dc_000430: true
+wn16_cc_000421: true
 
 # CAT 3 rules
 wn16_00_000200: true
@@ -332,10 +328,6 @@ wn16_cc_000350: true
 wn16_dc_000160: true
 wn16_so_000160: true
 wn16_so_000450: true
-
-
-
-
 
 # Variables related to individual tasks
 # CAT1
@@ -357,58 +349,124 @@ wn16_so_000450: true
 # To be STIG compliant you need to have either Windows Defender AV enabled/running or a 3rd party AV running (McAfee or Symantec for example)
 win16stig_av_sftw: WinDefend
 
-# CAT 3
+# CAT 2
 
-# WN16-SO-000160
-# The Windows dialog box title for the legal banner must be configured with the appropriate text.
-# "DoD Notice and Consent Banner", "US Department of Defense Warning Statement", or an organization-defined equivalent.
-# If an organization-defined title is used, it can in no case contravene or modify the language of the banner text required in WN16-SO-000150.
-# Automated tools may only search for the titles defined above. If an organization-defined title is used, a manual review will be required.
-# "{{ wn16_so_000150_legalnoticetext }}" will call to the default DoD Notice and Consent Banner.  
-# Upon creating this both "DoD Notice and Consent Banner", "US Department of Defense Warning Statement" are the same.
-wn16_so_000160_legalnoticecaption: "{{ wn16_so_000150_legalnoticetext }}"
+# WN16-00-000030
+# wn16stig_pass_age Windows Server 2016 passwords for the built-in Administrator account must be changed
+# at least every 60 days. If the PasswordLastSet date is greater than wn19stig_pass_age days old, this is a finding.
+wn16stig_pass_age: 60
 
+# WN16-AC-000010
+# Windows Server 2016 account lockout duration must be configured to 15 minutes or greater.
+# Configuring this to "0", requiring an administrator to unlock the account, is more restrictive and is not a finding.
+# Valid Variables are 15 or more or 0.
+wn16stig_lockoutduration: 15
 
+# WN16-AC-000020
+# Windows Server 2016 must have the number of allowed bad logon attempts configured to three or less.
+# and may not be set to 0.
+wn16stig_lockoutbadcount: 3
 
+# WN16-AC-000030
+# Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater.
+# wn16stig_resetlockoutcount is the Reset account lockout counter after value in mintues.
+wn16stig_resetlockoutcount: 15
 
+# WN16-AC-000040
+# Windows Server 2016 password history must be configured to 24 passwords remembered.
+# wn16stig_passwordhistorysize is the number of passwords windows will remember before you may
+# be able to reuse that same password. The default value is "24" for Windows domain systems.
+# DoD has decided this is the appropriate value for all Windows systems.
+wn16stig_passwordhistorysize: 24
 
+# WN16-AC-000050
+# Windows Server 2016 maximum password age must be configured to 60 days or less and cannot be 0.
+# wn16stig_maximumpasswordage is the Maximum password age value in days.
+wn16stig_maximumpasswordage: 60
 
+# WN16-AC-000060
+# Windows Server 2016 minimum password age must be configured to at least one day and cannot be set to 0.
+# wn16stig_minimumpasswordage is the Minimum password age value in days.
+wn16stig_minimumpasswordage: 1
 
+# WN16-AC-000070
+# Windows Server 2016 minimum password length must be configured to 14 characters or more.
+# wn16stig_minimumpasswordlength is the Minimum password characters length value.
+wn16stig_minimumpasswordlength: 14
 
+# WN16-CC-000110
+# Windows Server 2016 virtualization-based security must be enabled with the platform security
+# level configured to Secure Boot or Secure Boot with DMA Protection.
+# wn16stig_dma_protection is the level that they would like to setup.
+# Valid settings are as follows.
+# 1 (Secure Boot only)
+# 3 (Secure Boot and DMA Protection)
+wn16stig_dma_protection: 3
 
+# WN16-CC-000140
+# Early Launch Antimalware, Boot-Start Driver Initialization Policy must prevent boot drivers identified as bad.
+# wn16stig_driver_load_policy is the registry value that will be applied. The default behavior is for
+# Early Launch Antimalware - Boot-Start Driver Initialization policy to enforce "Good, unknown and bad but
+# critical" (preventing "bad").
+# Approved values are below:
+# 8 - Good only
+# 1 - Good and unknown
+# 3 - Good, unknown and bad but critical
+wn16stig_driver_load_policy: 1
 
+# WN16-CC-000300
+# The Application event log size must be configured to 32768 KB or greater.
+wn16stig_application_event_log_max_size: 32768
 
+# WN16-CC-000310
+# The Security event log size must be configured to 196608 KB or greater.
+wn16stig_security_event_log_max_size: 196608
 
+# WN16-CC-000320
+# The System event log size must be configured to 32768 KB or greater.
+wn16stig_system_event_log_max_size: 32768
 
+# WN16-DC-000430
+# The password for the krbtgt account on a domain must be reset at least every 180 days.
+# The default setting here matches the STIG requirements.  If you would like to
+# enforce a more strcit policy you may do so for auditing purposes.
+# Valid Days are 180 or less.
+wn16stig_krbtgt_account_pass_age: 180
 
+# WN16-SO-000030
+# Windows Server 2016 built-in administrator account must be renamed.
+# This can be skipped during testing so as to not break the box connection using
+# the tggle win_skip_for_test
+wn16stig_newadministratorname: adminchangethis
 
+# WN16-SO-000040
+# Windows Server 2016 built-in guest account must be renamed.
+wn16stig_newguestname: guestchangethis
 
-# CAT 1 defaults
-# This SID is the same for standalone, member, domain controller for 'Administrators' group
-wn16_ur_000130_sedebugprivilege: "*S-1-5-32-544"
+# WN16-SO-000120
+# The maximum age for machine account passwords must be configured to 30 days or less.
+# wn16stig_machineaccountpsswd_max_age is the setting for the Computer account passwords
+# are changed automatically on a regular basis. This setting controls the maximum password
+# age that a machine account may have. This must be set to no more than 30 days, ensuring
+# the machine changes its password monthly.
+wn16stig_machineaccountpsswd_max_age: 30
 
-# CAT 2 defaults
-wn16_00_000030_pass_age: 60
+# WN16-SO-000140
+# The machine inactivity limit must be set to 15 minutes, locking the system with the screen saver.
+# wn16stig_inactivitytimeoutsecs is the time in seconds that will be set in the registry that
+# enagages the screen saver. Default setting is "900" seconds or less excluding "0"
+wn16stig_inactivitytimeoutsecs: 900
 
-wn16_ac_000010_lockoutduration: 15
-wn16_ac_000020_lockoutbadcount: 3
-wn16_ac_000030_resetlockoutcount: 15
-wn16_ac_000040_passwordhistorysize: 24
-wn16_ac_000050_maximumpasswordage: 60
-wn16_ac_000060_minimumpasswordage: 1
-wn16_ac_000070_minimumpasswordlength: 14
-
-wn16_so_000030_newadministratorname: renamedadmin
-wn16_so_000040_newguestname: renamedguest
-
-wn16_so_000150_legalnoticetext: |
+# WN16-SO-000150
+# wn16stig_legalnoticetext is the required legal notice must be configured to display before console logon.
+wn16stig_legalnoticetext: |
     You are accessing a U.S. Government (USG) Information System (IS) that is provided for USG-authorized use only.
 
     By using this IS (which includes any device attached to this IS), you consent to the following conditions:
 
     -The USG routinely intercepts and monitors communications on this IS for purposes including, but not limited to, penetration testing, COMSEC monitoring, network operations and defense, personnel misconduct (PM), law enforcement (LE), and counterintelligence (CI) investigations.
 
-    -At any time, the USG may inspect and seize data stored on this IS.
+    -At any time,  the USG may inspect and seize data stored on this IS.
 
     -Communications using, or data stored on, this IS are not private, are subject to routine monitoring, interception, and search, and may be disclosed or used for any USG-authorized purpose.
 
@@ -416,10 +474,121 @@ wn16_so_000150_legalnoticetext: |
 
     -Notwithstanding the above, using this IS does not constitute consent to PM, LE or CI investigative searching or monitoring of the content of privileged communications, or work product, related to personal representation or services by attorneys, psychotherapists, or clergy, and their assistants. Such communications and work product are private and confidential. See User Agreement for details.
 
-wn16_cc_000300_app_maxsize: 32768
-wn16_cc_000310_sec_maxsize: 196608
-wn16_cc_000320_sys_maxsize: 32768
+# WN16-SO-000480
+# User Account Control must, at a minimum, prompt administrators for consent on the secure desktop.
+# The more secure option for this setting, "Prompt for credenti
+# Default setting is 2
+# 2 -(Prompt for consent on the secure desktop)
+# 1 -(Prompt for credentials on the secure desktop)
+wn16stig_consentprompt: 2
 
-wn16_dc_000430_pass_age: 180
+# WN16-UR-000050
+# The Allow log on locally user right must only be assigned to the Administrators group.
+# If any SIDs other than the following are granted the "SeInteractiveLogonRight" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators
+wn16stig_seinteractivelogonright: Administrators
 
+# WN16-UR-000070
+# The Back up files and directories user right must only be assigned to the Administrators group.
+# If any SIDs other than the following are granted the "SeBackupPrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators
+wn16stig_sebackuprivilege: Administrators
 
+# WN16-UR-000100
+# The Create global objects user right must only be assigned to Administrators, Service, Local Service, and Network Service.
+# If any SIDs other than the following are granted the "SeCreateGlobalPrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators,Service,Local Service,Network Service
+wn16stig_secreateglobalprivilege: Administrators,Service,Local Service,Network Service
+
+# WN16-UR-000210
+# The Generate security audits user right must only be assigned to Local Service and Network Service.
+# If any SIDs other than the following are granted the "SeAuditPrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Local Service,Network Service
+wn16stig_seauditprivilege: Local Service,Network Service
+
+# WN16-UR-000220
+# The Impersonate a client after authentication user right must only be assigned to Administrators, Service, Local Service, and Network Service.
+# If any SIDs other than the following are granted the "SeImpersonatePrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators,Service,Local Service,Network Service
+wn16stig_seimpersonateprivilege: Administrators,Service,Local Service,Network Service
+
+# WN16-UR-000230
+# The Increase scheduling priority user right must only be assigned to the Administrators group.
+# If any SIDs other than the following are granted the "SeIncreaseBasePriorityPrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators
+wn16stig_seincreasebasepriorityprivilege: Administrators
+
+# WN16-UR-000250
+# The Lock pages in memory user right must not be assigned to any groups or accounts.
+# If any SIDs are granted the "SeLockMemoryPrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: ""
+wn16stig_selockmemorprivilege: ""
+
+# WN16-UR-000260
+# The Manage auditing and security log user right must only be assigned to the Administrators group.
+# If any SIDs other than the following are granted the "SeSecurityPrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# If the organization has an Auditors group, the assignment of this group to the user right would not be a finding.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators
+wn16stig_sesecurityprivilege: Administrators
+
+# WN16-UR-000280
+# The Perform volume maintenance tasks user right must only be assigned to the Administrators group.
+# If any SIDs other than the following are granted the "SeManageVolumePrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators
+wn16stig_semanagevolumeprivilege: Administrators
+
+# WN16-UR-000300
+# The Restore files and directories user right must only be assigned to the Administrators group.
+# If any SIDs other than the following are granted the "SeRestorePrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators
+wn16stig_serestoreprivilege: Administrators
+
+# WN16-UR-000310
+# The Take ownership of files or other objects user right must only be assigned to the Administrators group.
+# If any SIDs other than the following are granted the "SeTakeOwnershipPrivilege" user right, this is a finding.
+# If an application requires this user right, this would not be a finding. Vendor documentation must support the
+# requirement for having the user right. The requirement must be documented with the ISSO.
+# NOTE: Improper Accounts Or Groups listed here will FAIL task.
+# Default: Administrators
+wn16stig_setakeownershipprivilege: Administrators
+
+# CAT 3
+
+# WN16-SO-000160
+# The Windows dialog box title for the legal banner must be configured with the appropriate text.
+# "DoD Notice and Consent Banner", "US Department of Defense Warning Statement", or an organization-defined equivalent.
+# If an organization-defined title is used, it can in no case contravene or modify the language of the banner text required in WN16-SO-000150.
+# Automated tools may only search for the titles defined above. If an organization-defined title is used, a manual review will be required.
+# "{{ wn16_s 0x00000001 (1) (Secure Boot only) or 0x00000003 (3) (Secure Boot and DMA Protection. "{{ wn16stig_legalnoticetext }}" will call to the default DoD Notice and Consent Banner.
+# Upon creating this both "DoD Notice and Consent Banner", "US Department of Defense Warning Statement" are the same.
+wn16stig_legalnoticecaption: "{{ wn16stig_legalnoticetext }}"
