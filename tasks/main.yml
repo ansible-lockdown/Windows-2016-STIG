@@ -34,6 +34,7 @@
   ansible.builtin.include_tasks: prelim.yml
   tags:
       - prelim_tasks
+      - always
 
 - name: Execute the category 1 (highest severity) tasks
   ansible.builtin.include_tasks: cat1.yml
