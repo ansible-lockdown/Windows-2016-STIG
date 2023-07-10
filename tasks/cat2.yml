@@ -1326,7 +1326,6 @@
             section: System Access
             key: LockoutBadCount
             value: "{{ wn16stig_lockoutbadcount }}"
-        register: changed
         when:
             - wn16stig_lockoutbadcount > 0
             - wn16stig_lockoutbadcount <= 3
