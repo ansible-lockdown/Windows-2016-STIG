@@ -4,7 +4,6 @@
 
 June 2023 Updates
 - Update To V2R6 Release 
-- Updated Controls For Cloud Systems
 - Warning System Added
 - Default/Main Variables updated and documented better.
 - Non-implemented controls have been added to new warning system for manual check or have been updated to make functional. 

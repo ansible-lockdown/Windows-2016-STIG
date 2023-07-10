@@ -1326,12 +1326,12 @@
             section: System Access
             key: LockoutBadCount
             value: "{{ wn16stig_lockoutbadcount }}"
+        register: changed
         when:
             - wn16stig_lockoutbadcount > 0
             - wn16stig_lockoutbadcount <= 3
   when:
       - wn16_ac_000020
-      - not win16stig_cloud_based_system
   tags:
       - WN16-AC-000020
       - V-224867
@@ -1367,7 +1367,6 @@
             - wn16stig_resetlockoutcount >= 15
   when:
       - wn16_ac_000030
-      - not win16stig_cloud_based_system
   tags:
       - WN16-AC-000030
       - V-224868
@@ -1406,7 +1405,6 @@
               wn16stig_lockoutduration >= 15
   when:
       - wn16_ac_000010
-      - not win16stig_cloud_based_system
   tags:
       - WN16-AC-000010
       - V-205795
