@@ -213,7 +213,6 @@
             - "'IsOwned_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
             - "'SpecVersion=2.0' or 'SpecVersion=1.2' in wn10_00_000010_tpm_status.stderr_lines | string or
               'No Instance' in wn10_00_000010_tpm_status.stderr_lines | string"
-        # Current hardware and virtual environments may not support virtualization-based security features, including Credential Guard, due to specific supporting requirements including a TPM, UEFI with Secure Boot, and the capability to run the Hyper-V feature within a virtual machine.
   when:
       - wn16_00_000100
       - ansible_windows_domain_member
@@ -224,6 +223,7 @@
       - SRG-OS-000480-GPOS-00227
       - CCI-000366
       - CAT2
+# Current hardware and virtual environments may not support virtualization-based security features, including Credential Guard, due to specific supporting requirements including a TPM, UEFI with Secure Boot, and the capability to run the Hyper-V feature within a virtual machine.
 
 - name: "MEDIUM | WN16-00-000140 | AUDIT | Servers must have a host-based intrusion detection or prevention system."
   block:
@@ -308,24 +308,24 @@
       - SRG-OS-000312-GPOS-00122
       - CCI-002165
       - CAT2
-    # Investigate a better way to the do the when statement and figure out why it is mot reading the when statement
-    # possible issue with the : or \ in them.
-        # when:
-        # - "'c:\\program files NT SERVICE\\TrustedInstaller:(F)' in wn16_00_000170_program_files_audit.stdout_lines | string"
-        # - "'NT SERVICE\\TrustedInstaller:(F)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'NT SERVICE\\TrustedInstaller:(CI)(IO)(F)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'NT AUTHORITY\\SYSTEM:(M)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'NT AUTHORITY\\SYSTEM:(OI)(CI)(IO)(F)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'BUILTIN\\Administrators:(M)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'BUILTIN\\Administrators:(OI)(CI)(IO)(F)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'BUILTIN\\Users:(RX)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'BUILTIN\\Users:(OI)(CI)(IO)(GR,GE)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'CREATOR OWNER:(OI)(CI)(IO)(F)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'APPLICATION PACKAGE AUTHORITY\\ALL APPLICATION PACKAGES:(RX)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'APPLICATION PACKAGE AUTHORITY\\ALL APPLICATION PACKAGES:(OI)(CI)(IO)(GR,GE)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'APPLICATION PACKAGE AUTHORITY\\ALL RESTRICTED APPLICATION PACKAGES:(RX)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'APPLICATION PACKAGE AUTHORITY\\ALL RESTRICTED APPLICATION PACKAGES:(OI)(CI)(IO)(GR,GE)' not in wn16_00_000170_program_files_audit.stdout | string"
-        # - "'Successfully processed 1 files; Failed processing 0 files' not in wn16_00_000170_program_files_audit.stdout | string"
+# Investigate a better way to the do the when statement and figure out why it is mot reading the when statement
+# possible issue with the : or \ in them.
+# when:
+# - "'c:\\program files NT SERVICE\\TrustedInstaller:(F)' in wn16_00_000170_program_files_audit.stdout_lines | string"
+# - "'NT SERVICE\\TrustedInstaller:(F)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'NT SERVICE\\TrustedInstaller:(CI)(IO)(F)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'NT AUTHORITY\\SYSTEM:(M)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'NT AUTHORITY\\SYSTEM:(OI)(CI)(IO)(F)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'BUILTIN\\Administrators:(M)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'BUILTIN\\Administrators:(OI)(CI)(IO)(F)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'BUILTIN\\Users:(RX)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'BUILTIN\\Users:(OI)(CI)(IO)(GR,GE)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'CREATOR OWNER:(OI)(CI)(IO)(F)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'APPLICATION PACKAGE AUTHORITY\\ALL APPLICATION PACKAGES:(RX)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'APPLICATION PACKAGE AUTHORITY\\ALL APPLICATION PACKAGES:(OI)(CI)(IO)(GR,GE)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'APPLICATION PACKAGE AUTHORITY\\ALL RESTRICTED APPLICATION PACKAGES:(RX)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'APPLICATION PACKAGE AUTHORITY\\ALL RESTRICTED APPLICATION PACKAGES:(OI)(CI)(IO)(GR,GE)' not in wn16_00_000170_program_files_audit.stdout | string"
+# - "'Successfully processed 1 files; Failed processing 0 files' not in wn16_00_000170_program_files_audit.stdout | string"
 
 - name: "MEDIUM | WN16-00-000180 | AUDIT | Permissions for the Windows installation directory must conform to minimum requirements."
   block:
@@ -459,7 +459,7 @@
       - CCI-000764
       - CCI-000795
       - CAT2
-  # $sid.Translate( [Security.Principal.Securityidentifier] ).Value <-- potentialto use in 2019 did not work in 2016
+# $sid.Translate( [Security.Principal.Securityidentifier] ).Value <-- potentialto use in 2019 did not work in 2016
 
 - name: "MEDIUM | WN16-00-000220 | AUDIT | Windows Server 2016 accounts must require passwords."
   block:
@@ -3751,7 +3751,6 @@
       - CCI-001948
       - CAT2
 
-
 - name: "MEDIUM | WN16-DC-000320 | PATCH | Domain controllers must require LDAP access signing."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
@@ -5326,8 +5325,8 @@
       - SRG-OS-000324-GPOS-00125
       - CCI-002235
       - CAT2
-    # Get-Content C:\secpol.cfg | where { $_ -like "SeLockMemoryPrivilege*" } can be used in possible audit work.
-    # This Will work for other user rights as well.  Need to convert SID to actual name or groups though. 
+# Get-Content C:\secpol.cfg | where { $_ -like "SeLockMemoryPrivilege*" } can be used in possible audit work.
+# This Will work for other user rights as well.  Need to convert SID to actual name or groups though.
 
 - name: "MEDIUM | WN16-UR-000260 | PATCH | The Manage auditing and security log user right must only be assigned to the Administrators group."
   ansible.windows.win_user_right:
