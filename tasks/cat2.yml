@@ -196,10 +196,10 @@
                 - "Warning!! Please confirm TPM status is Ready for use. Current settings do not meet STIG requirements."
         when:
             - "'No Instance' not in wn10_00_000010_tpm_status.stderr_lines | string"
-            - "'IsActivated_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
-            - "'IsEnabled_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
-            - "'IsOwned_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
-            - "'SpecVersion=2' or 'SpecVersion=1.2' in wn10_00_000010_tpm_status.stderr_lines | string"
+            - "'IsActivated_InitialValue=TRUE' not in wn10_00_000010_tpm_status.stderr_lines | string"
+            - "'IsEnabled_InitialValue=TRUE' not in wn10_00_000010_tpm_status.stderr_lines | string"
+            - "'IsOwned_InitialValue=TRUE' not in wn10_00_000010_tpm_status.stderr_lines | string"
+            - "'SpecVersion=2' or 'SpecVersion=1.2' not in wn10_00_000010_tpm_status.stderr_lines | string"
 
       - name: "MEDIUM | WN16-00-000100 | AUDIT | Windows Server 2016 domain-joined systems must have a Trusted Platform Module (TPM) enabled and ready for use. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
@@ -207,10 +207,10 @@
             warn_control_id: 'WN16-00-000100'
         when:
             - "'No Instance' not in wn10_00_000010_tpm_status.stderr_lines | string"
-            - "'IsActivated_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
-            - "'IsEnabled_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
-            - "'IsOwned_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
-            - "'SpecVersion=2.0' or 'SpecVersion=1.2' in wn10_00_000010_tpm_status.stderr_lines | string or
+            - "'IsActivated_InitialValue=TRUE' not in wn10_00_000010_tpm_status.stderr_lines | string"
+            - "'IsEnabled_InitialValue=TRUE' not in wn10_00_000010_tpm_status.stderr_lines | string"
+            - "'IsOwned_InitialValue=TRUE' not in wn10_00_000010_tpm_status.stderr_lines | string"
+            - "'SpecVersion=2.0' or 'SpecVersion=1.2' not in wn10_00_000010_tpm_status.stderr_lines | string or
               'No Instance' in wn16_00_000010_tpm_status.stderr_lines | string"
   when:
       - wn16_00_000100
