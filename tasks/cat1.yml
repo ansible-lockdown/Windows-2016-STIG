@@ -46,33 +46,33 @@
         ansible.windows.win_reg_stat:
             path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion\
             name: CurrentMajorVersionNumber
-        register: wn16_00_000110_audit_currentmajorversionnumber
-        failed_when: wn16_00_000110_audit_currentmajorversionnumber.value is not version('10', '>=')
         changed_when: false
+        failed_when: wn16_00_000110_audit_currentmajorversionnumber.value is not version('10', '>=')
+        register: wn16_00_000110_audit_currentmajorversionnumber
 
       - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Build (currentNumber)."
         ansible.windows.win_reg_stat:
             path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion
             name: CurrentBuildNumber
-        register: wn16_00_000110_audit_currentbuildnumber
-        failed_when: wn16_00_000110_audit_currentbuildnumber.value is not version('14393', '>=')
         changed_when: false
+        failed_when: wn16_00_000110_audit_currentbuildnumber.value is not version('14393', '>=')
+        register: wn16_00_000110_audit_currentbuildnumber
 
       - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Release"
         ansible.windows.win_reg_stat:
             path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion
             name: ReleaseId
-        register: wn16_00_000110_audit_releaseid
-        failed_when: wn16_00_000110_audit_releaseid.value is not version('1607', '>=')
         changed_when: false
+        failed_when: wn16_00_000110_audit_releaseid.value is not version('1607', '>=')
+        register: wn16_00_000110_audit_releaseid
 
       - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Build"
         ansible.windows.win_reg_stat:
             path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion
             name: CurrentBuild
-        register: wn16_00_000110_audit_currentbuild
-        failed_when: wn16_00_000110_audit_currentbuildnumber.value is not version('14393', '>=')
         changed_when: false
+        failed_when: wn16_00_000110_audit_currentbuildnumber.value is not version('14393', '>=')
+        register: wn16_00_000110_audit_currentbuild
   when:
       - wn16_00_000110
   tags:

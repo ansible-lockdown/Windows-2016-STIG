@@ -58,7 +58,7 @@
         ansible.builtin.debug:
             msg: "Warning!! This is a manual task. Windows Server 2016 must have Secure Boot enabled. | Warning Message."
 
-      - name: "LOW | WN16-00-000470 | PATCH | Secure Boot must be enabled on Windows Server 2016 systems. | Warning Count"
+      - name: "LOW | WN16-00-000470 | AUDIT | Secure Boot must be enabled on Windows Server 2016 systems. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000470'
@@ -86,15 +86,13 @@
                 - "Warning!! Windows Server 2016 is currently using {{ wn16_00_000480_audit.stdout | trim }} BIOS."
                 - "Windows Server 2016 systems must have Unified Extensible Firmware Interface (UEFI)"
                 - "firmware and be configured to run in UEFI mode, not Legacy BIOS."
-        when:
-            - "'UEFI' not in wn16_00_000480_audit.stdout"
+        when: "'UEFI' not in wn16_00_000480_audit.stdout"
 
-      - name: "LOW | WN16-00-000480 | AUDIOT | Windows 2016 systems must have Unified Extensible Firmware Interface (UEFI) firmware and be configured to run in UEFI mode, not Legacy BIOS. | Warning Count"
+      - name: "LOW | WN16-00-000480 | AUDIT | Windows 2016 systems must have Unified Extensible Firmware Interface (UEFI) firmware and be configured to run in UEFI mode, not Legacy BIOS. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000480'
-        when:
-            - "'UEFI' not in wn16_00_000480_audit.stdout"
+        when: "'UEFI' not in wn16_00_000480_audit.stdout"
   when:
       - wn16_00_000480
   tags:

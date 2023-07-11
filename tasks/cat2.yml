@@ -119,7 +119,7 @@
         ansible.builtin.debug:
             msg: "Warning!! This is a manual task. Windows Server 2016 manually managed application account passwords must be changed at least annually or when a system administrator with knowledge of the password leaves the organization."
 
-      - name: "MEDIUM | WN16-00-000070 | PATCH | Manually managed application account passwords must be changed at least annually or when a system administrator with knowledge of the password leaves the organization. | Warning Message"
+      - name: "MEDIUM | WN16-00-000070 | AUDIT | Manually managed application account passwords must be changed at least annually or when a system administrator with knowledge of the password leaves the organization. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000070'
@@ -140,7 +140,7 @@
         ansible.builtin.debug:
             msg: "Warning!! This is a manual task. Windows Server 2016 shared user accounts must not be permitted."
 
-      - name: "MEDIUM | WN16-00-000080 | AUDOIT | Shared user accounts must not be permitted on the system. | Warning Count"
+      - name: "MEDIUM | WN16-00-000080 | AUDIT | Shared user accounts must not be permitted on the system. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000080'
@@ -188,8 +188,7 @@
         ansible.builtin.debug:
             msg:
                 - "Warning!! Please confirm TPM status is Ready for use, there are no instances currently running."
-        when:
-            - "'No Instance' in wn10_00_000010_tpm_status.stderr_lines | string"
+        when: "'No Instance' in wn10_00_000010_tpm_status.stderr_lines | string"
 
       - name: "MEDIUM | WN16-00-000100 | AUDIT | Windows Server 2016 domain-joined systems must have a Trusted Platform Module (TPM) enabled and ready for use. | Full TPM Check."
         ansible.builtin.debug:
@@ -284,8 +283,8 @@
 
       - name: "MEDIUM | WN16-00-000170 | AUDIT | Permissions for program file directories must conform to minimum requirements. | Obtain icacls for Program Files x86"
         ansible.windows.win_shell: icacls "c:\program files (x86)"
-        failed_when: false
         changed_when: false
+        failed_when: false
         register: wn16_00_000170_program_files_86_audit
 
       - name: "MEDIUM | WN16-00-000170 | AUDIT | Permissions for program file directories must conform to minimum requirements. | Manual Audit icacls for Program Files x86."
@@ -381,11 +380,10 @@
   block:
       - name: "MEDIUM | WN16-00-000210 | AUDIT - DOMAIN CONTROLLERS | Outdated or unused accounts must be removed from the system or disabled | Audit System."
         ansible.windows.win_shell: Search-ADAccount -AccountInactive -UsersOnly -TimeSpan 35.00:00:00
-        failed_when: false
         changed_when: false
+        failed_when: false
         register: wn16_00_000210_account_audit_dc
-        when:
-            - ansible_windows_domain_role == "Primary domain controller"
+        when: ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000210 | AUDIT - DOMAIN CONTROLLERS | Outdated or unused accounts must be removed from the system or disabled. | Warning Message."
         ansible.builtin.debug:
@@ -421,8 +419,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000210_account_audit_dm_sa
-        when:
-            - not ansible_windows_domain_role == "Primary domain controller"
+        when: not ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000210 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Outdated or unused accounts must be removed from the system or disabled. | Warning Message."
         ansible.builtin.debug:
@@ -447,8 +444,7 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000210'
-        when:
-            - wn16_00_000210_account_audit_dc is not skipped and wn16_00_000210_account_audit_dc.stdout != "" or wn16_00_000210_account_audit_dm_sa is not skipped and wn16_00_000210_account_audit_dm_sa.stdout != ""
+        when: wn16_00_000210_account_audit_dc is not skipped and wn16_00_000210_account_audit_dc.stdout != "" or wn16_00_000210_account_audit_dm_sa is not skipped and wn16_00_000210_account_audit_dm_sa.stdout != ""
   when:
       - wn16_00_000210
   tags:
@@ -468,8 +464,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000220_audit_dc
-        when:
-            - ansible_windows_domain_role == "Primary domain controller"
+        when: ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 accounts must require passwords."
         ansible.builtin.debug:
@@ -485,8 +480,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000220_audit_dm_sa
-        when:
-            - not ansible_windows_domain_role == "Primary domain controller"
+        when: not ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 accounts must require passwords."
         ansible.builtin.debug:
@@ -501,8 +495,7 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000220'
-        when:
-            - wn16_00_000220_audit_dc is not skipped and wn16_00_000220_audit_dc.stdout != "" or wn16_00_000220_audit_dm_sa is not skipped and wn16_00_000220_audit_dm_sa.stdout != ""
+        when: wn16_00_000220_audit_dc is not skipped and wn16_00_000220_audit_dc.stdout != "" or wn16_00_000220_audit_dm_sa is not skipped and wn16_00_000220_audit_dm_sa.stdout != ""
   when:
       - wn16_00_000220
   tags:
@@ -521,8 +514,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000230_audit_dc
-        when:
-            - ansible_windows_domain_role == "Primary domain controller"
+        when: ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000230 | AUDIT - DOMAIN CONTROLLER | Passwords must be configured to expire. | Warning Message."
         ansible.builtin.debug:
@@ -539,11 +531,10 @@
                 Get-CimInstance -Class Win32_Useraccount -Filter "PasswordExpires=False and LocalAccount=True" |
                 Where-Object -FilterScript {$_.PasswordExpires -EQ $False -AND $_.Disabled -EQ $False} |
                 Format-Table -Property Name,PasswordExpires,Disabled,LocalAccount
-        failed_when: false
         changed_when: false
+        failed_when: false
         register: wn16_00_000230_audit_dm_sa
-        when:
-            - not ansible_windows_domain_role == "Primary domain controller"
+        when: not ansible_windows_domain_role == "Primary domain controller"
 
       - name: MEDIUM | WN16-00-000230 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Passwords must be configured to expire. | Warning Message"
         ansible.builtin.debug:
@@ -559,8 +550,7 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000230'
-        when:
-            - wn16_00_000230_audit_dc is not skipped and wn16_00_000230_audit_dc.stdout != "" or wn16_00_000230_audit_dm_sa is not skipped and wn16_00_000230_audit_dm_sa.stdout != ""
+        when: wn16_00_000230_audit_dc is not skipped and wn16_00_000230_audit_dc.stdout != "" or wn16_00_000230_audit_dm_sa is not skipped and wn16_00_000230_audit_dm_sa.stdout != ""
   when:
       - wn16_00_000230
   tags:
@@ -595,8 +585,8 @@
   block:
       - name: "MEDIUM | WN16-00-000250 | AUDIT | Non-system-created file shares on a system must limit access to groups that require it. | Audit Shares"
         ansible.windows.win_shell: Get-SmbShare | Where-Object { ($_.Name -notlike "ADMIN$") -and ($_.Name -notlike 'C$') -and ($_.Name -notlike 'IPC$') } | Select-Object -Property Name | format-table -hidetableheaders
-        failed_when: false
         changed_when: false
+        failed_when: false
         register: wn16_00_000250_audit
 
       - name: "MEDIUM | WN16-00-000250 | AUDIT | Non-system-created file shares on a system must limit access to groups that require it. | Warning Message."
@@ -604,15 +594,13 @@
             msg:
                 - "Warning!! You have shares that non-system created. Please manually review those shares listed below to make sure appropriate permissions are applied"
                 - "{{ wn16_00_000250_audit.stdout_lines | select() | list }}"
-        when:
-            - wn16_00_000250_audit.stdout_lines | select() | length > 0
+        when: wn16_00_000250_audit.stdout_lines | select() | length > 0
 
       - name: "MEDIUM | WN16-00-000250 | AUDIT | Non-system-created file shares on a system must limit access to groups that require it."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000250'
-        when:
-            - wn16_00_000250_audit.stdout_lines | select() | length > 0
+        when: wn16_00_000250_audit.stdout_lines | select() | length > 0
   when:
       - wn16_00_000250
   tags:
@@ -633,8 +621,7 @@
             recurse: true
             hidden: true
         register: wn16_00_000270_files
-        with_items:
-            - "{{ wn16_drive_letters.stdout_lines }}"
+        with_items: "{{ wn16_drive_letters.stdout_lines }}"
 
       - name: "MEDIUM | WN16-00-000270 | PATCH | Software certificate installation files must be removed from Windows Server 2016. | Remove Files"
         ansible.windows.win_file:
@@ -856,8 +843,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000330_audit_dc
-        when:
-            - ansible_windows_domain_role == "Primary domain controller"
+        when: ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000330 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 must automatically remove or disable temporary user accounts after 72 hours. | Warning Message"
         ansible.builtin.debug:
@@ -874,8 +860,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000330_audit_sa
-        when:
-            - not ansible_windows_domain_role == "Primary domain controller"
+        when: not ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000330 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 must automatically remove or disable temporary user accounts after 72 hours. | Warning Message"
         ansible.builtin.debug:
@@ -891,8 +876,7 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000330'
-        when:
-            - wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != "" or wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != ""
+        when: wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != "" or wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != ""
   when:
       - wn16_00_000330
   tags:
@@ -910,8 +894,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000340_audit_dc
-        when:
-            - ansible_windows_domain_role == "Primary domain controller"
+        when: ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000340 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 must automatically remove or disable emergency accounts after the crisis is resolved or within 72 hours. | Warning Message"
         ansible.builtin.debug:
@@ -928,8 +911,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000340_audit_sa
-        when:
-            - not ansible_windows_domain_role == "Primary domain controller"
+        when: not ansible_windows_domain_role == "Primary domain controller"
 
       - name: "MEDIUM | WN16-00-000340 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 must automatically remove or disable emergency accounts after the crisis is resolved or within 72 hours. | Warning Message"
         ansible.builtin.debug:
@@ -945,8 +927,7 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000340'
-        when:
-            - wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != "" or wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != ""
+        when: wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != "" or wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != ""
   when:
       - wn16_00_000340
   tags:
@@ -1167,7 +1148,7 @@
 
 - name: "MEDIUM | WN16-00-000430 | AUDIT | FTP servers must be configured to prevent anonymous logons."
   block:
-      - name: Get FTP Installed
+      - name: "MEDIUM | WN16-00-000430 | AUDIT | FTP servers must be configured to prevent anonymous logons. | Get FTP Installed Status."
         ansible.windows.win_shell: Get-WindowsFeature | Where Name -eq Web-Ftp-Service
         changed_when: false
         failed_when: false
@@ -1182,15 +1163,13 @@
             msg:
                 - "Warning!! This is a manual task. Internet Information Services (IIS) Manager FTP is currently"
                 - "installed on the system. Anonymous Authentication must be set to diabled per STIG Requirements."
-        when:
-            - "'Installed' in wn16_00_000430_ftp_audit"
+        when: "'Installed' in wn16_00_000430_ftp_audit"
 
       - name: "MEDIUM | WN16-00-000430 | AUDIT | FTP servers must be configured to prevent anonymous logons. | Warn Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000430'
-        when:
-            - "'Installed' in wn16_00_000430_ftp_audit"
+        when: "'Installed' in wn16_00_000430_ftp_audit"
   when:
       - wn16_00_000430
   tags:
@@ -1220,8 +1199,7 @@
         changed_when: false
         failed_when: false
         register: wn16_00_000440_isssite_audit
-        when:
-            - "'Installed' in wn16_00_000440_ftp_audit"
+        when: "'Installed' in wn16_00_000440_ftp_audit"
 
       - name: "MEDIUM | WN16-00-000440 | AUDIT | FTP servers must be configured to prevent access to the system drive. | Warning Message."
         debug:
@@ -1230,15 +1208,13 @@
                 - "If the site includes any system areas such as root of the drive, Program Files, or Windows directories, this is a finding"
                 - "Configure the FTP sites to allow access only to specific FTP shared resources. Do not allow access to other areas of the system."
                 - "{{ wn16_00_000440_isssite_audit.stdout.split('\n') }}"
-        when:
-            - "'Installed' in wn16_00_000440_ftp_audit"
+        when: "'Installed' in wn16_00_000440_ftp_audit"
 
       - name: "MEDIUM | WN16-00-000440 | AUDIT | FTP servers must be configured to prevent access to the system drive. | Warn Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000440'
-        when:
-            - "'Installed' in wn16_00_000440_ftp_audit"
+        when: "'Installed' in wn16_00_000440_ftp_audit"
   when:
       - wn16_00_000440
   tags:
@@ -1264,8 +1240,7 @@
                 - "User Accounts"
                 - "----------------------------------------------------------------------"
                 - "{{ wn16_00_000460_orphaned_user_accounts.stdout_lines }}"
-        when:
-            - wn16_00_000460_orphaned_user_accounts.stdout_lines | select() | length > 0
+        when: wn16_00_000460_orphaned_user_accounts.stdout_lines | select() | length > 0
 
       - name: "MEDIUM | WN16-00-000460 | AUDIT | Orphaned security identifiers (SIDs) must be removed from user rights on Windows 2016. | Check For Orphaned Group Accounts. | Get Group List"
         ansible.windows.win_shell: Get-WmiObject -Class Win32_UserAccount | Where-Object {$_.SID -match "*S"} | Select Name,SID,DOMAIN
@@ -1280,16 +1255,14 @@
                 - "Group Accounts"
                 - "----------------------------------------------------------------------"
                 - "{{ wn16_00_000460_orphaned_group_accounts.stdout_lines }}"
-        when:
-            - wn16_00_000460_orphaned_group_accounts.stdout_lines | select() | length > 0
+        when: wn16_00_000460_orphaned_group_accounts.stdout_lines | select() | length > 0
 
       - name: "MEDIUM | WN16-00-000460 | AUDIT | Orphaned security identifiers (SIDs) must be removed from user rights on Windows 20-16. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000460'
         when:
-            - wn16_00_000460_orphaned_user_accounts.stdout_lines | select() | length > 0 or
-              wn16_00_000460_orphaned_group_accounts.stdout_lines | select() | length > 0
+            - wn16_00_000460_orphaned_user_accounts.stdout_lines | select() | length > 0 or wn16_00_000460_orphaned_group_accounts.stdout_lines | select() | length > 0
   when:
       - wn16_00_000460
   tags:
@@ -1347,23 +1320,20 @@
             msg:
                 - "Warning!! You have a invalid number of days set for wn16stig_resetlockoutcount please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_resetlockoutcount < 15
+        when: wn16stig_resetlockoutcount < 15
 
       - name: MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AC-000030'
-        when:
-            - wn16stig_resetlockoutcount < 15
+        when: wn16stig_resetlockoutcount < 15
 
       - name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater. | Apply Variable"
         community.windows.win_security_policy:
             section: System Access
             key: ResetLockoutCount
             value: "{{ wn16stig_resetlockoutcount }}"
-        when:
-            - wn16stig_resetlockoutcount >= 15
+        when: wn16stig_resetlockoutcount >= 15
   when:
       - wn16_ac_000030
   tags:
@@ -1419,23 +1389,20 @@
             msg:
                 - "Warning!! You have a invalid number remembered passwords set for wn16stig_passwordhistorysize please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_passwordhistorysize < 24
+        when: wn16stig_passwordhistorysize < 24
 
       - name: Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AC-000040 '
-        when:
-            - wn16stig_passwordhistorysize < 24
+        when: wn16stig_passwordhistorysize < 24
 
       - name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered."
         win_security_policy:
             section: System Access
             key: PasswordHistorySize
             value: "{{ wn16stig_passwordhistorysize }}"
-        when:
-            - wn16stig_passwordhistorysize >= 24
+        when: wn16stig_passwordhistorysize >= 24
   when:
       - wn16_ac_000040
   tags:
@@ -1490,23 +1457,20 @@
             msg:
                 - "Warning!! You have a invalid number of days set for wn16stig_minimumpasswordage please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_minimumpasswordage == 0
+        when: wn16stig_minimumpasswordage == 0
 
       - name: "MEDIUM | WN16-AC-000060 | AUDIT | Windows Server 2016 minimum password age must be configured to at least one day. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AC-000060'
-        when:
-            wn16stig_minimumpasswordage == 0
+        when: wn16stig_minimumpasswordage == 0
 
       - name: "MEDIUM | WN16-AC-000060 | PATCH | Windows Server 2016 minimum password age must be configured to at least one day. | Set Variable."
         community.windows.win_security_policy:
             section: System Access
             key: MinimumPasswordAge
             value: "{{ wn16stig_minimumpasswordage }}"
-        when:
-            wn16stig_minimumpasswordage > 0
+        when: wn16stig_minimumpasswordage > 0
   when:
       - wn16_ac_000060
   tags:
@@ -1524,23 +1488,20 @@
             msg:
                 - "Warning!! You have a invalid password length for wn16stig_minimumpasswordlength please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_minimumpasswordlength < 14
+        when: wn16stig_minimumpasswordlength < 14
 
       - name: "MEDIUM | WN16-AC-000070 | AUDIT | Windows Server 2016 minimum password length must be configured to 14 characters. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN19-AC-000070'
-        when:
-            - wn16stig_minimumpasswordlength < 14
+        when: wn16stig_minimumpasswordlength < 14
 
       - name: "MEDIUM | WN16-AC-000070 | PATCH | Windows Server 2016 minimum password length must be configured to 14 characters. | Apply Variable."
         community.windows.win_security_policy:
             section: System Access
             key: MinimumPasswordLength
             value: "{{ wn16stig_minimumpasswordlength }}"
-        when:
-            - wn16stig_minimumpasswordlength >= 14
+        when: wn16stig_minimumpasswordlength >= 14
   when:
       - wn16_ac_000070
   tags:
@@ -1780,13 +1741,11 @@
         ansible.windows.win_shell: AuditPol /get /subcategory:"Credential Validation" -r | ConvertFrom-Csv | Select-Object -expand "Inclusion Setting"
         changed_when: false
         failed_when: false
-        check_mode: false
         register: wn16_au_000070_audit
 
       - name: "MEDIUM | WN16-AU-000070 | PATCH | Windows Server 2016 must be configured to audit Account Logon - Credential Validation successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Credential Validation" /success:enable
-        when:
-            - "'Success' not in wn16_au_000070_audit.stdout"
+        when: "'Success' not in wn16_au_000070_audit.stdout"
   when:
       - wn16_au_000070
   tags:
@@ -1807,8 +1766,7 @@
 
       - name: "MEDIUM | WN16-AU-000080 | PATCH | Windows Server 2016 must be configured to audit Account Logon - Credential Validation failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Credential Validation" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000080_audit.stdout"
+        when: "'Failure' not in wn16_au_000080_audit.stdout"
   when:
       - wn16_au_000080
   tags:
@@ -1829,8 +1787,7 @@
 
       - name: "MEDIUM | WN16-AU-000100 | PATCH | Windows Server 2016 must be configured to audit Account Management - Other Account Management Events successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Other Account Management Events" /success:enable
-        when:
-            - "'Success' not in wn16_au_000100_audit.stdout"
+        when: "'Success' not in wn16_au_000100_audit.stdout"
   when:
       - wn16_au_000100
   tags:
@@ -1852,8 +1809,7 @@
 
       - name: "MEDIUM | WN16-AU-000120 | PATCH | Windows Server 2016 must be configured to audit Account Management - Security Group Management successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Security Group Management" /success:enable
-        when:
-            - "'Success' not in wn16_au_000120_audit.stdout"
+        when: "'Success' not in wn16_au_000120_audit.stdout"
   when:
       - wn16_au_000120
   tags:
@@ -1879,8 +1835,7 @@
 
       - name: "MEDIUM | WN16-AU-000140 | PATCH | Windows Server 2016 must be configured to audit Account Management - User Account Management successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"User Account Management" /success:enable
-        when:
-            - "'Success' not in wn16_au_000140_audit.stdout"
+        when: "'Success' not in wn16_au_000140_audit.stdout"
   when:
       - wn16_au_000140
   tags:
@@ -1906,8 +1861,7 @@
 
       - name: "MEDIUM | WN16-AU-000150 | PATCH | Windows Server 2016 must be configured to audit Account Management - User Account Management failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"User Account Management" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000150_audit.stdout"
+        when: "'Failure' not in wn16_au_000150_audit.stdout"
   when:
       - wn16_au_000150
   tags:
@@ -1933,8 +1887,7 @@
 
       - name: "MEDIUM | WN16-AU-000160 | PATCH | Windows Server 2016 must be configured to audit Detailed Tracking - Plug and Play Events successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Plug and Play Events" /success:enable
-        when:
-            - "'Success' not in wn16_au_000160_audit.stdout"
+        when: "'Success' not in wn16_au_000160_audit.stdout"
   when:
       - wn16_au_000160
   tags:
@@ -1955,8 +1908,7 @@
 
       - name: "MEDIUM | WN16-AU-000170 | PATCH | Windows Server 2016 must be configured to audit Detailed Tracking - Process Creation successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Process Creation" /success:enable
-        when:
-            - "'Success' not in wn16_au_000170_audit.stdout"
+        when: "'Success' not in wn16_au_000170_audit.stdout"
   when:
       - wn16_au_000170
   tags:
@@ -1977,8 +1929,7 @@
 
       - name: "MEDIUM | WN16-AU-000230 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Account Lockout failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Account Lockout" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000230_audit.stdout"
+        when: "'Failure' not in wn16_au_000230_audit.stdout"
   when:
       - wn16_au_000230
   tags:
@@ -2000,8 +1951,7 @@
 
       - name: "MEDIUM | WN16-AU-000240 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Group Membership successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Group Membership" /success:enable
-        when:
-            - "'Success' not in wn16_au_000240_audit.stdout"
+        when: "'Success' not in wn16_au_000240_audit.stdout"
   when:
       - wn16_au_000240
   tags:
@@ -2022,8 +1972,7 @@
 
       - name: "MEDIUM | WN16-AU-000250 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logoff successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Logoff" /success:enable
-        when:
-            - "'Success' not in wn16_au_000250_audit.stdout"
+        when: "'Success' not in wn16_au_000250_audit.stdout"
   when:
       - wn16_au_000250
   tags:
@@ -2045,8 +1994,7 @@
 
       - name: "MEDIUM | WN16-AU-000260 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logon successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Logon" /success:enable
-        when:
-            - "'Success' not in wn16_au_000260_audit.stdout"
+        when: "'Success' not in wn16_au_000260_audit.stdout"
   when:
       - wn16_au_000260
   tags:
@@ -2068,8 +2016,7 @@
 
       - name: "MEDIUM | WN16-AU-000270 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Logon failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Logon" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000270_audit.stdout"
+        when: "'Failure' not in wn16_au_000270_audit.stdout"
   when:
       - wn16_au_000270
   tags:
@@ -2091,8 +2038,7 @@
 
       - name: "MEDIUM | WN16-AU-000280 | PATCH | Windows Server 2016 must be configured to audit Logon/Logoff - Special Logon successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Special Logon" /success:enable
-        when:
-            - "'Success' not in wn16_au_000280_audit.stdout"
+        when: "'Success' not in wn16_au_000280_audit.stdout"
   when:
       - wn16_au_000280
   tags:
@@ -2133,8 +2079,7 @@
 
       - name: "MEDIUM | WN16-AU-000290 | PATCH | Windows Server 2016 must be configured to audit Object Access - Removable Storage successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Removable Storage" /success:enable
-        when:
-            - "'Success' not in wn16_au_000290_audit.stdout"
+        when: "'Success' not in wn16_au_000290_audit.stdout"
   when:
       - wn16_au_000290
   tags:
@@ -2155,8 +2100,7 @@
 
       - name: "MEDIUM | WN16-AU-000300 | PATCH | Windows Server 2016 must be configured to audit Object Access - Removable Storage failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Removable Storage" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000300_audit.stdout"
+        when: "'Failure' not in wn16_au_000300_audit.stdout"
   when:
       - wn16_au_000300
   tags:
@@ -2177,8 +2121,7 @@
 
       - name: "MEDIUM | WN16-AU-000310 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Audit Policy Change successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Audit Policy Change" /success:enable
-        when:
-            - "'Success' not in wn16_au_000310_audit.stdout"
+        when: "'Success' not in wn16_au_000310_audit.stdout"
   when:
       - wn16_au_000310
   tags:
@@ -2200,8 +2143,7 @@
 
       - name: "MEDIUM | WN16-AU-000320 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Audit Policy Change failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Audit Policy Change" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000320_audit.stdout"
+        when: "'Failure' not in wn16_au_000320_audit.stdout"
   when:
       - wn16_au_000320
   tags:
@@ -2223,8 +2165,7 @@
 
       - name: "MEDIUM | WN16-AU-000330 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Authentication Policy Change successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Authentication Policy Change" /success:enable
-        when:
-            - "'Success' not in wn16_au_000330_audit.stdout"
+        when: "'Success' not in wn16_au_000330_audit.stdout"
   when:
       - wn16_au_000330
   tags:
@@ -2246,8 +2187,7 @@
 
       - name: "MEDIUM | WN16-AU-000340 | PATCH | Windows Server 2016 must be configured to audit Policy Change - Authorization Policy Change successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Authorization Policy Change" /success:enable
-        when:
-            - "'Success' not in wn16_au_000340_audit.stdout"
+        when: "'Success' not in wn16_au_000340_audit.stdout"
   when:
       - wn16_au_000340
   tags:
@@ -2292,8 +2232,7 @@
 
       - name: "MEDIUM | WN16-AU-000360 | PATCH | Windows Server 2016 must be configured to audit Privilege Use - Sensitive Privilege Use failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Sensitive Privilege Use" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000360_audit.stdout"
+        when: "'Failure' not in wn16_au_000360_audit.stdout"
   when:
       - wn16_au_000360
   tags:
@@ -2315,8 +2254,7 @@
 
       - name: "MEDIUM | WN16-AU-000370 | PATCH | Windows Server 2016 must be configured to audit System - IPsec Driver successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"IPsec Driver" /success:enable
-        when:
-            - "'Success' not in wn16_au_000370_audit.stdout"
+        when: "'Success' not in wn16_au_000370_audit.stdout"
   when:
       - wn16_au_000370
   tags:
@@ -2338,8 +2276,7 @@
 
       - name: "MEDIUM | WN16-AU-000380 | PATCH | Windows Server 2016 must be configured to audit System - IPsec Driver failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"IPsec Driver" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000380_audit.stdout"
+        when: "'Failure' not in wn16_au_000380_audit.stdout"
   when:
       - wn16_au_000380
   tags:
@@ -2361,8 +2298,7 @@
 
       - name: "MEDIUM | WN16-AU-000390 | PATCH | Windows Server 2016 must be configured to audit System - Other System Events successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Other System Events" /success:enable
-        when:
-            - "'Success' not in wn16_au_000390_audit.stdout"
+        when: "'Success' not in wn16_au_000390_audit.stdout"
   when:
       - wn16_au_000390
   tags:
@@ -2384,8 +2320,7 @@
 
       - name: "MEDIUM | WN16-AU-000400 | PATCH | Windows Server 2016 must be configured to audit System - Other System Events failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Other System Events" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000400_audit.stdout"
+        when: "'Failure' not in wn16_au_000400_audit.stdout"
   when:
       - wn16_au_000400
   tags:
@@ -2407,8 +2342,7 @@
 
       - name: "MEDIUM | WN16-AU-000410 | PATCH | Windows Server 2016 must be configured to audit System - Security State Change successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Security State Change" /success:enable
-        when:
-            - "'Success' not in wn16_au_000410_audit.stdout"
+        when: "'Success' not in wn16_au_000410_audit.stdout"
   when:
       - wn16_au_000410
   tags:
@@ -2430,8 +2364,7 @@
 
       - name: "MEDIUM | WN16-AU-000420 | PATCH | Windows Server 2016 must be configured to audit System - Security System Extension successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Security System Extension" /success:enable
-        when:
-            - "'Success' not in wn16_au_000420_audit.stdout"
+        when: "'Success' not in wn16_au_000420_audit.stdout"
   when:
       - wn16_au_000420
   tags:
@@ -2453,8 +2386,7 @@
 
       - name: "MEDIUM | WN16-AU-000440 | PATCH | Windows Server 2016 must be configured to audit System - System Integrity successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"System Integrity" /success:enable
-        when:
-            - "'Success' not in wn16_au_000440_audit.stdout"
+        when: "'Success' not in wn16_au_000440_audit.stdout"
   when:
       - wn16_au_000440
   tags:
@@ -2476,8 +2408,7 @@
 
       - name: "MEDIUM | WN16-AU-000450 | PATCH | Windows Server 2016 must be configured to audit System - System Integrity failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"System Integrity" /failure:enable
-        when:
-            - "'Failure' not in wn16_au_000450_audit.stdout"
+        when: "'Failure' not in wn16_au_000450_audit.stdout"
   when:
       - wn16_au_000450
   tags:
@@ -2598,7 +2529,7 @@
             data: "{{ wn16stig_dma_protection }}"
             datatype: dword
 
-      - name: "MEDIUM | WN16-CC-000110 | PATCH | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection. | Get Status Of Device Guard Virtualization."
+      - name: "MEDIUM | WN16-CC-000110 | AUDIT | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection. | Get Status Of Device Guard Virtualization."
         ansible.windows.win_shell: Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard | Select-Object VirtualizationBasedSecurityStatus | ft -hidetableheaders
         changed_when: false
         failed_when: false
@@ -2611,8 +2542,7 @@
                 - "level configured to Secure Boot or Secure Boot with DMA Protection. The policy settings referenced in the Fix section will"
                 - "configure the following registry values. However, due to hardware requirements, the registry values alone do not ensure proper"
                 - "function."
-        when:
-            - "'2' not in wn16_cc_000110_audit.stdout | trim"
+        when: "'2' not in wn16_cc_000110_audit.stdout | trim"
 
       - name: "MEDIUM | WN16-CC-000110 | AUDIT | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection. | Warn Count"
         ansible.builtin.import_tasks: warning_facts.yml
@@ -2633,8 +2563,8 @@
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Policies\EarlyLaunch
       state: present
-      value: "{{ wn16stig_driver_load_policy }}"
-      data: 1
+      value: DriverLoadPolicy
+      data: "{{ wn16stig_driver_load_policy }}"
       datatype: dword
   when:
       - wn16_cc_000140
@@ -2789,15 +2719,13 @@
             msg:
                 - "Warning!! You have a invalid file size set for wn16stig_application_event_log_max_size please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_application_event_log_max_size < 32768
+        when: wn16stig_application_event_log_max_size < 32768
 
       - name: "MEDIUM | WN16-CC-000300 | AUDIT | The Application event log size must be configured to 32768 KB or greater. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-CC-000300'
-        when:
-            - wn16stig_application_event_log_max_size < 32768
+        when: wn16stig_application_event_log_max_size < 32768
 
       - name: "MEDIUM | WN16-CC-000300 | PATCH | The Application event log size must be configured to 32768 KB or greater. | Apply Log Size"
         ansible.windows.win_regedit:
@@ -2806,8 +2734,7 @@
             value: MaxSize
             data: "{{ wn16stig_application_event_log_max_size }}"
             datatype: dword
-        when:
-            - wn16stig_application_event_log_max_size >= 32768
+        when: wn16stig_application_event_log_max_size >= 32768
   when:
       - wn16_cc_000300
   tags:
@@ -2825,15 +2752,13 @@
             msg:
                 - "Warning!! You have a invalid file size set for wn16stig_security_event_log_size please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_security_event_log_max_size < 196608
+        when: wn16stig_security_event_log_max_size < 196608
 
       - name: "MEDIUM | WN16-CC-000310 | AUDIT | The Security event log size must be configured to 196608 KB or greater. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-CC-000310'
-        when:
-            - wn16stig_security_event_log_max_size < 196608
+        when: wn16stig_security_event_log_max_size < 196608
 
       - name: "MEDIUM | WN16-CC-000310 | PATCH | The Security event log size must be configured to 196608 KB or greater. | Apply Log Size"
         ansible.windows.win_regedit:
@@ -2842,8 +2767,7 @@
             value: MaxSize
             data: "{{ wn16stig_security_event_log_max_size }}"
             datatype: dword
-        when:
-            - wn16stig_security_event_log_max_size >= 196608
+        when: wn16stig_security_event_log_max_size >= 196608
   when:
       - wn16_cc_000310
   tags:
@@ -2861,15 +2785,13 @@
             msg:
                 - "Warning!! You have a invalid file size set for wn16stig_system_event_log_max_size please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_system_event_log_max_size < 32768
+        when: wn16stig_system_event_log_max_size < 32768
 
       - name: "MEDIUM | WN16-CC-000320 | AUDIT | The System event log size must be configured to 32768 KB or greater. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-CC-000320'
-        when:
-            - wn16stig_system_event_log_max_size < 32768
+        when: wn16stig_system_event_log_max_size < 32768
 
       - name: "MEDIUM | WN16-CC-000320 | PATCH | The System event log size must be configured to 32768 KB or greater. | Apply Log Size"
         ansible.windows.win_regedit:
@@ -2878,8 +2800,7 @@
             value: MaxSize
             data: "{{ wn16stig_system_event_log_max_size }}"
             datatype: dword
-        when:
-            - wn16stig_system_event_log_max_size >= 32768
+        when: wn16stig_system_event_log_max_size >= 32768
   when:
       - wn16_cc_000320
   tags:
@@ -3442,7 +3363,7 @@
       - CCI-002450
       - CAT2
 
-- name: "MEDIUM | WN16-DC-000170 | Active Directory Group Policy objects must be configured with proper audit settings."
+- name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings."
   block:
       - name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings. | Warning Message"
         ansible.builtin.debug:
@@ -3450,7 +3371,7 @@
                 - "Warning!! This is a manual task. Active Directory Group Policy objects must be configured with proper audit settings."
                 - "Please review the STIG documentation for proper direction on auditing this control."
 
-      - name: "MEDIUM | WN16-DC-000170 | PATCH | Active Directory Group Policy objects must be configured with proper audit settings. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings. | Warn Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000170'
@@ -3466,7 +3387,7 @@
       - CCI-002234
       - CAT2
 
-- name: "MEDIUM | WN16-DC-000180 | AUDOT | The Active Directory Domain object must be configured with proper audit settings."
+- name: "MEDIUM | WN16-DC-000180 | AUDIT | The Active Directory Domain object must be configured with proper audit settings."
   block:
       - name: "MEDIUM | WN16-DC-000180 | AUDIT | The Active Directory Domain object must be configured with proper audit settings. | Warning Message"
         ansible.builtin.debug:
@@ -3563,7 +3484,7 @@
       - CCI-002234
       - CAT2
 
-- name: "MEDIUM | WN16-DC-000220 | The Active Directory RID Manager$ object must be configured with proper audit settings."
+- name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings."
   block:
       - name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings. | Warning Message"
         ansible.builtin.debug:
@@ -3571,7 +3492,7 @@
                 - "Warning!! This is a manual task. The Active Directory RID Manager$ object must be configured with proper audit settings."
                 - "Please review the STIG documentation for proper direction on auditing this control."
 
-      - name: "MEDIUM | WN16-DC-000220 | PATCH | The Active Directory RID Manager$ object must be configured with proper audit settings. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings. | Warn Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000220'
@@ -3597,8 +3518,7 @@
 
       - name: "MEDIUM | WN16-DC-000230 | PATCH | Windows Server 2016 must be configured to audit Account Management - Computer Account Management successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Computer Account Management" /success:enable
-        when:
-            - "'Success' not in wn16_dc_000230_audit.stdout"
+        when: "'Success' not in wn16_dc_000230_audit.stdout"
   when:
       - wn16_dc_000230
       - ansible_windows_domain_role == "Primary domain controller"
@@ -3625,8 +3545,7 @@
 
       - name: "MEDIUM | WN16-DC-000240 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Access successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Directory Service Access" /success:enable
-        when:
-            - "'Success' not in wn16_dc_000240_audit.stdout"
+        when: "'Success' not in wn16_dc_000240_audit.stdout"
   when:
       - wn16_dc_000240
       - ansible_windows_domain_role == "Primary domain controller"
@@ -3649,8 +3568,7 @@
 
       - name: "MEDIUM | WN16-DC-000250 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Access failures. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Directory Service Access" /failure:enable
-        when:
-            - "'Failure' not in wn16_dc_000250_audit.stdout"
+        when: "'Failure' not in wn16_dc_000250_audit.stdout"
   when:
       - wn16_dc_000250
       - ansible_windows_domain_role == "Primary domain controller"
@@ -3673,8 +3591,7 @@
 
       - name: "MEDIUM | WN16-DC-000260 | PATCH | Windows Server 2016 must be configured to audit DS Access - Directory Service Changes successes. | Set"
         ansible.windows.win_shell: AuditPol /set /subcategory:"Directory Service Changes" /success:enable
-        when:
-            - "'Success' not in wn16_dc_000260_audit.stdout"
+        when: "'Success' not in wn16_dc_000260_audit.stdout"
   when:
       - wn16_dc_000260
       - ansible_windows_domain_role == "Primary domain controller"
@@ -3710,7 +3627,7 @@
       - CCI-000185
       - CAT2
 
-- name: "MEDIUM | WN16-DC-000310 | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
+- name: "MEDIUM | WN16-DC-000310 | AUDIT | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication."
   block:
       - name: "MEDIUM | WN16-DC-000310 | AUDIT | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication. | Obtain Accounts"
         ansible.windows.win_shell: Get-ADUser -Filter {(Enabled -eq $True) -and (SmartcardLogonRequired -eq $False)} | FT Name
@@ -3942,16 +3859,14 @@
             msg:
                 - "Warning!! You have a invalid number of days set for wn16stig_krbtgt_account_pass_age please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - wn16stig_krbtgt_account_pass_age > 180
+        when: wn16stig_krbtgt_account_pass_age > 180
 
       - name: "MEDIUM | WN16-DC-000430 | AUDIT | The password for the krbtgt account on a domain must be reset at least every 180 days. | Get Password Last Set"
         ansible.windows.win_shell: "Get-ADUser krbtgt -Property PasswordLastSet | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16_dc_000430_pass_age }}))} | Select-Object -ExpandProperty PasswordLastSet"
         changed_when: false
         failed_when: false
         register: wn16_dc_000430_audit
-        when:
-            - wn16stig_krbtgt_account_pass_age <= 180
+        when: wn16stig_krbtgt_account_pass_age <= 180
 
       - name: "MEDIUM | WN16-DC-000430 | AUDIT | The password for the krbtgt account on a domain must be reset at least every 180 days. | Warning Message Account."
         ansible.builtin.debug:
@@ -4100,16 +4015,14 @@
                 - Local account
                 - Local account and member of Administrators group
             action: set
-        when:
-            - ansible_windows_domain_role == "Member server"
+        when: ansible_windows_domain_role == "Member server"
 
       - name: "MEDIUM | WN16-MS-000370 | STAND-ALONE - PATCH | The Deny access to this computer from the network user right on member servers must be configured to prevent access from highly privileged domain accounts and local accounts on domain systems, and from unauthenticated access on all systems"
         ansible.windows.win_user_right:
             name: SeDenyNetworkLogonRight
             users: Guests
             action: set
-        when:
-            - not ansible_windows_domain_member
+        when: not ansible_windows_domain_member
   when:
       - wn16_ms_000370
   tags:
@@ -4130,8 +4043,7 @@
                 - Domain Admins
                 - Guests
             action: set
-        when:
-            - ansible_windows_domain_role == "Member server"
+        when: ansible_windows_domain_role == "Member server"
 
       - name: "MEDIUM | WN16-MS-000380 | STAND-ALONE - PATCH | The Deny log on as a batch job user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
         ansible.windows.win_user_right:
@@ -4139,8 +4051,7 @@
             users:
                 - Guests
             action: set
-        when:
-            - not ansible_windows_domain_member
+        when: not ansible_windows_domain_member
   when:
       - wn16_ms_000380
   tags:
@@ -4179,8 +4090,7 @@
                 - Enterprise Admins
                 - Domain Admins
             action: set
-        when:
-            - ansible_windows_domain_role == "Member server"
+        when: ansible_windows_domain_role == "Member server"
 
       - name: "MEDIUM | WN16-MS-000400 | STAND-ALONE - PATCH | The Deny log on locally user right on member servers must be configured to prevent access from highly privileged domain accounts on domain systems and from unauthenticated access on all systems."
         ansible.windows.win_user_right:
@@ -4188,8 +4098,7 @@
             users:
                 - Guests
             action: set
-        when:
-            - not ansible_windows_domain_member
+        when: not ansible_windows_domain_member
   when:
       - wn16_ms_000400
   tags:
@@ -4211,8 +4120,7 @@
                 - Enterprise Admins
                 - Domain Admins
             action: set
-        when:
-            - ansible_windows_domain_role == "Member server"
+        when: ansible_windows_domain_role == "Member server"
 
       - name: "MEDIUM | WN16-MS-000410 | STAND-ALONE - PATCH | The Deny log on through Remote Desktop Services user right on member servers must be configured to prevent access from highly privileged domain accounts and all local accounts on domain systems and from unauthenticated access on all systems."
         ansible.windows.win_user_right:
@@ -4220,8 +4128,7 @@
             users:
                 - Guests
             action: set
-        when:
-            - not ansible_windows_domain_member
+        when: not ansible_windows_domain_member
   when:
       - wn16_ms_000410
   tags:
@@ -4274,8 +4181,7 @@
                 - "Warning!! The DOD Root CA 3 is not installed on the system or"
                 - "contains a incorrect Thumbprint for the Root CA Certificate."
                 - "Please refer to STIG documentation for proper cert to be installed."
-        when:
-            - wn16_pk_000010_root_3_Check.stdout == ""
+        when: wn16_pk_000010_root_3_Check.stdout == ""
 
       - name: "MEDIUM | WN16-PK-000010 | AUDIT | The DoD Root CA certificates must be installed in the Trusted Root Store. | Warning!! No DOD Root CA 4 Certificate Installed."
         ansible.builtin.debug:
@@ -4283,8 +4189,7 @@
                 - "Warning!! The DOD Root CA 4 is not installed on the system or"
                 - "contains a incorrect Thumbprint for the Root CA Certificate."
                 - "Please refer to STIG documentation for proper cert to be installed."
-        when:
-            - wn16_pk_000010_root_4_Check.stdout == ""
+        when: wn16_pk_000010_root_4_Check.stdout == ""
 
       - name: "MEDIUM | WN16-PK-000010 | AUDIT | The DoD Root CA certificates must be installed in the Trusted Root Store. | Warning!! No DOD Root CA 5 Certificate Installed."
         ansible.builtin.debug:
@@ -4292,8 +4197,7 @@
                 - "Warning!! The DOD Root CA 5 is not installed on the system or"
                 - "contains a incorrect Thumbprint for the Root CA Certificate."
                 - "Please refer to STIG documentation for proper cert to be installed."
-        when:
-            - wn16_pk_000010_root_5_Check.stdout == ""
+        when: wn16_pk_000010_root_5_Check.stdout == ""
 
       - name: "MEDIUM | WN16-PK-000010 | AUDIT | The DoD Root CA certificates must be installed in the Trusted Root Store. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
@@ -4327,15 +4231,13 @@
             msg:
                 - "Warning!! The DoD Root CA 3 - DoD Interoperability Root CA 2 certificate is not installed on the system or"
                 - "does not contain Thumbprint 49CBE933151872E17C8EAE7F0ABA97FB610F6477 for the Certificate."
-        when:
-            - wn16_pk_000020_interop_check_for_49.stdout == ""
+        when: wn16_pk_000020_interop_check_for_49.stdout == ""
 
       - name: "MEDIUM | WN16-PK-000020 | AUDIT | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-PK-000020'
-        when:
-            - wn16_pk_000020_interop_check_for_49.stdout == ""
+        when: wn16_pk_000020_interop_check_for_49.stdout == ""
   when:
       - wn16_pk_000020
   tags:
@@ -4360,15 +4262,13 @@
             msg:
                 - "Warning!! The DoD Root CA 3 - US DoD CCEB Interoperability Root CA 2 certificate is not installed on the system or"
                 - "does not contain Thumbprint 9B74964506C7ED9138070D08D5F8B969866560C8 for the Certificate."
-        when:
-            - wn16_pk_000030_cceb_interop_check.stdout == ""
+        when: wn16_pk_000030_cceb_interop_check.stdout == ""
 
       - name: "MEDIUM | WN16-PK-000030 | AUDIT | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-PK-000030'
-        when:
-            - wn16_pk_000030_cceb_interop_check.stdout == ""
+        when: wn16_pk_000030_cceb_interop_check.stdout == ""
   when:
       - wn16_pk_000030
   tags:
@@ -4402,23 +4302,20 @@
             msg:
                 - "Warning!! You have not changed the default name for wn16stig_newadministratorname, please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - "'adminchangethis' in wn16stig_newadministratorname"
+        when: "'adminchangethis' in wn16stig_newadministratorname"
 
       - name: "MEDIUM | WN16-SO-000030 | AUDIT | Windows Server 2016 built-in administrator account must be renamed. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-SO-000030'
-        when:
-            - "'adminchangethis' in wn16stig_newadministratorname"
+        when: "'adminchangethis' in wn16stig_newadministratorname"
 
       - name: "MEDIUM | WN16-SO-000030 | PATCH | Windows Server 2016 built-in administrator account must be renamed. | Change Admin Name"
         community.windows.win_security_policy:
             section: System Access
             key: NewAdministratorName
             value: "{{ wn16stig_newadministratorname }}"
-        when:
-            - "'adminchangethis' not in wn16stig_newadministratorname"
+        when: "'adminchangethis' not in wn16stig_newadministratorname"
   when:
       - wn16_so_000030
       - not win_skip_for_test
@@ -4437,23 +4334,20 @@
             msg:
                 - "Warning!! You have not changed the default name for wn16stig_newguestname, please read"
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
-        when:
-            - "'guestchangethis' in wn16stig_newguestname"
+        when: "'guestchangethis' in wn16stig_newguestname"
 
       - name: "MEDIUM | WN16-SO-000040 | AUDIT | Windows Server 2016 built-in guest account must be renamed. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN19-SO-000040'
-        when:
-            - "'guestchangethis' in wn16stig_newguestname"
+        when: "'guestchangethis' in wn16stig_newguestname"
 
       - name: "MEDIUM | WN16-SO-000040 | PATCH | Windows Server 2016 built-in guest account must be renamed. | Set Variable."
         community.windows.win_security_policy:
             section: System Access
             key: NewGuestName
             value: "{{ wn16stig_newguestname }}"
-        when:
-            - "'guestchangethis' not in wn16stig_newguestname"
+        when: "'guestchangethis' not in wn16stig_newguestname"
   when:
       - wn16_so_000040
   tags:
@@ -4814,7 +4708,7 @@
       - CCI-000366
       - CAT2
 
-- name: "MEDIUM | WN16-SO-000330 | NTLM must be prevented from falling back to a Null session."
+- name: "MEDIUM | WN16-SO-000330 | PATCH | NTLM must be prevented from falling back to a Null session."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
       state: present
@@ -4951,7 +4845,7 @@
       - CCI-002450
       - CAT2
 
-- name: "MEDIUM | WN16-SO-000460 | User Account Control approval mode for the built-in Administrator must be enabled."
+- name: "MEDIUM | WN16-SO-000460 | PATCH | User Account Control approval mode for the built-in Administrator must be enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
       state: present
