@@ -182,13 +182,13 @@
         ansible.windows.win_command: wmic /namespace:\\root\cimv2\security\microsofttpm path win32_tpm get * /format:textvaluelist.xsl
         changed_when: false
         failed_when: false
-        register: wn10_00_000010_tpm_status
+        register: wn16_00_000010_tpm_status
 
       - name: "MEDIUM | WN16-00-000100 | AUDIT | Windows Server 2016 domain-joined systems must have a Trusted Platform Module (TPM) enabled and ready for use. | Running Instances Check."
         ansible.builtin.debug:
             msg:
                 - "Warning!! Please confirm TPM status is Ready for use, there are no instances currently running."
-        when: "'No Instance' in wn10_00_000010_tpm_status.stderr_lines | string"
+        when: "'No Instance' in wn16_00_000010_tpm_status.stderr_lines | string"
 
       - name: "MEDIUM | WN16-00-000100 | AUDIT | Windows Server 2016 domain-joined systems must have a Trusted Platform Module (TPM) enabled and ready for use. | Full TPM Check."
         ansible.builtin.debug:
@@ -211,7 +211,7 @@
             - "'IsEnabled_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
             - "'IsOwned_InitialValue=TRUE' in wn10_00_000010_tpm_status.stderr_lines | string"
             - "'SpecVersion=2.0' or 'SpecVersion=1.2' in wn10_00_000010_tpm_status.stderr_lines | string or
-              'No Instance' in wn10_00_000010_tpm_status.stderr_lines | string"
+              'No Instance' in wn16_00_000010_tpm_status.stderr_lines | string"
   when:
       - wn16_00_000100
       - ansible_windows_domain_member
