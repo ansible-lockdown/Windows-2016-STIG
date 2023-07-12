@@ -71,7 +71,7 @@
       - name: "MEDIUM | WN16-00-000050 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Members of the Backup Operators group must have separate accounts for backup duties and normal operational tasks. | Warning Message"
         ansible.builtin.debug:
             msg:
-                - "Warning!! The accounts listed are members of the Backup Operators group."
+                - "Warning!! This is a manual task. The accounts listed are members of the Backup Operators group."
                 - "Please verify these accounts have separate accounts for backup duties and normal operational tasks."
                 - "{{ wn16_00_000050_audit.stdout.split('\n') }}"
         when:
@@ -82,6 +82,9 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000050'
+        when:
+            - wn16_00_000050_audit is not skipped
+            - wn16_00_000050_audit.stdout != ""
   when:
       - wn16_00_000050
       - not ansible_windows_domain_role == "Primary domain controller"
@@ -1251,7 +1254,7 @@
       - name: "MEDIUM | WN16-00-000460 | AUDIT | Orphaned security identifiers (SIDs) must be removed from user rights on Windows 2016. | Warning Message."
         ansible.builtin.debug:
             msg:
-                - "Warning!! Please review the User Rights listed for each of any unresolved SID to determine whether they are valid."
+                - "Warning!! Please review the Group Rights listed for each of any unresolved SID to determine whether they are valid."
                 - "Group Accounts"
                 - "----------------------------------------------------------------------"
                 - "{{ wn16_00_000460_orphaned_group_accounts.stdout_lines }}"
@@ -1347,7 +1350,7 @@
 # below task is dependent on WN16-AC-000020 and WN16-AC-000030, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'LockoutDuration' in section 'System Access' is not a valid key, cannot set this value"
 - name: "MEDIUM | WN16-AC-000010 | PATCH | Windows Server 2016 account lockout duration must be configured to 15 minutes or greater."
   block:
-      - name: "MEDIUM | WN16-AC-000010 | PATCH | Windows Server 2016 account lockout duration must be configured to 15 minutes or greater. | Warning For Bad Variable."
+      - name: "MEDIUM | WN16-AC-000010 | AUDIT | Windows Server 2016 account lockout duration must be configured to 15 minutes or greater. | Warning For Bad Variable."
         ansible.builtin.debug:
             msg:
                 - "Warning!! You have a invalid number of minutes set for wn16stig_lockoutduration please read"
@@ -1356,7 +1359,7 @@
             - wn16stig_lockoutduration < 15
             - wn16stig_lockoutduration > 0
 
-      - name: "MEDIUM | WN16-AC-000010 | PATCH | Windows Server 2016 account lockout duration must be configured to 15 minutes or greater. | Warn Count."
+      - name: "MEDIUM | WN16-AC-000010 | AUDIT | Windows Server 2016 account lockout duration must be configured to 15 minutes or greater. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AC-000010'
@@ -1391,7 +1394,7 @@
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
         when: wn16stig_passwordhistorysize < 24
 
-      - name: Warn Count."
+      - name: "MEDIUM | WN16-AC-000040 | AUDIT | Windows Server 2016 password history must be configured to 24 passwords remembered. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AC-000040 '
@@ -3944,6 +3947,7 @@
       datatype: dword
   when:
       - wn16_ms_000040
+      - not ansible_windows_domain_role == "Primary domain controller"
   tags:
       - WN16-MS-000040
       - V-225010

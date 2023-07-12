@@ -18,7 +18,7 @@ win2016stig_audit_complex: true
 # We've defined disruption-high to indicate items that are likely to cause
 # disruption in a normal workflow.  These items can be remediated automatically
 # but are disabled by default to avoid disruption.
-win2016stig_disruption_high: true
+win2016stig_disruption_high: false
 
 # Show "changed" for disruptive items not remediated per disruption-high
 # setting to make them stand out.
