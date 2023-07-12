@@ -1257,7 +1257,7 @@
                 - "{{ wn16_00_000460_orphaned_group_accounts.stdout_lines }}"
         when: wn16_00_000460_orphaned_group_accounts.stdout_lines | select() | length > 0
 
-      - name: "MEDIUM | WN16-00-000460 | AUDIT | Orphaned security identifiers (SIDs) must be removed from user rights on Windows 20-16. | Warn Count."
+      - name: "MEDIUM | WN16-00-000460 | AUDIT | Orphaned security identifiers (SIDs) must be removed from user rights on Windows 2016. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000460'
@@ -2548,6 +2548,7 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-CC-000110'
+        when: "'2' not in wn16_cc_000110_audit.stdout | trim"
   when:
       - wn16_cc_000110
       - ansible_windows_domain_member
