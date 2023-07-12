@@ -3885,7 +3885,7 @@
         when:
             - wn16stig_krbtgt_account_pass_age <= 180
             - wn16_dc_000430_audit.stdout | length > 0 or
-              wn16stig_krbtgt_account_pass_age
+              wn16stig_krbtgt_account_pass_age > 180
   when:
       - wn16_dc_000430
       - ansible_windows_domain_role == "Primary domain controller"
