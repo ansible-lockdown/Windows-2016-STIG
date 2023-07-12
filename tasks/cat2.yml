@@ -3862,7 +3862,7 @@
         when: wn16stig_krbtgt_account_pass_age > 180
 
       - name: "MEDIUM | WN16-DC-000430 | AUDIT | The password for the krbtgt account on a domain must be reset at least every 180 days. | Get Password Last Set"
-        ansible.windows.win_shell: "Get-ADUser krbtgt -Property PasswordLastSet | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16_dc_000430_pass_age }}))} | Select-Object -ExpandProperty PasswordLastSet"
+        ansible.windows.win_shell: "Get-ADUser krbtgt -Property PasswordLastSet | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16stig_krbtgt_account_pass_age }}))} | Select-Object -ExpandProperty PasswordLastSet"
         changed_when: false
         failed_when: false
         register: wn16_dc_000430_audit
