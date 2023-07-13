@@ -28,7 +28,7 @@ win2016stig_audit_disruptive: true
 # removing all files of a specific file type that search the entire drive.
 # If there is an action tied to the lengthy search the action task will be disabled as well.
 # WN16-00-000270 - CAT2
-win16stig_lengthy_search: true
+win16stig_lengthy_search: false
 
 # win_skip_for_test is used in the playbook to skip over certain controls that
 # may cause breaking changes when running it for testing purposes.
