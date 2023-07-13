@@ -250,11 +250,20 @@
 
 - name: "MEDIUM | WN16-00-000160 | AUDIT | Permissions for the system drive root directory usually C:\ must conform to minimum requirements."
   block:
-      - name: "MEDIUM | WN16-00-000160 | AUDIT | Permissions for the system drive root directory usually C:\ must conform to minimum requirements."
-        ansible.builtin.debug:
-            msg: "Warning!! This is a manual task. Windows Server 2016 must have a host-based intrusion detection or prevention system."
+      - name: "MEDIUM | WN16-00-000160 | AUDIT | Permissions for the system drive root directory usually C:\ must conform to minimum requirements. | Obtain icacls for Program Files."
+        ansible.windows.win_shell: icacls "c:\program files"
+        changed_when: false
+        failed_when: false
+        register: wn16_00_000160_drive_root_audit
 
-      - name: "MEDIUM | WN16-00-000160 | AUDIT | Permissions for the system drive root directory usually C:\ must conform to minimum requirements."
+      - name: "MEDIUM | WN16-00-000160 | AUDIT | Permissions for the system drive root directory usually C:\ must conform to minimum requirements. | Manual Audit icacls for Program Files."
+        ansible.builtin.debug:
+            msg:
+                - "Warning!! This is a manual task to audit. Windows Server 2019 icacls program needs to meet"
+                - "the STIG requirements. Please check the report below and compare to the STIG requirements."
+                - "{{ wn16_00_000160_drive_root_audit.stdout_lines }}"
+
+      - name: "MEDIUM | WN16-00-000160 | AUDIT | Permissions for the system drive root directory usually C:\ must conform to minimum requirements. | Warn Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000160'
@@ -281,7 +290,7 @@
         ansible.builtin.debug:
             msg:
                 - "Warning!! This is a manual task to audit. Windows Server 2016 icacls program needs to meet"
-                - "the STIG requirements. Please check the report below and compare the the STIG requirements."
+                - "the STIG requirements. Please check the report below and compare to the STIG requirements."
                 - "{{ wn16_00_000170_program_files_audit.stdout_lines }}"
 
       - name: "MEDIUM | WN16-00-000170 | AUDIT | Permissions for program file directories must conform to minimum requirements. | Obtain icacls for Program Files x86"
@@ -294,8 +303,8 @@
         ansible.builtin.debug:
             msg:
                 - "Warning!! This is a manual task to audit. Windows Server 2016 icacls program files x86 needs to meet"
-                - "the STIG requirements. Please check the report below and compare the the STIG requirements."
-                - "{{ wn16_00_000170_program_files_audit.stdout_lines }}"
+                - "the STIG requirements. Please check the report below and compare to the STIG requirements."
+                - "{{ wn16_00_000170_program_files_86_audit.stdout_lines }}"
 
       - name: "MEDIUM | WN16-00-000170 | AUDIT | Permissions for program file directories must conform to minimum requirements. | Warn Count"
         ansible.builtin.import_tasks: warning_facts.yml
@@ -341,7 +350,7 @@
         ansible.builtin.debug:
             msg:
                 - "Warning!! This is a manual task to audit. Windows Server 2016 permissions for the Windows installation directory needs to meet"
-                - "the STIG requirements. Please check the report below and compare the the STIG requirements."
+                - "the STIG requirements. Please check the report below and compare to the STIG requirements."
                 - "{{ wn16_00_000180_windows_dir_audit.stdout_lines }}"
 
       - name: "MEDIUM | WN16-00-000180 | AUDIT | Permissions for the Windows installation directory must conform to minimum requirements. | Warn Count."
@@ -417,7 +426,7 @@
                                 if ($lastLogin -eq $null) {
                                 $lastLogin = 'Never'
                                 }
-                                Write-Host $user.Name $lastLogin $enabled
+                                Write-Host UserName: $user.Name LastLogin: $lastLogin Enabled: $enabled
                                 }
         changed_when: false
         failed_when: false
@@ -462,33 +471,35 @@
 
 - name: "MEDIUM | WN16-00-000220 | AUDIT | Windows Server 2016 accounts must require passwords."
   block:
-      - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 accounts must require passwords."
+      - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 accounts must require passwords. | Audit Accounts."
         ansible.windows.win_shell: Get-Aduser -Filter "(Passwordnotrequired -eq 'True') -and (Enabled -eq 'True')" | Select Name,Passwordnotrequired,Enabled
         changed_when: false
         failed_when: false
         register: wn16_00_000220_audit_dc
         when: ansible_windows_domain_role == "Primary domain controller"
 
-      - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 accounts must require passwords."
+      - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN CONTROLLER | Windows Server 2016 accounts must require passwords. | Warning Message"
         ansible.builtin.debug:
             msg:
-                - The accounts listed are currently enabled and do not require a password.
+                - "The accounts listed do not require a password and are currently enabled."
+                - "To conform to STIG complaince configure passwords on all accounts."
                 - "{{ wn16_00_000220_audit_dc.stdout.split('\n') }}"
         when:
             - wn16_00_000220_audit_dc is not skipped
             - wn16_00_000220_audit_dc.stdout != ""
 
-      - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 accounts must require passwords."
+      - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 accounts must require passwords. | Audit Local Accounts"
         ansible.windows.win_shell: Get-LocalUser | Where-Object {($_.PasswordRequired -ne 'True' -and $_.Enabled -eq 'True')} | Select Name,PasswordRequired,Enabled
         changed_when: false
         failed_when: false
         register: wn16_00_000220_audit_dm_sa
         when: not ansible_windows_domain_role == "Primary domain controller"
 
-      - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 accounts must require passwords."
+      - name: "MEDIUM | WN16-00-000220 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Windows Server 2016 accounts must require passwords. | Warning Message"
         ansible.builtin.debug:
             msg:
-                - The accounts listed are do not require a password and are currently enabled
+                - "The accounts listed do not require a password and are currently enabled."
+                - "To conform to STIG complaince configure passwords on all accounts."
                 - "{{ wn16_00_000220_audit_dm_sa.stdout.split('\n') }}"
         when:
             - wn16_00_000220_audit_dm_sa is not skipped
@@ -539,7 +550,7 @@
         register: wn16_00_000230_audit_dm_sa
         when: not ansible_windows_domain_role == "Primary domain controller"
 
-      - name: MEDIUM | WN16-00-000230 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Passwords must be configured to expire. | Warning Message"
+      - name: "MEDIUM | WN16-00-000230 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Passwords must be configured to expire. | Warning Message"
         ansible.builtin.debug:
             msg:
                 - "Warning!! This is a manual task. Windows Server 2016 passwords must be configured to expire."
@@ -872,14 +883,14 @@
                 - "listed where the expiration date is longer then 72 hours."
                 - "{{ wn16_00_000330_audit_sa.stdout.split('\n') }}"
         when:
-            - wn16_00_000330_audit_dc is not skipped
-            - wn16_00_000330_audit_dc.stdout != ""
+            - wn16_00_000330_audit_sa is not skipped
+            - wn16_00_000330_audit_sa.stdout != ""
 
       - name: "MEDIUM | WN16-00-000330 | AUDIT | Windows Server 2016 must automatically remove or disable temporary user accounts after 72 hours. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000330'
-        when: wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != "" or wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != ""
+        when: wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != "" or wn16_00_000330_audit_sa is not skipped and wn16_00_000330_audit_sa.stdout != ""
   when:
       - wn16_00_000330
   tags:
@@ -930,7 +941,7 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000340'
-        when: wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != "" or wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != ""
+        when: wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != "" or wn16_00_000340_audit_sa is not skipped and wn16_00_000340_audit_sa.stdout != ""
   when:
       - wn16_00_000340
   tags:
@@ -1054,8 +1065,7 @@
             value: SMB1
             data: 0
             datatype: dword
-        notify:
-            - reboot_windows
+        notify: reboot_windows
 
       - name: "MEDIUM | WN16-00-000411 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server. | Warning Message No SecGuide.admx"
         debug:
@@ -1099,8 +1109,7 @@
             value: Start
             data: 4
             datatype: dword
-        notify:
-            - reboot_windows
+        notify: reboot_windows
 
       - name: "MEDIUM | WN16-00-000412 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10. | Warning Message No SecGuide.admx"
         debug:
@@ -1400,7 +1409,7 @@
             warn_control_id: 'WN16-AC-000040 '
         when: wn16stig_passwordhistorysize < 24
 
-      - name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered."
+      - name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered. | Apply Variable"
         win_security_policy:
             section: System Access
             key: PasswordHistorySize
@@ -1600,7 +1609,7 @@
                 - "to prevent standard user accounts or groups from having access. The default permissions listed below satisfy this requirement:"
                 - "Eventlog - Full Control, SYSTEM - Full Control, Administrators - Full Control"
                 - "Current location of Application.evtx is {{ wn16_au_000030_app_log_location.stdout | trim }}"
-                - "If there is no output below If the location of the logs has been changed, when adding Eventlog to the permissions,"
+                - "If the location of the logs has been changed, when adding Eventlog to the permissions,"
                 - "it must be entered as NT Service\\Eventlog"
                 - "{{ wn16_au_000030_app_log_permissions.stdout_lines | reject('match', '^$') | list }}"
 
@@ -1641,7 +1650,7 @@
                 - "to prevent standard user accounts or groups from having access. The default permissions listed below satisfy this requirement:"
                 - "Eventlog - Full Control, SYSTEM - Full Control, Administrators - Full Control"
                 - "Current location of Security.evtx is {{ wn16_au_000040_sec_log_location.stdout | trim }}"
-                - "If there is no output below If the location of the logs has been changed, when adding Eventlog to the permissions,"
+                - "If the location of the logs has been changed, when adding Eventlog to the permissions,"
                 - "it must be entered as NT Service\\Eventlog"
                 - "{{ wn16_au_000040_sec_log_permissions.stdout_lines | reject('match', '^$') | list }}"
 
@@ -1682,7 +1691,7 @@
                 - "to prevent standard user accounts or groups from having access. The default permissions listed below satisfy this requirement:"
                 - "Eventlog - Full Control, SYSTEM - Full Control, Administrators - Full Control"
                 - "Current location of System.evtx is {{ wn16_au_000050_system_log_location.stdout | trim }}"
-                - "If there is no output below If the location of the logs has been changed, when adding Eventlog to the permissions,"
+                - "If the location of the logs has been changed, when adding Eventlog to the permissions,"
                 - "it must be entered as NT Service\\Eventlog"
                 - "{{ wn16_au_000050_system_log_permissions.stdout_lines | reject('match', '^$') | list }}"
 
@@ -3255,7 +3264,8 @@
       - name: "MEDIUM | WN16-DC-000060 | AUDIT | The computer clock synchronization tolerance must be limited to 5 minutes or less. | Warning Message"
         ansible.builtin.debug:
             msg:
-                - "Warning!! The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less."
+                - "This is a manual task. Windows Server 2016 computer clock synchronization tolerance"
+                - "must be limited to five minutes or less."
                 - "Configure the policy value in the Default Domain Policy for Computer Configuration"
                 - ">> Policies >> Windows Settings >> Security Settings >> Account Policies >> Kerberos Policy"
                 - ">> Maximum tolerance for computer clock synchronization to a maximum of 5 minutes or less."
