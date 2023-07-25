@@ -2,7 +2,7 @@
 
 ## Configure a Windows 2016 system to be [DISA STIG](https://public.cyber.mil/stigs/downloads/) compliant.
 
-### Based on [ Windows 2016 DISA STIG Version 2, Rel 1 released on November 13, 2020 ](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_MS_Windows_Server_2016_V2R1_STIG.zip)
+### Based on [ Windows 2016 DISA STIG Version 2, Rel 6 released on May 11, 2023 ](https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_MS_Windows_Server_2016_V2R6_STIG.zip)
 
 ---
 
@@ -113,7 +113,7 @@ Package 'python-xmltodict' is required if you enable the OpenSCAP tool installat
 
 ## Role Variables
 
-This role is designed that the end user should not have to edit the tasks themselves. All customizing should be done via the defaults/main.yml file or with extra vars within the project, job, workflow, etc. Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default. Disruptive finding remediation can be enabled by setting `win10stig_disruption_high` to `yes`.
+This role is designed that the end user should not have to edit the tasks themselves. All customizing should be done via the defaults/main.yml file or with extra vars within the project, job, workflow, etc. Non-disruptive CAT I, CAT II, and CAT III findings will be corrected by default. Disruptive finding remediation can be enabled by setting `win16stig_disruption_high` to `yes`.
 
 ## Tags
 
@@ -123,12 +123,12 @@ Below is an example of the tag section from a control within this role. Using th
 
 ```sh
 tags:
-      - WN10-CC-000295
-      - CAT2
-      - CCI-000366
+      - WN16-00-000010
+      - V-224819
+      - SV-224819r569186_rule
       - SRG-OS-000480-GPOS-00227
-      - SV-220853r569187_rule
-      - V-220853
+      - CCI-000366
+      - CAT1
 ```
 
 ## Community Contribution

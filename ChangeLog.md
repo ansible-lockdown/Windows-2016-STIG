@@ -1,13 +1,14 @@
 # Changelog
 
-## Future Plans For Repo
-
-- Warning System Added
-- More of the default main variables will be user defined. 
-- Check all controls to verify they are or can be implemented.
-- Update To v2r5
-
 ## Release Update
+
+June 2023 Updates
+- Update To V2R6 Release 
+- Warning System Added
+- Default/Main Variables updated and documented better.
+- Non-implemented controls have been added to new warning system for manual check or have been updated to make functional. 
+- Removed Control WN16-AU-000220
+- Removed Control WN16-DC-000270
 
 May 2023 Updates
 - Updated pipeline for testing.

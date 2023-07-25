@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-    author: "Trey Perrone, DFed"
+    author: "Trey Perrone, DFed, Stephen Williams"
     description: "Ansible role to apply DISA Windows Server 2016 STIG"
     company: "MindPoint Group"
     license: MIT
