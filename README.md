@@ -65,7 +65,7 @@ This is managed using tags:
 - CAT2
 - CAT3
 
-The control found in defaults main also need to reflect true so as this will allow the controls to run when the playbook is launched. 
+The control found in defaults main also need to reflect true so as this will allow the controls to run when the playbook is launched.
 
 ## Coming from a previous release
 
