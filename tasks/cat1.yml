@@ -2,11 +2,11 @@
 
 - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks."
   block:
-      - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks. | Message out"
+      - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks. | Message Out"
         ansible.builtin.debug:
             msg: "Warning!! This is a manual task. Windows Server 2016 users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks."
 
-      - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks. | Import reuseable task."
+      - name: "HIGH | WN16-00-000010 | AUDIT | Users with Administrative privileges must have separate accounts for administrative duties and normal operational tasks. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000010'
@@ -22,11 +22,11 @@
 
 - name: "HIGH | WN16-00-000040 | AUDIT | Administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email."
   block:
-      - name: "HIGH | WN16-00-000040 | AUDIT | Administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email."
+      - name: "HIGH | WN16-00-000040 | AUDIT | Administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email. | Message Out"
         ansible.builtin.debug:
             msg: "Warning!! This is a manual task. Windows Server 2016 administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email."
 
-      - name: "HIGH | WN16-00-000040 | AUDIT | Administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email."
+      - name: "HIGH | WN16-00-000040 | AUDIT | Administrative accounts must not be used with applications that access the Internet, such as web browsers, or with potential Internet sources, such as email. | Warn Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000040'
@@ -42,7 +42,7 @@
 
 - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level."
   block:
-      - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Major Version."
+      - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level |  OS Major Version."
         ansible.windows.win_reg_stat:
             path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion\
             name: CurrentMajorVersionNumber
@@ -50,7 +50,7 @@
         failed_when: wn16_00_000110_audit_currentmajorversionnumber.value is not version('10', '>=')
         register: wn16_00_000110_audit_currentmajorversionnumber
 
-      - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Build (currentNumber)."
+      - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level |  OS Build (currentNumber)."
         ansible.windows.win_reg_stat:
             path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion
             name: CurrentBuildNumber
@@ -58,7 +58,7 @@
         failed_when: wn16_00_000110_audit_currentbuildnumber.value is not version('14393', '>=')
         register: wn16_00_000110_audit_currentbuildnumber
 
-      - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Release"
+      - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level | OS Release"
         ansible.windows.win_reg_stat:
             path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion
             name: ReleaseId
@@ -66,7 +66,7 @@
         failed_when: wn16_00_000110_audit_releaseid.value is not version('1607', '>=')
         register: wn16_00_000110_audit_releaseid
 
-      - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level - OS Build"
+      - name: "HIGH | WN16-00-000110 | AUDIT | Systems must be maintained at a supported servicing level | OS Build"
         ansible.windows.win_reg_stat:
             path: HKLM:\Software\Microsoft\Windows NT\CurrentVersion
             name: CurrentBuild
@@ -139,7 +139,7 @@
                 - "This does not apply to system partitions such the Recovery and EFI System Partition."
                 - "{{ wn16_00_000150_audit.stdout.split('\n') }}"
 
-      - name: "HIGH | WN16-00-000150 | AUDIT | Local volumes must use a format that supports NTFS attributes. | | Warn Count."
+      - name: "HIGH | WN16-00-000150 | AUDIT | Local volumes must use a format that supports NTFS attributes. | Warn Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000150'
@@ -431,11 +431,11 @@
 
 - name: "HIGH | WN16-DC-000290 | AUDIT | Domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
   block:
-      - name: "HIGH | WN16-DC-000290 | AUDIT | Domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
+      - name: "HIGH | WN16-DC-000290 | AUDIT | Domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA). | Warning Message"
         ansible.builtin.debug:
             msg: "Warning!! This is a manual task. Windows Server 2016 domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
 
-      - name: "HIGH | WN16-DC-000290 | AUDIT | Domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA)."
+      - name: "HIGH | WN16-DC-000290 | AUDIT | Domain Controller PKI certificates must be issued by the DoD PKI or an approved External Certificate Authority (ECA). | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000290'
@@ -488,7 +488,7 @@
                 - "{{ wn16_ms_000010_audit.stdout.split('\n') }}"
         changed_when: false
 
-      - name: "HIGH | WN16-MS-000010 | AUDIT | Only administrators responsible for the member server or standalone system must have Administrator rights on the system. | Warning Message"
+      - name: "HIGH | WN16-MS-000010 | AUDIT | Only administrators responsible for the member server or standalone system must have Administrator rights on the system. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-MS-000010'

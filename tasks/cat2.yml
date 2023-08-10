@@ -3,7 +3,7 @@
 # we need a variable to the "changed" admin account name since control XXXX states acct must be renamed
 # enumerating on DC is different than standalone
 # DC == Get-ADUser -Filter * -Properties SID, PasswordLastSet | Where SID -Like "*-500" | Ft Name, SID, PasswordLastSet
-- name: "MEDIUM | WN16-00-000030 | AUDIT | Passwords for the built-in Administrator account must be changed at least every 60 days."
+- name: "MEDIUM | WN16-00-000030 | AUDIT | Passwords for the built-in Administrator account must be changed at least every 60 days. | Get Accounts On DC"
   block:
       - name: "MEDIUM | WN16-00-000030 | AUDIT - DOMAIN CONTROLLER | Passwords for the built-in Administrator account must be changed at least every 60 days."
         ansible.windows.win_shell: "Get-ADUser -Filter * -Property PasswordLastSet | Where SID -like S-1-5-21-*-500 | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16_00_000030_pass_age }}))} | Select Name,PasswordLastSet"
@@ -14,7 +14,7 @@
         when:
             - ansible_windows_domain_role == "Primary domain controller"
 
-      - name: "MEDIUM | WN16-00-000030 | AUDIT - DOMAIN CONTROLLER | Passwords for the built-in Administrator account must be changed at least every 60 days."
+      - name: "MEDIUM | WN16-00-000030 | AUDIT - DOMAIN CONTROLLER | Passwords for the built-in Administrator account must be changed at least every 60 days. | Warning Message"
         ansible.builtin.debug:
             msg:
                 - "Warning!! The following account appears to be the default admin account and the password does not meet"
@@ -24,15 +24,14 @@
             - wn16_00_000030_audit_dc is not skipped
             - wn16_00_000030_audit_dc.stdout != ""
 
-      - name: "MEDIUM | WN16-00-000030 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Passwords for the built-in Administrator account must be changed at least every 60 days."
+      - name: "MEDIUM | WN16-00-000030 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Passwords for the built-in Administrator account must be changed at least every 60 days. | Get Accounts On DM or SA"
         win_shell: "Get-Localuser -Name * | Select * | Where SID -like S-1-5-21-*-500 | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16stig_pass_age }}))} | Select Name,PasswordLastSet"
         changed_when: false
         failed_when: false
         register: wn16_00_000030_audit_dm_sa
-        when:
-            - not ansible_windows_domain_role == "Primary domain controller"
+        when: not ansible_windows_domain_role == "Primary domain controller"
 
-      - name: "MEDIUM | WN16-00-000030 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Passwords for the built-in Administrator account must be changed at least every 60 days."
+      - name: "MEDIUM | WN16-00-000030 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Passwords for the built-in Administrator account must be changed at least every 60 days. | Warning Message"
         ansible.builtin.debug:
             msg:
                 - "Warning!! The following account appears to be the default admin account and the password does not meet"
@@ -42,12 +41,13 @@
             - wn16_00_000030_audit_dm_sa is not skipped
             - wn16_00_000030_audit_dm_sa.stdout != ""
 
-      - name: "MEDIUM | WN16-00-000030 | AUDIT | Passwords for the built-in Administrator account must be changed at least every 60 days. | Warning Count."
+      - name: "MEDIUM | WN16-00-000030 | AUDIT | Passwords for the built-in Administrator account must be changed at least every 60 days. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000030'
         when:
-            - wn16_00_000030_audit_dc is not skipped and wn16_00_000030_audit_dc.stdout != "" or wn16_00_000030_audit_dm_sa is not skipped and wn16_00_000030_audit_dm_sa.stdout != ""
+            - wn16_00_000030_audit_dc is not skipped and wn16_00_000030_audit_dc.stdout != "" or
+              wn16_00_000030_audit_dm_sa is not skipped and wn16_00_000030_audit_dm_sa.stdout != ""
   when:
       - wn16_00_000030
   tags:
@@ -505,11 +505,13 @@
             - wn16_00_000220_audit_dm_sa is not skipped
             - wn16_00_000220_audit_dm_sa.stdout != ""
 
-      - name: "MEDIUM | WN16-00-000230 | AUDIT | Windows Server 2016 accounts must require passwords. | Warning Count."
+      - name: "MEDIUM | WN16-00-000220 | AUDIT | Windows Server 2016 accounts must require passwords. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000220'
-        when: wn16_00_000220_audit_dc is not skipped and wn16_00_000220_audit_dc.stdout != "" or wn16_00_000220_audit_dm_sa is not skipped and wn16_00_000220_audit_dm_sa.stdout != ""
+        when:
+            - wn16_00_000220_audit_dc is not skipped and wn16_00_000220_audit_dc.stdout != "" or
+              wn16_00_000220_audit_dm_sa is not skipped and wn16_00_000220_audit_dm_sa.stdout != ""
   when:
       - wn16_00_000220
   tags:
@@ -564,7 +566,9 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000230'
-        when: wn16_00_000230_audit_dc is not skipped and wn16_00_000230_audit_dc.stdout != "" or wn16_00_000230_audit_dm_sa is not skipped and wn16_00_000230_audit_dm_sa.stdout != ""
+        when:
+            - wn16_00_000230_audit_dc is not skipped and wn16_00_000230_audit_dc.stdout != "" or
+              wn16_00_000230_audit_dm_sa is not skipped and wn16_00_000230_audit_dm_sa.stdout != ""
   when:
       - wn16_00_000230
   tags:
@@ -610,7 +614,7 @@
                 - "{{ wn16_00_000250_audit.stdout_lines | select() | list }}"
         when: wn16_00_000250_audit.stdout_lines | select() | length > 0
 
-      - name: "MEDIUM | WN16-00-000250 | AUDIT | Non-system-created file shares on a system must limit access to groups that require it."
+      - name: "MEDIUM | WN16-00-000250 | AUDIT | Non-system-created file shares on a system must limit access to groups that require it. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000250'
@@ -687,7 +691,7 @@
                 - "Warning!! This is a manual task. Windows Server 2016 systems requiring data at rest protections"
                 - "must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest. "
 
-      - name: "MEDIUM | WN16-00-000280 | AUDIT | Systems requiring data at rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest. | Warn Count"
+      - name: "MEDIUM | WN16-00-000280 | AUDIT | Systems requiring data at rest protections must employ cryptographic mechanisms to prevent unauthorized disclosure and modification of the information at rest. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN19-00-000250'
@@ -744,7 +748,7 @@
                 - "Document the roles and features required for the system to operate. Uninstall any that are not required."
                 - "{{ wn16_00_000300_audit.stdout_lines }}"
 
-      - name: "MEDIUM | WN16-00-000300 | AUDIT | The roles and features required by the system must be documented. | Warn Count."
+      - name: "MEDIUM | WN16-00-000300 | AUDIT | The roles and features required by the system must be documented. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000300'
@@ -811,7 +815,7 @@
                'Private profile is enabled' not in wn16_00_000310_firewall_audit.stdout_lines | string or
                'Public profile is enabled' not in wn16_00_000310_firewall_audit.stdout_lines | string"
 
-      - name: "MEDIUM | WN16-00-000310 | AUDIT | A host-based firewall must be installed and enabled on the system. | Warn Count"
+      - name: "MEDIUM | WN16-00-000310 | AUDIT | A host-based firewall must be installed and enabled on the system. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000310'
@@ -836,7 +840,7 @@
                 - "by Computer Network Defense Service Provider (CNDSP). Verify DoD-approved ESS software is installed and properly operating."
                 - "Ask the site ISSM for documentation of the ESS software installation and configuration."
 
-      - name: "MEDIUM | WN16-00-000320 | PATCH | Windows Server 2016 must employ automated mechanisms to determine the state of system components with regard to flaw remediation using the following frequency: continuously, where Host Based Security System (HBSS) is used; 30 days, for any additional internal network scans not covered by HBSS; and annually, for external scans by Computer Network Defense Service Provider (CNDSP). | Warn Count"
+      - name: "MEDIUM | WN16-00-000320 | PATCH | Windows Server 2016 must employ automated mechanisms to determine the state of system components with regard to flaw remediation using the following frequency: continuously, where Host Based Security System (HBSS) is used; 30 days, for any additional internal network scans not covered by HBSS; and annually, for external scans by Computer Network Defense Service Provider (CNDSP). | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000320'
@@ -890,7 +894,9 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000330'
-        when: wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != "" or wn16_00_000330_audit_sa is not skipped and wn16_00_000330_audit_sa.stdout != ""
+        when:
+            - wn16_00_000330_audit_dc is not skipped and wn16_00_000330_audit_dc.stdout != "" or
+              wn16_00_000330_audit_sa is not skipped and wn16_00_000330_audit_sa.stdout != ""
   when:
       - wn16_00_000330
   tags:
@@ -941,7 +947,9 @@
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000340'
-        when: wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != "" or wn16_00_000340_audit_sa is not skipped and wn16_00_000340_audit_sa.stdout != ""
+        when:
+            - wn16_00_000340_audit_dc is not skipped and wn16_00_000340_audit_dc.stdout != "" or
+              wn16_00_000340_audit_sa is not skipped and wn16_00_000340_audit_sa.stdout != ""
   when:
       - wn16_00_000340
   tags:
@@ -1083,7 +1091,7 @@
                 - "included with the STIG package."
         when: wn16_secguide_adml_audit.results[0].matched != 1
 
-      - name: "MEDIUM | WN16-00-000411 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server. | Warn Count."
+      - name: "MEDIUM | WN16-00-000411 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000411'
@@ -1102,7 +1110,7 @@
 
 - name: "MEDIUM | WN16-00-000412 | PATCH | Server Message Block (SMB) v1 protocol must be disabled on the SMB client."
   block:
-      - name: "MEDIUM | WN16-00-000412 | PATCH | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10."
+      - name: "MEDIUM | WN16-00-000412 | PATCH | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10. | Set Registry Key"
         ansible.windows.win_regedit:
             path: HKLM:\SYSTEM\CurrentControlSet\Services\mrxsmb10
             state: present
@@ -1127,7 +1135,7 @@
                 - "included with the STIG package."
         when: wn16_secguide_adml_audit.results[0].matched != 1
 
-      - name: "MEDIUM | WN16-00-000412 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10. | Warn Count."
+      - name: "MEDIUM | WN16-00-000412 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000412'
@@ -1166,7 +1174,7 @@
         failed_when: false
         register: wn16_00_000430_audit
 
-      - name: set_fact
+      - name: "MEDIUM | WN16-00-000430 | AUDIT | FTP servers must be configured to prevent anonymous logons. | Set Fact"
         ansible.builtin.set_fact:
             wn16_00_000430_ftp_audit: "{{ wn16_00_000430_audit.stdout_lines | regex_search('Installed') }}"
 
@@ -1177,7 +1185,7 @@
                 - "installed on the system. Anonymous Authentication must be set to diabled per STIG Requirements."
         when: "'Installed' in wn16_00_000430_ftp_audit"
 
-      - name: "MEDIUM | WN16-00-000430 | AUDIT | FTP servers must be configured to prevent anonymous logons. | Warn Count"
+      - name: "MEDIUM | WN16-00-000430 | AUDIT | FTP servers must be configured to prevent anonymous logons. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000430'
@@ -1269,12 +1277,13 @@
                 - "{{ wn16_00_000460_orphaned_group_accounts.stdout_lines }}"
         when: wn16_00_000460_orphaned_group_accounts.stdout_lines | select() | length > 0
 
-      - name: "MEDIUM | WN16-00-000460 | AUDIT | Orphaned security identifiers (SIDs) must be removed from user rights on Windows 2016. | Warn Count."
+      - name: "MEDIUM | WN16-00-000460 | AUDIT | Orphaned security identifiers (SIDs) must be removed from user rights on Windows 2016. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-00-000460'
         when:
-            - wn16_00_000460_orphaned_user_accounts.stdout_lines | select() | length > 0 or wn16_00_000460_orphaned_group_accounts.stdout_lines | select() | length > 0
+            - wn16_00_000460_orphaned_user_accounts.stdout_lines | select() | length > 0 or
+              wn16_00_000460_orphaned_group_accounts.stdout_lines | select() | length > 0
   when:
       - wn16_00_000460
   tags:
@@ -1327,7 +1336,7 @@
 # below task is dependent on WN16-AC-000020, maybe custom fail when known error if WN16-AC-000020 not set? "The key 'ResetLockoutCount' in section 'System Access' is not a valid key, cannot set this value"
 - name: "MEDIUM | WN16-AC-000030 | PATCH | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
   block:
-      - name: MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater."
+      - name: MEDIUM | WN16-AC-000030 | AUDIT | Windows Server 2016 must have the period of time before the bad logon counter is reset configured to 15 minutes or greater. | Warning For Bad Variable."
         ansible.builtin.debug:
             msg:
                 - "Warning!! You have a invalid number of days set for wn16stig_resetlockoutcount please read"
@@ -1396,7 +1405,7 @@
 
 - name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered."
   block:
-      - name: "MEDIUM | WN16-AC-000040 | AUDIT | Windows Server 2016 password history must be configured to 24 passwords remembered. | Warning Message"
+      - name: "MEDIUM | WN16-AC-000040 | AUDIT | Windows Server 2016 password history must be configured to 24 passwords remembered. | Warning For Bad Variable."
         ansible.builtin.debug:
             msg:
                 - "Warning!! You have a invalid number remembered passwords set for wn16stig_passwordhistorysize please read"
@@ -1551,7 +1560,7 @@
                 - "different system or media than the system being audited. Establish and implement a process"
                 - "for backing up log data to another system or media other than the system being audited."
 
-      - name: "MEDIUM | WN16-AU-000010 | AUDIt | Audit records must be backed up to a different system or media than the system being audited. | Warn Count"
+      - name: "MEDIUM | WN16-AU-000010 | AUDIt | Audit records must be backed up to a different system or media than the system being audited. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AU-000010'
@@ -1567,13 +1576,13 @@
 
 - name: "MEDIUM | WN16-AU-000020 | Windows Server 2016 must, at a minimum, off-load audit records of interconnected systems in real time and off-load standalone systems weekly."
   block:
-      - name: "MEDIUM | WN16-AU-000020 | AUDIT | Windows Server 2016 must, at a minimum, off-load audit records of interconnected systems in real time and off-load standalone systems weekly."
+      - name: "MEDIUM | WN16-AU-000020 | AUDIT | Windows Server 2016 must, at a minimum, off-load audit records of interconnected systems in real time and off-load standalone systems weekly. | Warning Message"
         ansible.builtin.debug:
             msg:
                 - "Warning!! This is a manual task. Windows Server 2016 must, at a minimum, offload audit"
                 - "records of interconnected systems in real time and offload standalone or nondomain-joined systems weekly."
 
-      - name: "MEDIUM | WN16-AU-000020 | PATCH | Windows Server 2016 must, at a minimum, off-load audit records of interconnected systems in real time and off-load standalone systems weekly."
+      - name: "MEDIUM | WN16-AU-000020 | PATCH | Windows Server 2016 must, at a minimum, off-load audit records of interconnected systems in real time and off-load standalone systems weekly. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AU-000020'
@@ -1613,7 +1622,7 @@
                 - "it must be entered as NT Service\\Eventlog"
                 - "{{ wn16_au_000030_app_log_permissions.stdout_lines | reject('match', '^$') | list }}"
 
-      - name: "MEDIUM | WN16-AU-000030 | AUDIT | Windows 2016 permissions for the Application event log must prevent access by non-privileged accounts. | Warn Count."
+      - name: "MEDIUM | WN16-AU-000030 | AUDIT | Windows 2016 permissions for the Application event log must prevent access by non-privileged accounts. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AU-000030'
@@ -1654,7 +1663,7 @@
                 - "it must be entered as NT Service\\Eventlog"
                 - "{{ wn16_au_000040_sec_log_permissions.stdout_lines | reject('match', '^$') | list }}"
 
-      - name: "MEDIUM | WN16-AU-000040 | AUDIT | Permissions for the Security event log must prevent access by non-privileged accounts. | Warn Count."
+      - name: "MEDIUM | WN16-AU-000040 | AUDIT | Permissions for the Security event log must prevent access by non-privileged accounts. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AU-000040'
@@ -1695,7 +1704,7 @@
                 - "it must be entered as NT Service\\Eventlog"
                 - "{{ wn16_au_000050_system_log_permissions.stdout_lines | reject('match', '^$') | list }}"
 
-      - name: "MEDIUM | WN16-AU-000050 | AUDIT | Permissions for the System event log must prevent access by non-privileged accounts. | Warn Count."
+      - name: "MEDIUM | WN16-AU-000050 | AUDIT | Permissions for the System event log must prevent access by non-privileged accounts. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AU-000050'
@@ -1732,7 +1741,7 @@
                 - "The default location should be System32 folder."
                 - "{{ wn16_au_000060_event_viewer_permissions.results[0].stdout_lines }}"
 
-      - name: "MEDIUM | WN16-AU-000060 | AUDIT | Event Viewer must be protected from unauthorized modification and deletion. | Warn Count."
+      - name: "MEDIUM | WN16-AU-000060 | AUDIT | Event Viewer must be protected from unauthorized modification and deletion. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-AU-000060'
@@ -2734,7 +2743,7 @@
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
         when: wn16stig_application_event_log_max_size < 32768
 
-      - name: "MEDIUM | WN16-CC-000300 | AUDIT | The Application event log size must be configured to 32768 KB or greater. | Warn Count."
+      - name: "MEDIUM | WN16-CC-000300 | AUDIT | The Application event log size must be configured to 32768 KB or greater. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-CC-000300'
@@ -2767,7 +2776,7 @@
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
         when: wn16stig_security_event_log_max_size < 196608
 
-      - name: "MEDIUM | WN16-CC-000310 | AUDIT | The Security event log size must be configured to 196608 KB or greater. | Warn Count."
+      - name: "MEDIUM | WN16-CC-000310 | AUDIT | The Security event log size must be configured to 196608 KB or greater. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-CC-000310'
@@ -2800,7 +2809,7 @@
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
         when: wn16stig_system_event_log_max_size < 32768
 
-      - name: "MEDIUM | WN16-CC-000320 | AUDIT | The System event log size must be configured to 32768 KB or greater. | Warn Count."
+      - name: "MEDIUM | WN16-CC-000320 | AUDIT | The System event log size must be configured to 32768 KB or greater. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-CC-000320'
@@ -3164,7 +3173,7 @@
                 - ">> Policies >> Windows Settings >> Security Settings >> Account Policies >> Kerberos Policy"
                 - ">> Enforce user logon restrictions to Enabled"
 
-      - name: "MEDIUM | WN16-DC-000020 | AUDIT | Kerberos user logon restrictions must be enforced. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000020 | AUDIT | Kerberos user logon restrictions must be enforced. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000020'
@@ -3191,7 +3200,7 @@
                 - ">> Maximum lifetime for service ticket to a maximum of 600 minutes, but not 0, which equates to"
                 - "Ticket doesn't expire"
 
-      - name: "MEDIUM | WN16-DC-000030 | AUDIT | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000030 | AUDIT | The Kerberos service ticket maximum lifetime must be limited to 600 minutes or less. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000030'
@@ -3217,7 +3226,7 @@
                 - ">> Policies >> Windows Settings >> Security Settings >> Account Policies >> Kerberos Policy"
                 - ">> Maximum lifetime for user ticket to a maximum of 10 hours but not 0, which equates to Ticket doesn't expire"
 
-      - name: "MEDIUM | WN16-DC-000040 | AUDIT | The Kerberos user ticket lifetime must be limited to 10 hours or less. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000040 | AUDIT | The Kerberos user ticket lifetime must be limited to 10 hours or less. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000040'
@@ -3243,7 +3252,7 @@
                 - ">> Policies >> Windows Settings >> Security Settings >> Account Policies >> Kerberos Policy"
                 - ">> Maximum lifetime for user ticket renewal to a maximum of 7 days or less"
 
-      - name: "MEDIUM | WN16-DC-000050 | AUDIT | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000050 | AUDIT | The Kerberos policy user ticket renewal maximum lifetime must be limited to seven days or less. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000050'
@@ -3270,7 +3279,7 @@
                 - ">> Policies >> Windows Settings >> Security Settings >> Account Policies >> Kerberos Policy"
                 - ">> Maximum tolerance for computer clock synchronization to a maximum of 5 minutes or less."
 
-      - name: "MEDIUM | WN16-DC-000060 | AUDIT | The computer clock synchronization tolerance must be limited to 5 minutes or less. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000060 | AUDIT | The computer clock synchronization tolerance must be limited to 5 minutes or less. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000060'
@@ -3312,7 +3321,7 @@
                 - "Note the logical drive(s) or file system partition for any organization-created data shares."
                 - "{{ wn16_dc_000120_audit_shares.stdout_lines | trim }}"
 
-      - name: "MEDIUM | WN16-DC-000120 | AUDIT | Data files owned by users must be on a different logical partition from the directory server data files. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000120 | AUDIT | Data files owned by users must be on a different logical partition from the directory server data files. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000120'
@@ -3336,7 +3345,7 @@
                 - "Review installed applications. Remove additional roles or applications such as web, database,"
                 - "and email from the domain controller."
 
-      - name: "MEDIUM | WN16-DC-000130 | PATCH | Domain controllers must run on a machine dedicated to that function. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000130 | PATCH | Domain controllers must run on a machine dedicated to that function. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000130'
@@ -3362,7 +3371,7 @@
                 - "implementations at a classified confidentiality level that transfer replication data through a network cleared"
                 - "to a lower level than the data."
 
-      - name: "MEDIUM | WN16-DC-000140 | AUDIT | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000140 | AUDIT | Separate, NSA-approved (Type 1) cryptography must be used to protect the directory data in transit for directory service implementations at a classified confidentiality level when replication data traverses a network cleared to a lower level than the data. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000140'
@@ -3385,7 +3394,7 @@
                 - "Warning!! This is a manual task. Active Directory Group Policy objects must be configured with proper audit settings."
                 - "Please review the STIG documentation for proper direction on auditing this control."
 
-      - name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000170 | AUDIT | Active Directory Group Policy objects must be configured with proper audit settings. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000170'
@@ -3409,7 +3418,7 @@
                 - "Warning!! This is a manual task. The Active Directory Domain object must be configured with proper audit settings."
                 - "Please review the STIG documentation for proper direction on auditing this control."
 
-      - name: "MEDIUM | WN16-DC-000180 | AUDIT | The Active Directory Domain object must be configured with proper audit settings. | Warn Cout"
+      - name: "MEDIUM | WN16-DC-000180 | AUDIT | The Active Directory Domain object must be configured with proper audit settings. | Warning Cout"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000180'
@@ -3433,7 +3442,7 @@
                 - "Warning!! This is a manual task. The Active Directory Infrastructure object must be configured with proper audit settings."
                 - "Please review the STIG documentation for proper direction on auditing this control."
 
-      - name: "MEDIUM | WN16-DC-000190 | AUDIT | The Active Directory Infrastructure object must be configured with proper audit settings. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000190 | AUDIT | The Active Directory Infrastructure object must be configured with proper audit settings. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000190'
@@ -3458,7 +3467,7 @@
                 - "Unit (OU) object must be configured with proper audit settings."
                 - "Please review the STIG documentation for proper direction on auditing this control."
 
-      - name: "MEDIUM | WN16-DC-000200 | AUDIT | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000200 | AUDIT | The Active Directory Domain Controllers Organizational Unit (OU) object must be configured with proper audit settings. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000200'
@@ -3482,7 +3491,7 @@
                 - "Warning!! This is a manual task. The Active Directory AdminSDHolder object must be configured with proper audit settings."
                 - "Please review the STIG documentation for proper direction on auditing this control."
 
-      - name: "MEDIUM | WN16-DC-000210 | AUDIT | The Active Directory AdminSDHolder object must be configured with proper audit settings. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000210 | AUDIT | The Active Directory AdminSDHolder object must be configured with proper audit settings. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000210'
@@ -3506,7 +3515,7 @@
                 - "Warning!! This is a manual task. The Active Directory RID Manager$ object must be configured with proper audit settings."
                 - "Please review the STIG documentation for proper direction on auditing this control."
 
-      - name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000220 | AUDIT | The Active Directory RID Manager$ object must be configured with proper audit settings. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000220'
@@ -3660,7 +3669,7 @@
                 - "the option Smart card is required for interactive logon"
                 - "{{ wn16_dc_000310_audit.stdout_lines | trim }}"
 
-      - name: "MEDIUM | WN16-DC-000310 | AUDIT | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000310 | AUDIT | Active Directory user accounts, including administrators, must be configured to require the use of a Common Access Card (CAC), Personal Identity Verification (PIV)-compliant hardware token, or Alternate Logon Token (ALT) for user authentication. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000310'
@@ -3892,7 +3901,7 @@
             - wn16stig_krbtgt_account_pass_age <= 180
             - wn16_dc_000430_audit.stdout | length > 0
 
-      - name: "MEDIUM | WN16-DC-000430 | AUDIT | The password for the krbtgt account on a domain must be reset at least every 180 days. | Warn Count"
+      - name: "MEDIUM | WN16-DC-000430 | AUDIT | The password for the krbtgt account on a domain must be reset at least every 180 days. | Warning Count"
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-DC-000310'
@@ -4214,7 +4223,7 @@
                 - "Please refer to STIG documentation for proper cert to be installed."
         when: wn16_pk_000010_root_5_Check.stdout == ""
 
-      - name: "MEDIUM | WN16-PK-000010 | AUDIT | The DoD Root CA certificates must be installed in the Trusted Root Store. | Warn Count."
+      - name: "MEDIUM | WN16-PK-000010 | AUDIT | The DoD Root CA certificates must be installed in the Trusted Root Store. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-PK-000010'
@@ -4248,7 +4257,7 @@
                 - "does not contain Thumbprint 49CBE933151872E17C8EAE7F0ABA97FB610F6477 for the Certificate."
         when: wn16_pk_000020_interop_check_for_49.stdout == ""
 
-      - name: "MEDIUM | WN16-PK-000020 | AUDIT | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems. | Warn Count."
+      - name: "MEDIUM | WN16-PK-000020 | AUDIT | The DoD Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-PK-000020'
@@ -4279,7 +4288,7 @@
                 - "does not contain Thumbprint 9B74964506C7ED9138070D08D5F8B969866560C8 for the Certificate."
         when: wn16_pk_000030_cceb_interop_check.stdout == ""
 
-      - name: "MEDIUM | WN16-PK-000030 | AUDIT | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems. | Warn Count."
+      - name: "MEDIUM | WN16-PK-000030 | AUDIT | The US DoD CCEB Interoperability Root CA cross-certificates must be installed in the Untrusted Certificates Store on unclassified systems. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-PK-000030'
@@ -4319,7 +4328,7 @@
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
         when: "'adminchangethis' in wn16stig_newadministratorname"
 
-      - name: "MEDIUM | WN16-SO-000030 | AUDIT | Windows Server 2016 built-in administrator account must be renamed. | Warn Count."
+      - name: "MEDIUM | WN16-SO-000030 | AUDIT | Windows Server 2016 built-in administrator account must be renamed. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-SO-000030'
@@ -4351,7 +4360,7 @@
                 - "the notes for the variable and make the necessary change to the variable to be in compliance."
         when: "'guestchangethis' in wn16stig_newguestname"
 
-      - name: "MEDIUM | WN16-SO-000040 | AUDIT | Windows Server 2016 built-in guest account must be renamed. | Warn Count."
+      - name: "MEDIUM | WN16-SO-000040 | AUDIT | Windows Server 2016 built-in guest account must be renamed. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN19-SO-000040'
@@ -4475,7 +4484,7 @@
             - wn16stig_machineaccountpsswd_max_age > 30 or
               wn16stig_machineaccountpsswd_max_age == 0
 
-      - name: "MEDIUM | WN16-SO-000120 | AUDIT | The maximum age for machine account passwords must be configured to 30 days or less. | Warn Count."
+      - name: "MEDIUM | WN16-SO-000120 | AUDIT | The maximum age for machine account passwords must be configured to 30 days or less. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-SO-000120'
@@ -4532,7 +4541,7 @@
             - wn16stig_inactivitytimeoutsecs > 900 or
               wn16stig_inactivitytimeoutsecs == 0
 
-      - name: "MEDIUM | WN16-SO-000140 | AUDIT | The machine inactivity limit must be set to 15 minutes, locking the system with the screen saver. | Warn Count."
+      - name: "MEDIUM | WN16-SO-000140 | AUDIT | The machine inactivity limit must be set to 15 minutes, locking the system with the screen saver. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-SO-000140'
@@ -4907,7 +4916,7 @@
             - wn16stig_consentprompt < 1 or
               wn16stig_consentprompt > 2
 
-      - name: "MEDIUM | WN16-SO-000480 | AUDIT | User Account Control must, at a minimum, prompt administrators for consent on the secure desktop. | Warn Count."
+      - name: "MEDIUM | WN16-SO-000480 | AUDIT | User Account Control must, at a minimum, prompt administrators for consent on the secure desktop. | Warning Count."
         ansible.builtin.import_tasks: warning_facts.yml
         vars:
             warn_control_id: 'WN16-SO-000480'
