@@ -21,7 +21,7 @@
 
 [![Main Pipeline Validation](https://github.com/ansible-lockdown/Windows-2016-STIG/actions/workflows/main_pipeline_validation.yml/badge.svg?)](https://github.com/ansible-lockdown/Windows-2016-STIG/actions/workflows/main_pipeline_validation.yml)
 
-[![Devel Pipeline Validation](https://github.com/ansible-lockdown/Windows-2016-STIG/actions/workflows/devel_pipeline_validation.yml/badge.svg?)](https://github.com/ansible-lockdown/Windows-10-STIG/actions/workflows/devel_pipeline_validation.yml)
+[![Devel Pipeline Validation](https://github.com/ansible-lockdown/Windows-2016-STIG/actions/workflows/devel_pipeline_validation.yml/badge.svg?)](https://github.com/ansible-lockdown/Windows-2016-STIG/actions/workflows/devel_pipeline_validation.yml)
 ![Devel Commits](https://img.shields.io/github/commit-activity/m/ansible-lockdown/Windows-2016-STIGs/devel?color=dark%20green&label=Devel%20Branch%20Commits)
 
 ![Issues Open](https://img.shields.io/github/issues-raw/ansible-lockdown/Windows-2016-STIG?label=Open%20Issues)
