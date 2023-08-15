@@ -1,13 +1,15 @@
 ---
 galaxy_info:
-    author: Trey Perrone, DFed
-    description: Apply the DISA Windows Server 2016 STIG
+    author: "Trey Perrone, DFed, Stephen Williams"
+    description: "Ansible role to apply DISA Windows Server 2016 STIG"
     company: "MindPoint Group"
     license: MIT
+    role_name: windows16_stig
+    namespace: mindpointgroup
     min_ansible_version: 2.6
 
     platforms:
-        - name: Windows Server
+        - name: Windows
           versions:
               - 2016
 
@@ -16,7 +18,15 @@ galaxy_info:
         - security
         - stig
         - hardening
+        - benchmark
         - microsoft
         - windows
+        - complianceascode
+        - compliance
+
+    collections:
+        - ansible.windows
+        - community.windows
+        - community.general
 
     dependencies: []

@@ -7,24 +7,65 @@
 #     + CategoryInfo          : NotSpecified: (:) [Get-Tpm], TpmWmiException
 #     + FullyQualifiedErrorId : Microsoft.Tpm.Commands.TpmWmiException,Microsoft.Tpm.Commands.GetTpmCommand
 - name: "PRELIM | Detect if Trusted Platform Module (TPM) is available"
-  win_shell: (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
+  ansible.windows.win_shell: (Get-CimInstance -ClassName Win32_OperatingSystem).ProductType
   register: win2016_tpm_enabled
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
   tags:
       - always
 
 # 1 = disabled 0 = enabled
 # this reg key may be useful detect is secure conenctions enabled, etc?
 - name: "PRELIM | Detect if Remote Desktop Services (RDP) is enabled"
-  win_reg_stat:
+  ansible.windows.win_reg_stat:
       path: HKLM:\System\CurrentControlSet\Control\Terminal Server
       name: fDenyTSConnections
   register: win2016_rdp_enabled
-  changed_when: no
-  failed_when: no
+  changed_when: false
+  failed_when: false
   tags:
       - always
+
 # remove this debug or set a verb level
-- debug:
+- name: "Show Variable."
+  ansible.builtin.debug:
       var: win2016_rdp_enabled.value
+
+- name: Get Drive Letters"
+  ansible.windows.win_shell: Get-Volume | ?{ $_.DriveType -eq 'Fixed' } | Select-Object -ExpandProperty 'DriveLetter'
+  changed_when: false
+  failed_when: false
+  register: wn16_drive_letters
+  when:
+      - wn16_00_000411 or
+        wn16_00_000412 or
+        wn16_au_000060 or
+        wn16_00_000270
+
+- name: Check For SecGuide.admx In PolicyDefinitions
+  ansible.windows.win_find:
+      paths: '{{ item }}:\Windows\PolicyDefinitions'
+      patterns: SecGuide.admx
+      hidden: true
+  changed_when: false
+  failed_when: false
+  with_items:
+      - "{{ wn16_drive_letters.stdout_lines }}"
+  register: wn16_secguide_admx_audit
+  when:
+      - wn16_00_000411 or
+        wn16_00_000412
+
+- name: Check For SecGuide.admx In PolicyDefinitions\en-US
+  ansible.windows.win_find:
+      paths: '{{ item }}:\Windows\PolicyDefinitions\en-US'
+      patterns: SecGuide.adml
+      hidden: true
+  changed_when: false
+  failed_when: false
+  with_items:
+      - "{{ wn16_drive_letters.stdout_lines }}"
+  register: wn16_secguide_adml_audit
+  when:
+      - wn16_00_000411 or
+        wn16_00_000412
