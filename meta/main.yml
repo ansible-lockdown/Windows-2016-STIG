@@ -4,7 +4,7 @@ galaxy_info:
     description: "Ansible role to apply DISA Windows Server 2016 STIG"
     company: "MindPoint Group"
     license: MIT
-    role_name: windows_2016_stig
+    role_name: windows16_stig
     namespace: mindpointgroup
     min_ansible_version: 2.6
 

@@ -25,7 +25,7 @@
             - wn16_00_000030_audit_dc.stdout != ""
 
       - name: "MEDIUM | WN16-00-000030 | AUDIT - DOMAIN MEMBERS OR STANDALONE | Passwords for the built-in Administrator account must be changed at least every 60 days. | Get Accounts On DM or SA"
-        win_shell: "Get-Localuser -Name * | Select * | Where SID -like S-1-5-21-*-500 | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16stig_pass_age }}))} | Select Name,PasswordLastSet"
+        ansible.windows.win_shell: "Get-Localuser -Name * | Select * | Where SID -like S-1-5-21-*-500 | Where-Object {$_.PasswordLastSet -lt ((Get-Date).AddDays(-{{ wn16stig_pass_age }}))} | Select Name,PasswordLastSet"
         changed_when: false
         failed_when: false
         register: wn16_00_000030_audit_dm_sa
@@ -1076,7 +1076,7 @@
         notify: reboot_windows
 
       - name: "MEDIUM | WN16-00-000411 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server. | Warning Message No SecGuide.admx"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "Warning!! SecGuide.admx is not installed in C:\\Windows\\PolicyDefinitions folder."
                 - "This policy setting requires the installation of the SecGuide.admx custom templates"
@@ -1084,7 +1084,7 @@
         when: wn16_secguide_admx_audit.results[0].matched != 1
 
       - name: "MEDIUM | WN16-00-000411 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server. | Warning Message No SecGuide.adml"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "Warning!! SecGuide.adml is not installed in C:\\Windows\\PolicyDefinitions\\en-US folder"
                 - "This policy setting requires the installation of the SecGuide.adml custom templates"
@@ -1120,7 +1120,7 @@
         notify: reboot_windows
 
       - name: "MEDIUM | WN16-00-000412 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10. | Warning Message No SecGuide.admx"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "Warning!! SecGuide.admx is not installed in C:\\Windows\\PolicyDefinitions folder."
                 - "This policy setting requires the installation of the SecGuide.admx custom templates"
@@ -1128,7 +1128,7 @@
         when: wn16_secguide_admx_audit.results[0].matched != 1
 
       - name: "MEDIUM | WN16-00-000412 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10. | Warning Message No SecGuide.adml"
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "Warning!! SecGuide.adml is not installed in C:\\Windows\\PolicyDefinitions\\en-US folder"
                 - "This policy setting requires the installation of the SecGuide.adml custom templates"
@@ -1222,7 +1222,7 @@
         when: "'Installed' in wn16_00_000440_ftp_audit"
 
       - name: "MEDIUM | WN16-00-000440 | AUDIT | FTP servers must be configured to prevent access to the system drive. | Warning Message."
-        debug:
+        ansible.builtin.debug:
             msg:
                 - "Warning!! This is a manual task. For any sites with a Binding that lists FTP, right-click the site and select Explore."
                 - "If the site includes any system areas such as root of the drive, Program Files, or Windows directories, this is a finding"
@@ -1419,7 +1419,7 @@
         when: wn16stig_passwordhistorysize < 24
 
       - name: "MEDIUM | WN16-AC-000040 | PATCH | Windows Server 2016 password history must be configured to 24 passwords remembered. | Apply Variable"
-        win_security_policy:
+        community.windows.win_security_policy:
             section: System Access
             key: PasswordHistorySize
             value: "{{ wn16stig_passwordhistorysize }}"
