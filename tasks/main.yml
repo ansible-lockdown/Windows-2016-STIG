@@ -13,7 +13,7 @@
   tags:
       - always
 
-- name: Check OS version and family
+- name: Check OS Version and Family
   ansible.builtin.assert:
       that:
           - ansible_os_family == 'Windows'
