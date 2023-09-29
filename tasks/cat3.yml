@@ -106,10 +106,9 @@
 - name: "LOW | WN16-CC-000040 | PATCH | Internet Protocol version 6 (IPv6) source routing must be configured to the highest protection level to prevent IP source routing."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters
-      state: present
-      value: DisableIPSourceRouting
+      name: DisableIPSourceRouting
       data: 2
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000040
   tags:
@@ -123,10 +122,9 @@
 - name: "LOW | WN16-CC-000050 | PATCH | Source routing must be configured to the highest protection level to prevent Internet Protocol (IP) source routing."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
-      state: present
-      value: DisableIPSourceRouting
+      name: DisableIPSourceRouting
       data: 2
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000050
   tags:
@@ -140,10 +138,9 @@
 - name: "LOW | WN16-CC-000060 | PATCH | Windows Server 2016 must be configured to prevent Internet Control Message Protocol (ICMP) redirects from overriding Open Shortest Path First (OSPF)-generated routes."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters
-      state: present
-      value: EnableICMPRedirect
+      name: EnableICMPRedirect
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000060
   tags:
@@ -157,10 +154,9 @@
 - name: "LOW | WN16-CC-000070 | PATCH | Windows Server 2016 must be configured to ignore NetBIOS name release requests except from WINS servers."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netbt\Parameters
-      state: present
-      value: NoNameReleaseOnDemand
+      name: NoNameReleaseOnDemand
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000070
   tags:
@@ -174,10 +170,9 @@
 - name: "LOW | WN16-CC-000240 | PATCH | The Application Compatibility Program Inventory must be prevented from collecting data and sending the information to Microsoft."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat
-      state: present
-      value: DisableInventory
+      name: DisableInventory
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000240
   tags:
@@ -191,10 +186,9 @@
 - name: "LOW | WN16-CC-000350 | PATCH | Turning off File Explorer heap termination on corruption must be disabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer
-      value: NoHeapTerminationOnCorruption
-      state: present
+      name: NoHeapTerminationOnCorruption
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000350
   tags:
@@ -229,10 +223,9 @@
 - name: "LOW | WN16-SO-000160 | PATCH | The Windows dialog box title for the legal banner must be configured with the appropriate text."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: LegalNoticeCaption
+      name: LegalNoticeCaption
       data: "{{ wn16stig_legalnoticecaption }}"
-      datatype: string
+      type: string
   when:
       - wn16_so_000160
   tags:
@@ -246,9 +239,9 @@
 - name: "LOW | WN16-SO-000450 | PATCH | The default permissions of global system objects must be strengthened."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager
-      value: ProtectionMode
+      name: ProtectionMode
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000450
   tags:

@@ -172,10 +172,9 @@
 - name: "HIGH | WN16-CC-000250 | PATCH | AutoPlay must be turned off for non-volume devices."
   ansible.windows.win_regedit:
       path: HKLM:\Software\Policies\Microsoft\Windows\Explorer
-      state: present
-      value: NoAutoplayfornonVolume
+      name: NoAutoplayfornonVolume
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000250
   tags:
@@ -189,10 +188,9 @@
 - name: "HIGH | WN16-CC-000260 | PATCH | The default AutoRun behavior must be configured to prevent AutoRun commands."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
-      state: present
-      value: NoAutorun
+      name: NoAutorun
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000260
   tags:
@@ -206,10 +204,9 @@
 - name: "HIGH | WN16-CC-000270 | PATCH | AutoPlay must be disabled for all drives."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
-      state: present
       name: NoDriveTypeAutoRun
       data: 255
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000270
   tags:
@@ -223,10 +220,9 @@
 - name: "HIGH | WN16-CC-000460 | PATCH | The Windows Installer Always install with elevated privileges option must be disabled."
   ansible.windows.win_regedit:
       path: HKLM:\Software\Policies\Microsoft\Windows\Installer
-      state: present
-      value: AlwaysInstallElevated
+      name: AlwaysInstallElevated
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000460
   tags:
@@ -240,10 +236,9 @@
 - name: "HIGH | WN16-CC-000500 | PATCH | The Windows Remote Management (WinRM) client must not use Basic authentication."
   ansible.windows.win_regedit:
       path: HKLM:\Software\Policies\Microsoft\Windows\WinRM\Client
-      state: present
-      value: AllowBasic
+      name: AllowBasic
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000500
       - not win_skip_for_test
@@ -259,10 +254,9 @@
 - name: "HIGH | WN16-CC-000530 | PATCH | The Windows Remote Management (WinRM) service must not use Basic authentication."
   ansible.windows.win_regedit:
       path: HKLM:\Software\Policies\Microsoft\Windows\WinRM\Service
-      state: present
-      value: AllowBasic
+      name: AllowBasic
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000530
       - not win_skip_for_test
@@ -506,10 +500,9 @@
 - name: "HIGH | WN16-MS-000120 | PATCH | Windows Server 2016 must be running Credential Guard on domain-joined member servers."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard
-      state: present
-      value: "{{ item }}"
+      name: "{{ item }}"
       data: 1
-      datatype: dword
+      type: dword
   loop:
       - EnableVirtualizationBasedSecurity
       - RequirePlatformSecurityFeatures
@@ -530,9 +523,9 @@
 - name: "HIGH | WN16-SO-000020 | PATCH | Local accounts with blank passwords must be restricted to prevent access from the network."
   ansible.windows.win_regedit:
       key: HKLM:\System\CurrentControlSet\Control\Lsa
-      value: LimitBlankPasswordUse
+      name: LimitBlankPasswordUse
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000020
   tags:
@@ -562,10 +555,9 @@
 - name: "HIGH | WN16-SO-000260 | PATCH | Anonymous enumeration of Security Account Manager (SAM) accounts must not be allowed."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-      state: present
-      value: RestrictAnonymousSAM
+      name: RestrictAnonymousSAM
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000260
       - ansible_windows_domain_role != "Primary domain controller"
@@ -581,10 +573,9 @@
 - name: "HIGH | WN16-SO-000270 | PATCH | Anonymous enumeration of shares must not be allowed."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-      state: present
-      value: RestrictAnonymous
+      name: RestrictAnonymous
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000270
   tags:
@@ -599,10 +590,9 @@
 - name: "HIGH | WN16-SO-000300 | PATCH | Anonymous access to Named Pipes and Shares must be restricted."
   ansible.windows.win_regedit:
       path: HKLM:\System\CurrentControlSet\Services\LanManServer\Parameters
-      state: present
-      value: restrictnullsessaccess
+      name: restrictnullsessaccess
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000300
   tags:
@@ -616,10 +606,9 @@
 - name: "HIGH | WN16-SO-000360 | PATCH | Windows Server 2016 must be configured to prevent the storage of the LAN Manager hash of passwords."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-      state: present
-      value: NoLMHash
+      name: NoLMHash
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000360
   tags:
@@ -634,10 +623,9 @@
 - name: "HIGH | WN16-SO-000380 | PATCH | The LAN Manager authentication level must be set to send NTLMv2 response only and to refuse LM and NTLM."
   ansible.windows.win_regedit:
       path: HKLM:\System\CurrentControlSet\Control\Lsa
-      state: present
-      value: LmCompatibilityLevel
+      name: LmCompatibilityLevel
       data: 5
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000380
   tags:

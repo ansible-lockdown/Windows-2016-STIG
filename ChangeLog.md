@@ -2,6 +2,13 @@
 
 ## Release 3.0.0
 
+September 2023 Updates
+  - Added Updated Discord Links
+  - Updated Galaxy Score Links
+  - Updated Readme
+  - Fixed Module Parameters For Win_Regedit aliases
+
+
 August 2023 Update
   - Updated Readme.md file.
   - Updated all linting files and updated linting across playbook.

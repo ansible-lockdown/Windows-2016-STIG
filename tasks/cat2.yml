@@ -1069,10 +1069,9 @@
       - name: "MEDIUM | WN16-00-000411 | PATCH | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server. | Registry Edit"
         ansible.windows.win_regedit:
             path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters
-            state: present
-            value: SMB1
+            name: SMB1
             data: 0
-            datatype: dword
+            type: dword
         notify: reboot_windows
 
       - name: "MEDIUM | WN16-00-000411 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB server. | Warning Message No SecGuide.admx"
@@ -1113,10 +1112,9 @@
       - name: "MEDIUM | WN16-00-000412 | PATCH | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10. | Set Registry Key"
         ansible.windows.win_regedit:
             path: HKLM:\SYSTEM\CurrentControlSet\Services\mrxsmb10
-            state: present
             value: Start
             data: 4
-            datatype: dword
+            type: dword
         notify: reboot_windows
 
       - name: "MEDIUM | WN16-00-000412 | AUDIT | The Server Message Block (SMB) v1 protocol must be disabled on the SMB client - mrxsmb10. | Warning Message No SecGuide.admx"
@@ -2445,10 +2443,9 @@
 - name: "MEDIUM | WN16-CC-000010 | PATCH | The display of slide shows on the lock screen must be disabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization
-      state: present
-      value: NoLockScreenSlideshow
+      name: NoLockScreenSlideshow
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000010
   tags:
@@ -2462,10 +2459,9 @@
 - name: "MEDIUM | WN16-CC-000030 | PATCH | WDigest Authentication must be disabled on Windows Server 2016."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\Wdigest
-      state: present
-      value: UseLogonCredential
+      name: UseLogonCredential
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000030
   tags:
@@ -2479,10 +2475,9 @@
 - name: "MEDIUM | WN16-CC-000080 | PATCH | Insecure logons to an SMB server must be disabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\LanmanWorkstation
-      state: present
-      value: AllowInsecureGuestAuth
+      name: AllowInsecureGuestAuth
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000080
   tags:
@@ -2497,10 +2492,9 @@
 - name: "MEDIUM | WN16-CC-000090 | PATCH | Hardened UNC paths must be defined to require mutual authentication and integrity for at least the SYSVOL and NETLOGON shares."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\NetworkProvider\HardenedPaths
-      state: present
-      value: "{{ item }}"
+      name: "{{ item }}"
       data: RequireMutualAuthentication=1, RequireIntegrity=1
-      datatype: string
+      type: string
   with_items:
       - \\*\SYSVOL
       - \\*\NETLOGON
@@ -2518,10 +2512,9 @@
 - name: "MEDIUM | WN16-CC-000100 | PATCH | Command line data must be included in process creation events."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit
-      state: present
-      value: ProcessCreationIncludeCmdLine_Enabled
+      name: ProcessCreationIncludeCmdLine_Enabled
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000100
   tags:
@@ -2537,18 +2530,16 @@
       - name: "MEDIUM | WN16-CC-000110 | PATCH | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection. | EnableVirtualizationBasedSecurity Registry Add"
         ansible.windows.win_regedit:
             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard\
-            state: present
-            value: EnableVirtualizationBasedSecurity
+            name: EnableVirtualizationBasedSecurity
             data: 1
-            datatype: dword
+            type: dword
 
       - name: "MEDIUM | WN16-CC-000110 | PATCH | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection. | RequirePlatformSecurityFeatures Registry Add"
         ansible.windows.win_regedit:
             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard\
-            state: present
-            value: RequirePlatformSecurityFeatures
+            name: RequirePlatformSecurityFeatures
             data: "{{ wn16stig_dma_protection }}"
-            datatype: dword
+            type: dword
 
       - name: "MEDIUM | WN16-CC-000110 | AUDIT | Windows Server 2016 virtualization-based security must be enabled with the platform security level configured to Secure Boot or Secure Boot with DMA Protection. | Get Status Of Device Guard Virtualization."
         ansible.windows.win_shell: Get-CimInstance -ClassName Win32_DeviceGuard -Namespace root\Microsoft\Windows\DeviceGuard | Select-Object VirtualizationBasedSecurityStatus | ft -hidetableheaders
@@ -2584,10 +2575,9 @@
 - name: "MEDIUM | WN16-CC-000140 | PATCH | Early Launch Antimalware, Boot-Start Driver Initialization Policy must prevent boot drivers identified as bad."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Policies\EarlyLaunch
-      state: present
-      value: DriverLoadPolicy
+      name: DriverLoadPolicy
       data: "{{ wn16stig_driver_load_policy }}"
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000140
   tags:
@@ -2601,10 +2591,9 @@
 - name: "MEDIUM | WN16-CC-000150 | PATCH | Group Policy objects must be reprocessed even if they have not changed."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Group Policy\{35378EAC-683F-11D2-A89A-00C04FBBCFA2}
-      state: present
-      value: NoGPOListChanges
+      name: NoGPOListChanges
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000150
   tags:
@@ -2618,10 +2607,9 @@
 - name: "MEDIUM | WN16-CC-000160 | PATCH | Downloading print driver packages over HTTP must be prevented."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers
-      state: present
-      value: DisableWebPnPDownload
+      name: DisableWebPnPDownload
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000160
   tags:
@@ -2635,10 +2623,9 @@
 - name: "MEDIUM | WN16-CC-000170 | PATCH | Printing over HTTP must be prevented."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers
-      state: present
-      value: DisableHTTPPrinting
+      name: DisableHTTPPrinting
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000170
   tags:
@@ -2652,10 +2639,9 @@
 - name: "MEDIUM | WN16-CC-000180 | PATCH | The network selection user interface (UI) must not be displayed on the logon screen."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
-      state: present
-      value: DontDisplayNetworkSelectionUI
+      name: DontDisplayNetworkSelectionUI
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000180
   tags:
@@ -2669,10 +2655,9 @@
 - name: "MEDIUM | WN16-CC-000210 | PATCH | Users must be prompted to authenticate when the system wakes from sleep (on battery)."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Power\PowerSettings\0e796bdb-100d-47d6-a2d5-f7d2daa51f51
-      state: present
-      value: DCSettingIndex
+      name: DCSettingIndex
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000210
   tags:
@@ -2686,10 +2671,9 @@
 - name: "MEDIUM | WN16-CC-000220 | PATCH | Users must be prompted to authenticate when the system wakes from sleep (plugged in)."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Power\PowerSettings\0e796bdb-100d-47d6-a2d5-f7d2daa51f51
-      state: present
-      value: ACSettingIndex
+      name: ACSettingIndex
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000220
   tags:
@@ -2703,10 +2687,9 @@
 - name: "MEDIUM | WN16-CC-000280 | PATCH | Administrator accounts must not be enumerated during elevation."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\CredUI
-      state: present
-      value: EnumerateAdministrators
+      name: EnumerateAdministrators
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000280
   tags:
@@ -2720,10 +2703,9 @@
 - name: "MEDIUM | WN16-CC-000290 | PATCH | Windows Telemetry must be configured to Security or Basic."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection
-      state: present
-      value: AllowTelemetry
+      name: AllowTelemetry
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000290
   tags:
@@ -2752,10 +2734,9 @@
       - name: "MEDIUM | WN16-CC-000300 | PATCH | The Application event log size must be configured to 32768 KB or greater. | Apply Log Size"
         ansible.windows.win_regedit:
             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Application
-            state: present
-            value: MaxSize
+            name: MaxSize
             data: "{{ wn16stig_application_event_log_max_size }}"
-            datatype: dword
+            type: dword
         when: wn16stig_application_event_log_max_size >= 32768
   when:
       - wn16_cc_000300
@@ -2785,10 +2766,9 @@
       - name: "MEDIUM | WN16-CC-000310 | PATCH | The Security event log size must be configured to 196608 KB or greater. | Apply Log Size"
         ansible.windows.win_regedit:
             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security
-            state: present
-            value: MaxSize
+            name: MaxSize
             data: "{{ wn16stig_security_event_log_max_size }}"
-            datatype: dword
+            type: dword
         when: wn16stig_security_event_log_max_size >= 196608
   when:
       - wn16_cc_000310
@@ -2818,10 +2798,9 @@
       - name: "MEDIUM | WN16-CC-000320 | PATCH | The System event log size must be configured to 32768 KB or greater. | Apply Log Size"
         ansible.windows.win_regedit:
             path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\System
-            state: present
-            value: MaxSize
+            name: MaxSize
             data: "{{ wn16stig_system_event_log_max_size }}"
-            datatype: dword
+            type: dword
         when: wn16stig_system_event_log_max_size >= 32768
   when:
       - wn16_cc_000320
@@ -2836,10 +2815,9 @@
 - name: "MEDIUM | WN16-CC-000330 | PATCH | Windows Server 2016 Windows SmartScreen must be enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
-      state: present
-      value: EnableSmartScreen
+      name: EnableSmartScreen
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000330
   tags:
@@ -2853,10 +2831,9 @@
 - name: "MEDIUM | WN16-CC-000340 | PATCH | Explorer Data Execution Prevention must be enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer
-      state: present
-      value: NoDataExecutionPrevention
+      name: NoDataExecutionPrevention
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000340
   tags:
@@ -2870,10 +2847,9 @@
 - name: "MEDIUM | WN16-CC-000360 | PATCH | File Explorer shell protocol must run in protected mode."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
-      state: present
-      value: PreXPSP2ShellProtocolBehavior
+      name: PreXPSP2ShellProtocolBehavior
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000360
   tags:
@@ -2887,10 +2863,9 @@
 - name: "MEDIUM | WN16-CC-000370 | PATCH | Passwords must not be saved in the Remote Desktop Client."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-      state: present
-      value: DisablePasswordSaving
+      name: DisablePasswordSaving
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000370
   tags:
@@ -2904,10 +2879,9 @@
 - name: "MEDIUM | WN16-CC-000380 | PATCH | Local drives must be prevented from sharing with Remote Desktop Session Hosts."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-      state: present
-      value: fDisableCdm
+      name: fDisableCdm
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000380
   tags:
@@ -2921,10 +2895,9 @@
 - name: "MEDIUM | WN16-CC-000390 | PATCH | Remote Desktop Services must always prompt a client for passwords upon connection."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-      state: present
-      value: fPromptForPassword
+      name: fPromptForPassword
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000390
   tags:
@@ -2938,10 +2911,9 @@
 - name: "MEDIUM | WN16-CC-000400 | PATCH | The Remote Desktop Session Host must require secure Remote Procedure Call (RPC) communications."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-      state: present
-      value: fEncryptRPCTraffic
+      name: fEncryptRPCTraffic
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000400
   tags:
@@ -2955,10 +2927,9 @@
 - name: "MEDIUM | WN16-CC-000410 | PATCH | Remote Desktop Services must be configured with the client connection encryption set to High Level."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services
-      state: present
-      value: MinEncryptionLevel
+      name: MinEncryptionLevel
       data: 3
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000410
   tags:
@@ -2972,10 +2943,9 @@
 - name: "MEDIUM | WN16-CC-000420 | PATCH | Attachments must be prevented from being downloaded from RSS feeds."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Feeds
-      state: present
-      value: DisableEnclosureDownload
+      name: DisableEnclosureDownload
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000420
   tags:
@@ -2989,10 +2959,9 @@
 - name: "MEDIUM | WN16-CC-000430 | PATCH | Basic authentication for RSS feeds over HTTP must not be used."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Internet Explorer\Feeds
-      state: present
-      value: AllowBasicAuthInClear
+      name: AllowBasicAuthInClear
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000430
   tags:
@@ -3006,10 +2975,9 @@
 - name: "MEDIUM | WN16-CC-000440 | PATCH | Indexing of encrypted files must be turned off."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search
-      state: present
-      value: AllowIndexingEncryptedStoresOrItems
+      name: AllowIndexingEncryptedStoresOrItems
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000440
   tags:
@@ -3024,10 +2992,9 @@
 - name: "MEDIUM | WN16-CC-000450 | PATCH | Users must be prevented from changing installation options."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer
-      state: present
-      value: EnableUserControl
+      name: EnableUserControl
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000450
   tags:
@@ -3041,10 +3008,9 @@
 - name: "MEDIUM | WN16-CC-000470 | PATCH | Users must be notified if a web-based program attempts to install software."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Installer
-      state: present
-      value: SafeForScripting
+      name: SafeForScripting
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000470
   tags:
@@ -3058,10 +3024,9 @@
 - name: "MEDIUM | WN16-CC-000480 | PATCH | Automatically signing in the last interactive user after a system-initiated restart must be disabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: DisableAutomaticRestartSignOn
+      name: DisableAutomaticRestartSignOn
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000480
   tags:
@@ -3075,10 +3040,9 @@
 - name: "MEDIUM | WN16-CC-000490 | PATCH | PowerShell script block logging must be enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging
-      state: present
-      value: EnableScriptBlockLogging
+      name: EnableScriptBlockLogging
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000490
   tags:
@@ -3092,10 +3056,9 @@
 - name: "MEDIUM | WN16-CC-000510 | PATCH | The Windows Remote Management (WinRM) client must not allow unencrypted traffic."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client
-      state: present
-      value: AllowUnencryptedTraffic
+      name: AllowUnencryptedTraffic
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000510
       - not win_skip_for_test
@@ -3111,10 +3074,9 @@
 - name: "MEDIUM | WN16-CC-000520 | PATCH | The Windows Remote Management (WinRM) client must not use Digest authentication."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client
-      state: present
-      value: AllowDigest
+      name: AllowDigest
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000520
       - not win_skip_for_test
@@ -3129,10 +3091,9 @@
 - name: "MEDIUM | WN16-CC-000540 | PATCH | The Windows Remote Management (WinRM) service must not allow unencrypted traffic."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service
-      state: present
-      value: AllowUnencryptedTraffic
+      name: AllowUnencryptedTraffic
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000540
       - not win_skip_for_test
@@ -3148,10 +3109,9 @@
 - name: "MEDIUM | WN16-CC-000550 | PATCH | The Windows Remote Management (WinRM) service must not store RunAs credentials."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\WinRM\Service
-      state: present
-      value: DisableRunAs
+      name: DisableRunAs
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_cc_000550
       - not win_skip_for_test
@@ -3691,10 +3651,9 @@
 - name: "MEDIUM | WN16-DC-000320 | PATCH | Domain controllers must require LDAP access signing."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters
-      state: present
-      value: LDAPServerIntegrity
+      name: LDAPServerIntegrity
       data: 2
-      datatype: dword
+      type: dword
   when:
       - wn16_dc_000320
       - ansible_windows_domain_role == "Primary domain controller"
@@ -3711,10 +3670,9 @@
 - name: "MEDIUM | WN16-DC-000330 | PATCH | Domain controllers must be configured to allow reset of machine account passwords."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-      state: present
-      value: RefusePasswordChange
+      name: RefusePasswordChange
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_dc_000330
       - ansible_windows_domain_role == "Primary domain controller"
@@ -3924,10 +3882,9 @@
 - name: "MEDIUM | WN16-MS-000020 | PATCH | Local administrator accounts must have their privileged token filtered to prevent elevated privileges from being used over the network on domain systems."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: LocalAccountTokenFilterPolicy
+      name: LocalAccountTokenFilterPolicy
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_ms_000020
       - ansible_windows_domain_role == "Member server"
@@ -3942,10 +3899,9 @@
 - name: "MEDIUM | WN16-MS-000030 | PATCH | Local users on domain-joined computers must not be enumerated."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\System
-      state: present
-      value: EnumerateLocalUsers
+      name: EnumerateLocalUsers
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_ms_000030
       - ansible_windows_domain_role == "Member server"
@@ -3960,10 +3916,9 @@
 - name: "MEDIUM | WN16-MS-000040 | PATCH | Unauthenticated Remote Procedure Call (RPC) clients must be restricted from connecting to the RPC server."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Rpc
-      state: present
-      value: RestrictRemoteClients
+      name: RestrictRemoteClients
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_ms_000040
       - not ansible_windows_domain_role == "Primary domain controller"
@@ -3978,10 +3933,9 @@
 - name: "MEDIUM | WN16-MS-000050 | PATCH | Caching of logon credentials must be limited."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
-      state: present
-      value: CachedLogonsCount
+      name: CachedLogonsCount
       data: 4
-      datatype: dword
+      type: dword
   when:
       - wn16_ms_000050
       - ansible_windows_domain_role == "Member server"
@@ -3996,10 +3950,9 @@
 - name: "MEDIUM | WN16-MS-000310 | PATCH | Remote calls to the Security Account Manager (SAM) must be restricted to Administrators."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-      state: present
-      value: RestrictRemoteSAM
+      name: RestrictRemoteSAM
       data: O:BAG:BAD:(A;;RC;;;BA)
-      datatype: string
+      type: string
   when:
       - wn16_ms_000310
   tags:
@@ -4385,10 +4338,9 @@
 - name: "MEDIUM | WN16-SO-000050 | PATCH | Audit policy using subcategories must be enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\
-      state: present
-      value: SCENoApplyLegacyAuditPolicy
+      name: SCENoApplyLegacyAuditPolicy
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000050
   tags:
@@ -4402,10 +4354,9 @@
 - name: "MEDIUM | WN16-SO-000080 | PATCH | The setting Domain member: Digitally encrypt or sign secure channel data (always) must be configured to Enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-      state: present
-      value: RequireSignOrSeal
+      name: RequireSignOrSeal
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000080
       - ansible_windows_domain_role == "Member server"
@@ -4421,10 +4372,9 @@
 - name: "MEDIUM | WN16-SO-000090 | PATCH | The setting Domain member: Digitally encrypt secure channel data (when possible) must be configured to enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-      state: present
-      value: SealSecureChannel
+      name: SealSecureChannel
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000090
       - ansible_windows_domain_role == "Member server"
@@ -4440,10 +4390,9 @@
 - name: "MEDIUM | WN16-SO-000100 | PATCH | The setting Domain member: Digitally sign secure channel data (when possible) must be configured to Enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-      state: present
-      value: SignSecureChannel
+      name: SignSecureChannel
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000100
       - ansible_windows_domain_role == "Member server"
@@ -4459,10 +4408,9 @@
 - name: "MEDIUM | WN16-SO-000110 | PATCH | The computer account password must not be prevented from being reset."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-      state: present
-      value: DisablePasswordChange
+      name: DisablePasswordChange
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000110
   tags:
@@ -4495,10 +4443,9 @@
       - name: "MEDIUM | WN16-SO-000120 | PATCH | The maximum age for machine account passwords must be configured to 30 days or less. | Apply Variable."
         ansible.windows.win_regedit:
             path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-            state: present
-            value: MaximumPasswordAge
+            name: MaximumPasswordAge
             data: "{{ wn16stig_machineaccountpsswd_max_age }}"
-            datatype: dword
+            type: dword
         when:
             - wn16stig_machineaccountpsswd_max_age <= 30
             - wn16stig_machineaccountpsswd_max_age != 0
@@ -4515,10 +4462,9 @@
 - name: "MEDIUM | WN16-SO-000130 | PATCH | Windows Server 2016 must be configured to require a strong session key."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
-      state: present
-      value: RequireStrongKey
+      name: RequireStrongKey
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000130
   tags:
@@ -4552,10 +4498,9 @@
       - name: "MEDIUM | WN16-SO-000140 | PATCH | The machine inactivity limit must be set to 15 minutes, locking the system with the screen saver. | Apply Variable."
         ansible.windows.win_regedit:
             path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-            state: present
-            value: InactivityTimeoutSecs
+            name: InactivityTimeoutSecs
             data: "{{ wn16stig_inactivitytimeoutsecs }}"
-            datatype: dword
+            type: dword
         when:
             - wn16stig_inactivitytimeoutsecs <= 900
             - wn16stig_inactivitytimeoutsecs != 0
@@ -4572,10 +4517,9 @@
 - name: "MEDIUM | WN16-SO-000150 | PATCH | The required legal notice must be configured to display before console logon."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: LegalNoticeText
+      name: LegalNoticeText
       data: "{{ wn16stig_legalnoticetext }}"
-      datatype: string
+      type: string
   when:
       - wn16_so_000150
   tags:
@@ -4595,10 +4539,9 @@
 - name: "MEDIUM | WN16-SO-000180 | PATCH | The Smart Card removal option must be configured to Force Logoff or Lock Workstation."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
-      state: present
-      value: scremoveoption
+      name: scremoveoption
       data: 1
-      datatype: string
+      type: string
   when:
       - wn16_so_000180
   tags:
@@ -4612,10 +4555,9 @@
 - name: "MEDIUM | WN16-SO-000190 | PATCH | The setting Microsoft network client: Digitally sign communications (always) must be configured to Enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
-      state: present
-      value: RequireSecuritySignature
+      name: RequireSecuritySignature
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000190
   tags:
@@ -4630,10 +4572,9 @@
 - name: "MEDIUM | WN16-SO-000200 | PATCH | The setting Microsoft network client: Digitally sign communications (if server agrees) must be configured to Enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
-      state: present
-      value: EnableSecuritySignature
+      name: EnableSecuritySignature
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000200
   tags:
@@ -4648,10 +4589,9 @@
 - name: "MEDIUM | WN16-SO-000210 | PATCH | Unencrypted passwords must not be sent to third-party Server Message Block (SMB) servers."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters
-      state: present
-      value: EnablePlainTextPassword
+      name: EnablePlainTextPassword
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000210
   tags:
@@ -4665,10 +4605,9 @@
 - name: "MEDIUM | WN16-SO-000230 | PATCH | The setting Microsoft network server: Digitally sign communications (always) must be configured to Enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters
-      state: present
-      value: RequireSecuritySignature
+      name: RequireSecuritySignature
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000230
   tags:
@@ -4683,10 +4622,9 @@
 - name: "MEDIUM | WN16-SO-000240 | PATCH | The setting Microsoft network server: Digitally sign communications (if client agrees) must be configured to Enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters
-      state: present
-      value: EnableSecuritySignature
+      name: EnableSecuritySignature
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000240
   tags:
@@ -4701,10 +4639,9 @@
 - name: "MEDIUM | WN16-SO-000290 | PATCH | Windows Server 2016 must be configured to prevent anonymous users from having the same permissions as the Everyone group."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-      state: present
-      value: EveryoneIncludesAnonymous
+      name: EveryoneIncludesAnonymous
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000290
   tags:
@@ -4718,10 +4655,9 @@
 - name: "MEDIUM | WN16-SO-000320 | PATCH | Services using Local System that use Negotiate when reverting to NTLM authentication must use the computer identity instead of authenticating anonymously."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
-      state: present
-      value: UseMachineId
+      name: UseMachineId
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000320
   tags:
@@ -4735,10 +4671,9 @@
 - name: "MEDIUM | WN16-SO-000330 | PATCH | NTLM must be prevented from falling back to a Null session."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
-      state: present
-      value: allownullsessionfallback
+      name: allownullsessionfallback
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000330
   tags:
@@ -4752,10 +4687,9 @@
 - name: "MEDIUM | WN16-SO-000340 | PATCH | PKU2U authentication using online identities must be prevented."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\pku2u
-      state: present
-      value: AllowOnlineID
+      name: AllowOnlineID
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000340
   tags:
@@ -4769,10 +4703,9 @@
 - name: "MEDIUM | WN16-SO-000350 | PATCH | Kerberos encryption types must be configured to prevent the use of DES and RC4 encryption suites."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters
-      state: present
-      value: SupportedEncryptionTypes
+      name: SupportedEncryptionTypes
       data: 2147483640
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000350
   tags:
@@ -4786,10 +4719,9 @@
 - name: "MEDIUM | WN16-SO-000390 | PATCH | Windows Server 2016 must be configured to at least negotiate signing for LDAP client signing."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Services\LDAP
-      state: present
-      value: LDAPClientIntegrity
+      name: LDAPClientIntegrity
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000390
   tags:
@@ -4803,10 +4735,9 @@
 - name: "MEDIUM | WN16-SO-000400 | PATCH | Session security for NTLM SSP-based clients must be configured to require NTLMv2 session security and 128-bit encryption."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
-      state: present
-      value: NTLMMinClientSec
+      name: NTLMMinClientSec
       data: 537395200
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000400
   tags:
@@ -4820,10 +4751,9 @@
 - name: "MEDIUM | WN16-SO-000410 | PATCH | Session security for NTLM SSP-based servers must be configured to require NTLMv2 session security and 128-bit encryption."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\MSV1_0
-      state: present
-      value: NTLMMinServerSec
+      name: NTLMMinServerSec
       data: 537395200
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000410
   tags:
@@ -4837,10 +4767,9 @@
 - name: "MEDIUM | WN16-SO-000420 | PATCH | Users must be required to enter a password to access private keys stored on the computer."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Policies\Microsoft\Cryptography
-      state: present
-      value: ForceKeyProtection
+      name: ForceKeyProtection
       data: 2
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000420
   tags:
@@ -4854,10 +4783,9 @@
 - name: "MEDIUM | WN16-SO-000430 | PATCH | Windows Server 2016 must be configured to use FIPS-compliant algorithms for encryption, hashing, and signing."
   ansible.windows.win_regedit:
       path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\FIPSAlgorithmPolicy
-      state: present
-      value: Enabled
+      name: Enabled
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000430
   tags:
@@ -4872,10 +4800,9 @@
 - name: "MEDIUM | WN16-SO-000460 | PATCH | User Account Control approval mode for the built-in Administrator must be enabled."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: FilterAdministratorToken
+      name: FilterAdministratorToken
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000460
       - not win_skip_for_test
@@ -4891,10 +4818,9 @@
 - name: "MEDIUM | WN16-SO-000470 | PATCH | UIAccess applications must not be allowed to prompt for elevation without using the secure desktop."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: EnableUIADesktopToggle
+      name: EnableUIADesktopToggle
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000470
   tags:
@@ -4927,10 +4853,9 @@
       - name: "MEDIUM | WN16-SO-000480 | PATCH | User Account Control must, at a minimum, prompt administrators for consent on the secure desktop. | Apply Variable."
         ansible.windows.win_regedit:
             path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-            state: present
-            value: ConsentPromptBehaviorAdmin
+            name: ConsentPromptBehaviorAdmin
             data: "{{ wn16stig_consentprompt }}"
-            datatype: dword
+            type: dword
         when:
             - wn16stig_consentprompt == 1 or
               wn16stig_consentprompt == 2
@@ -4947,10 +4872,9 @@
 - name: "MEDIUM | WN16-SO-000490 | PATCH | User Account Control must automatically deny standard user requests for elevation."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: ConsentPromptBehaviorUser
+      name: ConsentPromptBehaviorUser
       data: 0
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000490
   tags:
@@ -4964,10 +4888,9 @@
 - name: "MEDIUM | WN16-SO-000500 | PATCH | User Account Control must be configured to detect application installations and prompt for elevation."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: EnableInstallerDetection
+      name: EnableInstallerDetection
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000500
   tags:
@@ -4981,10 +4904,9 @@
 - name: "MEDIUM | WN16-SO-000510 | PATCH | User Account Control must only elevate UIAccess applications that are installed in secure locations."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: EnableSecureUIAPaths
+      name: EnableSecureUIAPaths
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000510
   tags:
@@ -4998,10 +4920,9 @@
 - name: "MEDIUM | WN16-SO-000520 | PATCH | User Account Control must run all administrators in Admin Approval Mode, enabling UAC."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: EnableLUA
+      name: EnableLUA
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000520
   tags:
@@ -5015,10 +4936,9 @@
 - name: "MEDIUM | WN16-SO-000530 | PATCH | User Account Control must virtualize file and registry write failures to per-user locations."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-      state: present
-      value: EnableVirtualization
+      name: EnableVirtualization
       data: 1
-      datatype: dword
+      type: dword
   when:
       - wn16_so_000530
   tags:
@@ -5032,10 +4952,9 @@
 - name: "MEDIUM | WN16-UC-000030 | PATCH | Zone information must be preserved when saving attachments."
   ansible.windows.win_regedit:
       path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments
-      state: present
-      value: SaveZoneInformation
+      name: SaveZoneInformation
       data: 2
-      datatype: dword
+      type: dword
   when:
       - wn16_uc_000030
   tags:
@@ -5342,18 +5261,16 @@
       - name: "MEDIUM | WN16-CC-000421 | PATCH | The Windows Explorer Preview pane must be disabled for Windows Server 2016. | NoPreviewPane Fix."
         ansible.windows.win_regedit:
             path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
-            state: present
-            value: NoPreviewPane
+            name: NoPreviewPane
             data: 1
-            datatype: dword
+            type: dword
 
       - name: "MEDIUM | WN16-CC-000421 | PATCH | The Windows Explorer Preview pane must be disabled for Windows Server 2016. | NoReadingPane Fix."
         ansible.windows.win_regedit:
             path: HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
-            state: present
-            value: NoReadingPane
+            name: NoReadingPane
             data: 1
-            datatype: dword
+            type: dword
   when:
       - wn16_cc_000421
   tags:
